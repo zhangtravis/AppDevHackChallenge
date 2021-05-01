@@ -25,9 +25,24 @@ def failure_response(message, code=404):
     return json.dumps({"success": False, "error": message}), code
 
 
-@app.route("/api/players")
+@app.route("/api/players/")
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
+
+@app.route("/api/player/", methods=["POST"])
+def create_player():
+    body = json.loads(request.data)
+    name = body.get('name')
+    username = body.get('username')
+    password = body.get('password')
+
+    if name is None or username is None or password is None:
+        return failure_response("Name, username, or password not provided")
+
+    new_player = Player(name=name, username=username, password=password)
+    db.session.add(new_player)
+    db.session.commit()
+    return success_response(new_player.serialize(), 201)
 
 
 @app.route("/api/challenges/")
