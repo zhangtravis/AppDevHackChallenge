@@ -5,7 +5,7 @@ from flask import jsonify
 from flask import request
 
 from db import db
-from db import Player
+from db import Player, Challenge
 
 app = Flask(__name__)
 db_filename = "game.db"
