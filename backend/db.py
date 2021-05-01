@@ -23,3 +23,23 @@ class Player(db.Model):
             "username": self.username,
             "points": self.points
         }
+
+class Challenge(db.Model):
+    __tablename__ = 'player'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    points_value = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.description = kwargs.get('description')
+        self.points_value = kwargs.get('points_value')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "points": self.points
+        }
