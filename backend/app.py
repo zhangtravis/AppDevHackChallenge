@@ -29,7 +29,7 @@ def failure_response(message, code=404):
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
 
-@app.route("/api/player/", methods=["POST"])
+@app.route("/api/players/", methods=["POST"])
 def create_player():
     body = json.loads(request.data)
     name = body.get('name')
@@ -43,6 +43,15 @@ def create_player():
     db.session.add(new_player)
     db.session.commit()
     return success_response(new_player.serialize(), 201)
+
+@app.route("/api/players/<int:player_id>/", methods=["DELETE"])
+def delete_player(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    db.session.delete(player)
+    db.session.commit()
+    return success_response(player.serialize())
 
 
 @app.route("/api/challenges/")
