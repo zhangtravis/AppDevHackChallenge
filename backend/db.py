@@ -48,8 +48,8 @@ class Player(db.Model):
             "name": self.name,
             "username": self.username,
             "points": self.points,
-            "current_challenge": [c.serialize() for c in self.challenges if current],
-            "completed_challenges": [c.serialize() for c in self.challenges if not current]
+            "current_challenge": [c.serialize() for c in self.challenges if not c.completed],
+            "completed_challenges": [c.serialize() for c in self.challenges if c.completed]
         }
 
 class Challenge(db.Model):
@@ -73,8 +73,9 @@ class Challenge(db.Model):
     description = db.Column(db.String, nullable=False)
     votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
+    completed = db.Column(db.Boolean, default=False, nullable=False)
     # player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
-    player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenge')
+    player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
 
     def __init__(self, **kwargs):
         """
@@ -83,6 +84,7 @@ class Challenge(db.Model):
         self.title = kwargs.get('title')
         self.description = kwargs.get('description')
         self.claimed = kwargs.get('claimed', False)
+        self.completed = kwargs.get('claimed', False)
         self.votes = 0
 
     def serialize(self):
@@ -95,5 +97,6 @@ class Challenge(db.Model):
             "description": self.description,
             "votes": self.votes,
             "claimed": self.claimed,
+            "completed": self.completed,
             "player": [self.player.serialize()]
         }
