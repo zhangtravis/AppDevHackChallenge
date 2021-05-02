@@ -61,6 +61,7 @@ class Challenge(db.Model):
     player_id: Denotes the id for current player through one-to-one relationship
     player: Denotes what player is partaking in a challenge right now
     """
+    
     __tablename__ = 'challenge'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
