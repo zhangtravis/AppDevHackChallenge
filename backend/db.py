@@ -2,6 +2,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+player_challenge_assoc = db.Table(
+    'player_challenge_assoc',
+    db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
+    db.Column('challenge_id', db.Integer, db.ForeignKey('challenge.id'))
+)
+
 class Player(db.Model):
     """
     Class used to represent Players Database
@@ -22,7 +28,7 @@ class Player(db.Model):
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     points = db.Column(db.Integer, nullable=False)
-    challenge = db.relationship('Challenge', back_populates='player')
+    challenges = db.relationship('Challenge',  secondary=player_challenge_assoc, back_populates='player')
 
     def __init__(self, **kwargs):
         """
@@ -32,7 +38,6 @@ class Player(db.Model):
         self.username = kwargs.get('username')
         self.password = kwargs.get('password')
         self.points = 0
-        self.completed_challenges = []
 
     def serialize(self):
         """
@@ -43,8 +48,8 @@ class Player(db.Model):
             "name": self.name,
             "username": self.username,
             "points": self.points,
-            "challenge": [self.challenge.serialize()],
-            "completed_challenges": self.completed_challenges
+            "current_challenge": [c.serialize() for c in self.challenges if current],
+            "completed_challenges": [c.serialize() for c in self.challenges if not current]
         }
 
 class Challenge(db.Model):
@@ -68,8 +73,8 @@ class Challenge(db.Model):
     description = db.Column(db.String, nullable=False)
     votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
-    player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
-    player = db.relationship('Player', back_populates='challenge')
+    # player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
+    player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenge')
 
     def __init__(self, **kwargs):
         """
