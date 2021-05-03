@@ -29,6 +29,13 @@ def failure_response(message, code=404):
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
 
+@app.route("/api/players/<int:player_id>/")
+def get_player(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    return success_response(player.serialize())
+
 @app.route("/api/players/", methods=["POST"])
 def create_player():
     body = json.loads(request.data)
@@ -82,6 +89,13 @@ def get_unclaimed_challenges():
 def get_challenges():
     challenges = [c.serialize() for c in Challenge.query.all()]
     return success_response(challenges)
+
+@app.route("/challenges/<int:challenge_id>/")
+def get_challenge(task_id):
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+    return success_response(challenge.serialize())
 
 @app.route("/api/challenges/", methods=["POST"])
 def create_challenge():
