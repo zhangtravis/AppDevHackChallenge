@@ -98,5 +98,5 @@ class Challenge(db.Model):
             "votes": self.votes,
             "claimed": self.claimed,
             "completed": self.completed,
-            "player": [self.player.serialize()]
+            "player": [p.serialize() for p in self.player]
         }

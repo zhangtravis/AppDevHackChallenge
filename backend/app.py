@@ -29,6 +29,13 @@ def failure_response(message, code=404):
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
 
+@app.route("/api/players/<int:player_id>/")
+def get_player(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    return success_response(player.serialize())
+
 @app.route("/api/players/", methods=["POST"])
 def create_player():
     body = json.loads(request.data)
@@ -53,13 +60,44 @@ def delete_player(player_id):
     db.session.commit()
     return success_response(player.serialize())
 
+@app.route("/api/players/<int:player_id>/challenge")
+def get_current_challenge(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    return success_response([c.serialize() for c in player.challenges if not c.completed])
+
+@app.route("/api/players/<int:player_id>/challenge", methods=["DELETE"])
+def delete_current_challenge(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    c = get_current_challenge(player.id)
+    if c is None:
+        return failure_response("No current challenge")
+    db.session.delete(c)
+    db.session.commit()
+    return success_response(c.serialize())
+
+@app.route("/api/challenges/unclaimed")
+def get_unclaimed_challenges():
+    challenges = [c.serialize() for c in Challenge.query.all() if not c.claimed]
+    return success_response(challenges)
+
 
 @app.route("/api/challenges/")
 def get_challenges():
     challenges = [c.serialize() for c in Challenge.query.all()]
     return success_response(challenges)
 
-@app.route("/api/challenge/", methods=["POST"])
+@app.route("/challenges/<int:challenge_id>/")
+def get_challenge(challenge_id):
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+    return success_response(challenge.serialize())
+
+@app.route("/api/challenges/", methods=["POST"])
 def create_challenge():
     body = json.loads(request.data)
     title = body.get('title')
@@ -72,6 +110,31 @@ def create_challenge():
     db.session.add(new_challenge)
     db.session.commit()
     return success_response(new_challenge.serialize(), 201)
+
+@app.route("/api/challenges/<int:challenge_id>/", methods=["DELETE"])
+def delete_challenge(challenge_id):
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+    db.session.delete(challenge)
+    db.session.commit()
+    return success_response(challenge.serialize())
+
+@app.route("/challenges/<int:challenge_id>/<int:player_id>/")
+def assign_challenge_to_player(challenge_id, player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+
+    challenge.claimed = True
+    player.challenges.append(challenge)
+    challenge.player.append(player)
+    db.session.commit()
+    return success_response(challenge.serialize())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
