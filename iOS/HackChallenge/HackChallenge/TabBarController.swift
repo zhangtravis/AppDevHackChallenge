@@ -12,7 +12,7 @@ class TabBarController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.viewControllers = [homeTabBar, challengeTabBar, leaderboardTabBar, profileTabBar]
+        self.viewControllers = [homeTabBar, searchTabBar, challengeTabBar, leaderboardTabBar, profileTabBar]
     }
     
     lazy public var homeTabBar: ViewController = {
@@ -32,6 +32,25 @@ class TabBarController: UITabBarController {
         homeTabBar.tabBarItem = tabBarItem
 
         return homeTabBar
+    }()
+    
+    lazy public var searchTabBar: SearchViewController = {
+        
+        let searchTabBar = SearchViewController()
+        
+        let title = "Search"
+        
+        let defaultImage = UIImage(named: "search.png")!
+        
+        let selectedImage = UIImage(named: "search.png")!
+        
+        let tabBarItems = (title: title, image: defaultImage, selectedImage: selectedImage)
+
+        let tabBarItem = UITabBarItem(title: tabBarItems.title, image: tabBarItems.image, selectedImage: tabBarItems.selectedImage)
+        
+        searchTabBar.tabBarItem = tabBarItem
+
+        return searchTabBar
     }()
     
     lazy public var challengeTabBar: ChallengeViewController = {

@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A37263FBC3E00D1245F /* SearchViewController.swift */; };
+		AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */; };
+		AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */; };
+		AC753A41263FBFEC00D1245F /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */; };
+		AC753A44263FC0FB00D1245F /* PastChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A43263FC0FB00D1245F /* PastChallenge.swift */; };
+		AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */; };
 		ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */; };
 		ACDFFF3F263DF45B00E4D96B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF3E263DF45B00E4D96B /* SceneDelegate.swift */; };
 		ACDFFF41263DF45B00E4D96B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF40263DF45B00E4D96B /* ViewController.swift */; };
@@ -20,6 +26,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC753A37263FBC3E00D1245F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallenge.swift; sourceTree = "<group>"; };
+		AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallengeCollectionViewCell.swift; sourceTree = "<group>"; };
+		AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		AC753A43263FC0FB00D1245F /* PastChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastChallenge.swift; sourceTree = "<group>"; };
+		AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastChallengesCollectionViewCell.swift; sourceTree = "<group>"; };
 		ACDFFF39263DF45B00E4D96B /* HackChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACDFFF3E263DF45B00E4D96B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,7 +79,13 @@
 				ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */,
 				ACDFFF3E263DF45B00E4D96B /* SceneDelegate.swift */,
 				ACDFFF40263DF45B00E4D96B /* ViewController.swift */,
+				AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */,
+				AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */,
+				AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */,
+				AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */,
+				AC753A43263FC0FB00D1245F /* PastChallenge.swift */,
 				ACDFFF51263DFAD900E4D96B /* TabBarController.swift */,
+				AC753A37263FBC3E00D1245F /* SearchViewController.swift */,
 				ACDFFF57263DFE3600E4D96B /* ChallengeViewController.swift */,
 				ACDFFF5A263DFE4200E4D96B /* LeaderboardViewController.swift */,
 				ACDFFF54263DFB8D00E4D96B /* ProfileViewController.swift */,
@@ -150,10 +168,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACDFFF5B263DFE4200E4D96B /* LeaderboardViewController.swift in Sources */,
+				AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */,
 				ACDFFF41263DF45B00E4D96B /* ViewController.swift in Sources */,
+				AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */,
 				ACDFFF52263DFAD900E4D96B /* TabBarController.swift in Sources */,
 				ACDFFF55263DFB8D00E4D96B /* ProfileViewController.swift in Sources */,
+				AC753A41263FBFEC00D1245F /* HomeHeaderView.swift in Sources */,
+				AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */,
 				ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */,
+				AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */,
+				AC753A44263FC0FB00D1245F /* PastChallenge.swift in Sources */,
 				ACDFFF58263DFE3600E4D96B /* ChallengeViewController.swift in Sources */,
 				ACDFFF3F263DF45B00E4D96B /* SceneDelegate.swift in Sources */,
 			);
