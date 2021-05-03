@@ -91,7 +91,7 @@ def get_challenges():
     return success_response(challenges)
 
 @app.route("/challenges/<int:challenge_id>/")
-def get_challenge(task_id):
+def get_challenge(challenge_id):
     challenge = Challenge.query.filter_by(id=challenge_id).first()
     if challenge is None:
         return failure_response("Challenge not found!")
