@@ -59,5 +59,19 @@ def get_challenges():
     challenges = [c.serialize() for c in Challenge.query.all()]
     return success_response(challenges)
 
+@app.route("/api/challenge/", methods=["POST"])
+def create_challenge():
+    body = json.loads(request.data)
+    title = body.get('title')
+    description = body.get('description')
+
+    if title is None or description is None :
+        return failure_response("Title or description not provided")
+
+    new_challenge = Challenge(title=title, description=description)
+    db.session.add(new_challenge)
+    db.session.commit()
+    return success_response(new_challenge.serialize(), 201)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
