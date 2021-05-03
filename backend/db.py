@@ -84,7 +84,7 @@ class Challenge(db.Model):
         self.title = kwargs.get('title')
         self.description = kwargs.get('description')
         self.claimed = kwargs.get('claimed', False)
-        self.completed = kwargs.get('claimed', False)
+        self.completed = kwargs.get('completed', False)
         self.votes = 0
 
     def serialize(self):
