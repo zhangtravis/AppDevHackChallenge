@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/home_item"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="Home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/groups_item"
+        android:enabled="true"
+        android:icon="@drawable/groups"
+        android:title="Groups"
+        app:showAsAction="ifRoom" />
+<!--    <item-->
+<!--        android:id="@+id/global_item"-->
+<!--        android:enabled="true"-->
+<!--        android:icon="@drawable/global"-->
+<!--        android:title="Global"-->
+<!--        app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/new_challenge_item"
+        android:enabled="true"
+        android:icon="@drawable/sword"
+        android:title="New Challenge"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/leaderboard_item"
+        android:enabled="true"
+        android:icon="@drawable/bar_chart"
+        android:title="Leaderboard"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/profile_item"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+</menu>
