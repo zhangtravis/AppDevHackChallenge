@@ -59,7 +59,7 @@ def get_challenges():
     challenges = [c.serialize() for c in Challenge.query.all()]
     return success_response(challenges)
 
-@app.route("/api/challenge/", methods=["POST"])
+@app.route("/api/challenges/", methods=["POST"])
 def create_challenge():
     body = json.loads(request.data)
     title = body.get('title')
