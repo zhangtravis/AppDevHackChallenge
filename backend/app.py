@@ -60,6 +60,18 @@ def get_current_challenge(player_id):
         return failure_response("Player not found!")
     return success_response([c.serialize() for c in player.challenges if not c.completed])
 
+@app.route("/api/players/<int:player_id>/challenge", methods=["DELETE"])
+def delete_current_challenge(player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found!")
+    c = get_current_challenge(player.id)
+    if c is None:
+        return failure_response("No current challenge")
+    db.session.delete(c)
+    db.session.commit()
+    return success_response(c.serialize())
+
 @app.route("/api/challenges/unclaimed")
 def get_unclaimed_challenges():
     challenges = [c.serialize() for c in Challenge.query.all() if not c.claimed]
@@ -84,6 +96,15 @@ def create_challenge():
     db.session.add(new_challenge)
     db.session.commit()
     return success_response(new_challenge.serialize(), 201)
+
+@app.route("/api/challenges/<int:challenge_id>/", methods=["DELETE"])
+def delete_challenge(challenge_id):
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+    db.session.delete(challenge)
+    db.session.commit()
+    return success_response(challenge.serialize())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
