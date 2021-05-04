@@ -1,6 +1,22 @@
 from flask_sqlalchemy import SQLAlchemy
+import base64
+import boto3
+import datetime
+from io import BytesIO
+from mimetypes import guess_extension, guess_type
+import os
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+import random
+import re
+import string
 
 db = SQLAlchemy()
+
+EXTENSIONS = ['png', 'gif', 'jpg', 'jpeg', 'jpe']
+BASE_DIR = os.getcwd()
+S3_BUCKET = 'appdevhackchallenge'
+S3_BASE_URL = f'https://{S3_BUCKET}.s3-us-west-1.amazonaws.com'
 
 player_challenge_assoc = db.Table(
     'player_challenge_assoc',
@@ -63,7 +79,6 @@ class Challenge(db.Model):
     description: Database column for description of each challenge
     votes: Database column for # of votes (approval rating) for each challenge
     claimed: Database column for whether a challenge has been claimed or not
-    player_id: Denotes the id for current player through one-to-one relationship
     player: Denotes what player is partaking in a challenge right now
     """
     
@@ -74,7 +89,6 @@ class Challenge(db.Model):
     votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
-    # player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
 
     def __init__(self, **kwargs):
@@ -100,3 +114,73 @@ class Challenge(db.Model):
             "completed": self.completed,
             "player": [p.serialize() for p in self.player]
         }
+
+class Asset(db.Model):
+    """
+    Class used to represent Asset Database (uploading to/downloading from AWS)
+
+    Attributes:
+    -------
+    id: Database column to denote the IDs of each file
+    base_url: Database column for base_url of each file
+    salt: Database column that represent unique identifier for images
+    """
+
+    __tablename__ = 'asset'
+    id = db.Column(db.Integer, primary_key=True)
+    base_url = db.Column(db.String, nullable=False)
+    salt = db.Column(db.String, nullable=False)
+    extension = db.Column(db.String, nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    width = db.Column(db.Integer, nullable=False)
+    created_at =db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, **kwargs):
+        self.create(kwargs.get('image_data'))
+
+    def serialize(self):
+        return {
+            'url': f'{self.base_url}/{self.salt}.{self.extension}',
+            'created_at': str(self.created_at)
+        }
+
+    def create(self, image_data):
+        try:
+            ext = guess_extension(guess_type(image_data)[0])[1:]
+            if ext not in EXTENSIONS:
+                raise Exception(f'Extension {ext} not supported!')
+            
+            salt = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for i in range(16))
+            
+            img_str = re.sub("^data:image/.+;base64,", "", image_data)
+            img_data = base64.b64decode(img_str)
+            img = Image.open(BytesIO(img_data))
+
+            self.base_url = S3_BASE_URL
+            self.salt = salt
+            self.extension = ext
+            self.height = img.height
+            self.width = img.width
+            self.created_at = datetime.datetime.now()
+
+            img_filename = f'{salt}.{ext}'
+            self.upload(img, img_filename)
+
+        except Exception as e:
+            print('Error: ', e)
+
+    def upload(self, img, img_filename):
+        try:
+            img_temploc = f'{BASE_DIR}/uploads/{img_filename}'
+            img.save(img_temploc)
+
+            s3_client = boto3.client('s3')
+            s3_client.upload_file(img_temploc, S3_BUCKET, img_filename)
+
+            s3_resource = boto3.resource('s3')
+            object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
+            object_acl.put(ACL="public-read")
+            os.remove(img_temploc)
+
+        except Exception as e:
+            print('Upload Failed: ', e)

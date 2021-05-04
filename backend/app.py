@@ -1,14 +1,15 @@
 import json
 
-from flask import Flask
-from flask import jsonify
-from flask import request
+from flask import Flask, jsonify, request, redirect, send_file
+import os
 
 from db import db
-from db import Player, Challenge
+from db import Player, Challenge, Asset
 
 app = Flask(__name__)
 db_filename = "game.db"
+upload_folder = "uploads"
+bucket_name = "appdevhackchallenge"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s" % db_filename
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -19,10 +20,10 @@ with app.app_context():
     db.create_all()
 
 def success_response(data, code=200):
-    return json.dumps({"success": True, "data": data}), code
+    return json.dumps({"success": True, "data": data}, default=str), code
 
 def failure_response(message, code=404):
-    return json.dumps({"success": False, "error": message}), code
+    return json.dumps({"success": False, "error": message}, default=str), code
 
 
 @app.route("/api/players/")
@@ -135,6 +136,21 @@ def assign_challenge_to_player(challenge_id, player_id):
     challenge.player.append(player)
     db.session.commit()
     return success_response(challenge.serialize())
+
+"""
+File upload route
+"""
+@app.route('/upload/', methods=['POST'])
+def upload():
+    body = json.loads(request.data)
+    image_data = body.get('image_data')
+    if image_data is None:
+        return failure_response('No Image!')
+    asset = Asset(image_data=image_data)
+    db.session.add(asset)
+    db.session.commit()
+    return success_response(asset.serialize(), 201)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
