@@ -5,10 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class HomeFragment : Fragment() {
-
+    private lateinit var currentChallengeRecyclerView : RecyclerView
+    private lateinit var currentChallengeAdapter : RecyclerView.Adapter<*>
+    private lateinit var currentChallengeLayoutManager : RecyclerView.LayoutManager
+    private lateinit var pastChallengeRecyclerView : RecyclerView
+    private lateinit var pastChallengeAdapter : RecyclerView.Adapter<*>
+    private lateinit var pastChallengeLayoutManager : RecyclerView.LayoutManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -23,6 +30,25 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val root:View = inflater.inflate(R.layout.fragment_home, container, false)
 
+        currentChallengeRecyclerView  = root.findViewById(R.id.curr_challenges)
+        currentChallengeLayoutManager= LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
+        currentChallengeRecyclerView.layoutManager=currentChallengeLayoutManager
+        var currChallengeDataSet= mutableListOf<Challenge>()
+        currChallengeDataSet.add(Challenge("Challenge one"))
+        currChallengeDataSet.add(Challenge("Challenge two"))
+        currentChallengeAdapter = ChallengeAdapter(currChallengeDataSet)
+        currentChallengeRecyclerView.adapter=currentChallengeAdapter
+
+        pastChallengeRecyclerView=root.findViewById(R.id.past_challenges)
+        pastChallengeLayoutManager = LinearLayoutManager(root.context)
+        pastChallengeRecyclerView.layoutManager=pastChallengeLayoutManager
+        var pastChallengeDataSet = mutableListOf<Challenge>()
+        pastChallengeDataSet.add(Challenge("Challenge three"))
+        pastChallengeDataSet.add(Challenge("Challenge four"))
+        pastChallengeDataSet.add(Challenge("Challenge five"))
+        pastChallengeDataSet.add(Challenge("Challenge six"))
+        pastChallengeAdapter=ChallengeAdapter(pastChallengeDataSet)
+        pastChallengeRecyclerView.adapter=pastChallengeAdapter
         return root
     }
 

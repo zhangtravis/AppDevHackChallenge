@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ChallengeWithFriends</string>
-
+    <string name="current_challenges">Current Challenges</string>
+    <string name="past_challenges">Past Challenges</string>
+    <string name="find_challenges">Find Challenges</string>
+    <string name="search">&#x1F50D;</string>
 </resources>
