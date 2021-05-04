@@ -30,10 +30,11 @@ class ViewController: UIViewController {
     private let cellPadding: CGFloat = 20
     private let sectionPadding: CGFloat = 4
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
+    private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = backgroundGrey
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -65,8 +66,8 @@ class ViewController: UIViewController {
             CurrentChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "John Doe")
         ]
         pastChallenges = [
-            PastChallenge(title: "Climb Mount Everast", image: UIImage(named: "mountain.png")!, description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person"),
-            PastChallenge(title: "Climb Mount Everast", image: UIImage(named: "mountain.png")!, description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person")
+            PastChallenge(title: "Climb Mount Everast", image: Image(withImage: UIImage(named: "mountain.png")!), description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person", upvotes: 0, downvotes: 0),
+            PastChallenge(title: "Climb Mount Everast", image: Image(withImage: UIImage(named: "mountain.png")!), description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person", upvotes: 1, downvotes: 0)
         ]
         
         // Setup flow layout
@@ -188,20 +189,22 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
             return CGSize(width: collectionView.frame.width, height: 125)
         }
         else {
-            let size = (collectionView.frame.width)
             return CGSize(width: collectionView.frame.width, height: 274)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == currentCollectionView {
-            currentChallenges[indexPath.item].selected = !currentChallenges[indexPath.item].selected
-            collectionView.reloadData()
+//            currentChallenges[indexPath.item].selected = !currentChallenges[indexPath.item].selected
+//            collectionView.reloadData()
+            
+            print("selected a current challenge")
             
         }
         else {
-            pastChallenges[indexPath.item].selected = !pastChallenges[indexPath.item].selected
-            collectionView.reloadData()
+            print("selected a past challenge")
+//            pastChallenges[indexPath.item].selected = !pastChallenges[indexPath.item].selected
+//            collectionView.reloadData()
         }
     }
 }

@@ -78,8 +78,6 @@ class CurrentChallengeCollectionViewCell: UICollectionViewCell {
         title.text = challenge.title
         desc.text = challenge.description
         sender.text = "Challenged by: " + challenge.sender
-        challengeView.layer.opacity = challenge.selected ? 0.8 : 1
-        
     }
     
     required init?(coder: NSCoder) {
