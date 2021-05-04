@@ -25,7 +25,7 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"success": False, "error": message}, default=str), code
 
-
+@app.route("/")
 @app.route("/api/players/")
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
@@ -153,4 +153,5 @@ def upload():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = os.environ.get('PORT', 500)
+    app.run(host="0.0.0.0", port=port)
