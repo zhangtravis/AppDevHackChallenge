@@ -109,6 +109,7 @@ class ViewController: UIViewController {
         currentCollectionView.delegate = self
         pastCollectionView.delegate = self
         
+        
         view.addSubview(currentCollectionView)
         view.addSubview(pastCollectionView)
         setupConstraints()
@@ -170,11 +171,23 @@ extension ViewController: UICollectionViewDataSource {
         if collectionView == currentCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: currentChallengeCellReuseIdentifier, for: indexPath) as! CurrentChallengeCollectionViewCell
             cell.configure(for: currentChallenges[indexPath.item])
+            cell.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+//            cell.layer.shadowColor = UIColor.gray.cgColor
+            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+            cell.layer.shadowRadius = 5.0
+            cell.layer.shadowOpacity = 1.0
+            cell.layer.masksToBounds = false
             return cell
         }
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: pastChallengesCellReuseIdentifier, for: indexPath) as! PastChallengesCollectionViewCell
             cell.configure(for: pastChallenges[indexPath.item])
+            cell.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+//            cell.layer.shadowColor = UIColor.gray.cgColor
+            cell.layer.shadowOffset = CGSize(width: 3, height: 3)
+            cell.layer.shadowRadius = 5.0
+            cell.layer.shadowOpacity = 1.0
+            cell.layer.masksToBounds = false
             return cell
         }
 
@@ -189,7 +202,7 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
             return CGSize(width: collectionView.frame.width, height: 125)
         }
         else {
-            return CGSize(width: collectionView.frame.width, height: 274)
+            return CGSize(width: collectionView.frame.width, height: 280)
         }
     }
     
