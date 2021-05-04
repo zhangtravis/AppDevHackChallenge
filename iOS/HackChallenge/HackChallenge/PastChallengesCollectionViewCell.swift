@@ -31,8 +31,8 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(title)
         
         img.layer.cornerRadius = 5
-        img.layer.borderWidth = 1.0
-        img.layer.borderColor = CGColor(red: 255, green: 255, blue: 255, alpha: 1)
+//        img.layer.borderWidth = 1.0
+//        img.layer.borderColor = CGColor(red: 255, green: 255, blue: 255, alpha: 1)
         img.layer.masksToBounds = true
         img.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(img)

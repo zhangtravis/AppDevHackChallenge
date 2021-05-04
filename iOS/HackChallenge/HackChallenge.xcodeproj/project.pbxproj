@@ -10,7 +10,6 @@
 		AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A37263FBC3E00D1245F /* SearchViewController.swift */; };
 		AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */; };
 		AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */; };
-		AC753A41263FBFEC00D1245F /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */; };
 		AC753A44263FC0FB00D1245F /* PastChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A43263FC0FB00D1245F /* PastChallenge.swift */; };
 		AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */; };
 		ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */; };
@@ -23,13 +22,15 @@
 		ACDFFF55263DFB8D00E4D96B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF54263DFB8D00E4D96B /* ProfileViewController.swift */; };
 		ACDFFF58263DFE3600E4D96B /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF57263DFE3600E4D96B /* ChallengeViewController.swift */; };
 		ACDFFF5B263DFE4200E4D96B /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF5A263DFE4200E4D96B /* LeaderboardViewController.swift */; };
+		E89EF975A0ECBE94E810C524 /* Pods_HackChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1E1B00D9225D95E89FE119A /* Pods_HackChallenge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11CCD07940328C2C28084CA5 /* Pods-HackChallenge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackChallenge.debug.xcconfig"; path = "Target Support Files/Pods-HackChallenge/Pods-HackChallenge.debug.xcconfig"; sourceTree = "<group>"; };
+		1469823BCCF46AF156DFF26B /* Pods-HackChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackChallenge.release.xcconfig"; path = "Target Support Files/Pods-HackChallenge/Pods-HackChallenge.release.xcconfig"; sourceTree = "<group>"; };
 		AC753A37263FBC3E00D1245F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallenge.swift; sourceTree = "<group>"; };
 		AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallengeCollectionViewCell.swift; sourceTree = "<group>"; };
-		AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		AC753A43263FC0FB00D1245F /* PastChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastChallenge.swift; sourceTree = "<group>"; };
 		AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastChallengesCollectionViewCell.swift; sourceTree = "<group>"; };
 		ACDFFF39263DF45B00E4D96B /* HackChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +45,7 @@
 		ACDFFF54263DFB8D00E4D96B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		ACDFFF57263DFE3600E4D96B /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
 		ACDFFF5A263DFE4200E4D96B /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
+		D1E1B00D9225D95E89FE119A /* Pods_HackChallenge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HackChallenge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,17 +53,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E89EF975A0ECBE94E810C524 /* Pods_HackChallenge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E84C6B60577E7BD1E7C9282 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D1E1B00D9225D95E89FE119A /* Pods_HackChallenge.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		56D480D3FF4AB2101C95E402 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				11CCD07940328C2C28084CA5 /* Pods-HackChallenge.debug.xcconfig */,
+				1469823BCCF46AF156DFF26B /* Pods-HackChallenge.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		ACDFFF30263DF45A00E4D96B = {
 			isa = PBXGroup;
 			children = (
 				ACDFFF3B263DF45B00E4D96B /* HackChallenge */,
 				ACDFFF3A263DF45B00E4D96B /* Products */,
+				56D480D3FF4AB2101C95E402 /* Pods */,
+				1E84C6B60577E7BD1E7C9282 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,7 +103,6 @@
 				ACDFFF3E263DF45B00E4D96B /* SceneDelegate.swift */,
 				ACDFFF40263DF45B00E4D96B /* ViewController.swift */,
 				AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */,
-				AC753A40263FBFEC00D1245F /* HomeHeaderView.swift */,
 				AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */,
 				AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */,
 				AC753A43263FC0FB00D1245F /* PastChallenge.swift */,
@@ -104,9 +126,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ACDFFF4D263DF45B00E4D96B /* Build configuration list for PBXNativeTarget "HackChallenge" */;
 			buildPhases = (
+				44CB334EDF127CEDD174468B /* [CP] Check Pods Manifest.lock */,
 				ACDFFF35263DF45B00E4D96B /* Sources */,
 				ACDFFF36263DF45B00E4D96B /* Frameworks */,
 				ACDFFF37263DF45B00E4D96B /* Resources */,
+				7C3EB80E4DC7690B5098C170 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -162,6 +186,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		44CB334EDF127CEDD174468B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HackChallenge-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7C3EB80E4DC7690B5098C170 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		ACDFFF35263DF45B00E4D96B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -173,7 +239,6 @@
 				AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */,
 				ACDFFF52263DFAD900E4D96B /* TabBarController.swift in Sources */,
 				ACDFFF55263DFB8D00E4D96B /* ProfileViewController.swift in Sources */,
-				AC753A41263FBFEC00D1245F /* HomeHeaderView.swift in Sources */,
 				AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */,
 				ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */,
 				AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */,
@@ -323,6 +388,7 @@
 		};
 		ACDFFF4E263DF45B00E4D96B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11CCD07940328C2C28084CA5 /* Pods-HackChallenge.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -341,6 +407,7 @@
 		};
 		ACDFFF4F263DF45B00E4D96B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1469823BCCF46AF156DFF26B /* Pods-HackChallenge.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
