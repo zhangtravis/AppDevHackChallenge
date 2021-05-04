@@ -124,6 +124,10 @@ class Asset(db.Model):
     id: Database column to denote the IDs of each file
     base_url: Database column for base_url of each file
     salt: Database column that represent unique identifier for images
+    extension: Database column to store the extensions in each file
+    height: Database column for image height
+    width: Database column for image width
+    created_at: Database column for when file was created
     """
 
     __tablename__ = 'asset'
@@ -136,15 +140,26 @@ class Asset(db.Model):
     created_at =db.Column(db.DateTime, nullable=False)
 
     def __init__(self, **kwargs):
+        """
+        Initialize variables
+        """
         self.create(kwargs.get('image_data'))
 
     def serialize(self):
+        """
+        Return serialized data
+        """
         return {
             'url': f'{self.base_url}/{self.salt}.{self.extension}',
             'created_at': str(self.created_at)
         }
 
     def create(self, image_data):
+        """
+        Tries to create an image from base64 code and upload to Amazon s3 bucket
+
+        @param image_data: base64 encoded data of image
+        """
         try:
             ext = guess_extension(guess_type(image_data)[0])[1:]
             if ext not in EXTENSIONS:
@@ -170,6 +185,12 @@ class Asset(db.Model):
             print('Error: ', e)
 
     def upload(self, img, img_filename):
+        """
+        Tries to upload image to Amazon s3 bucket
+
+        @param img: the image to upload
+        @param img_filename: Filename for image
+        """
         try:
             img_temploc = f'{BASE_DIR}/uploads/{img_filename}'
             img.save(img_temploc)
