@@ -7,22 +7,28 @@
 
 import UIKit
 
-class PastChallenge {
+struct Image: Codable {
+    let imageData: Data?
+    
+    init(withImage image: UIImage) {
+        self.imageData = image.pngData()
+    }
+
+    func getImage() -> UIImage? {
+        guard let imageData = self.imageData else {
+            return nil
+        }
+        let image = UIImage(data: imageData)
+        
+        return image
+    }
+}
+
+struct PastChallenge : Codable {
     var title: String
-    var image: UIImage
+    var image: Image
     var description: String
     var sender: String
     var upvotes: Int
     var downvotes: Int
-    var selected: Bool
-
-    init(title: String, image: UIImage, description: String, sender: String) {
-        self.title = title
-        self.image = image
-        self.description = description
-        self.sender = sender
-        self.upvotes = 0
-        self.downvotes = 0
-        self.selected = false
-    }
 }

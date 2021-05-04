@@ -91,9 +91,8 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
     func configure(for challenge: PastChallenge) {
         title.text = challenge.title
         desc.text = challenge.description
-        img.image = challenge.image
+        img.image = challenge.image.getImage()
         sender.text = "Challenged by: " + challenge.sender
-        challengeView.layer.opacity = challenge.selected ? 0.8 : 1
         
     }
     

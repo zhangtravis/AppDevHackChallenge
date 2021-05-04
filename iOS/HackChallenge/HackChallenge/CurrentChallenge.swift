@@ -7,16 +7,9 @@
 
 import UIKit
 
-class CurrentChallenge {
+struct CurrentChallenge {
     var title: String
     var description: String
     var sender: String
-    var selected: Bool
-
-    init(title: String, description: String, sender: String) {
-        self.title = title
-        self.description = description
-        self.sender = sender
-        self.selected = false
-    }
 }
+
