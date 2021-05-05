@@ -24,6 +24,12 @@ player_challenge_assoc = db.Table(
     db.Column('challenge_id', db.Integer, db.ForeignKey('challenge.id'))
 )
 
+player_group_assoc = db.Table(
+    'player_group_assoc',
+    db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
+    db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
+)
+
 class Player(db.Model):
     """
     Class used to represent Players Database
@@ -45,6 +51,8 @@ class Player(db.Model):
     password = db.Column(db.String, nullable=False)
     points = db.Column(db.Integer, nullable=False)
     challenges = db.relationship('Challenge',  secondary=player_challenge_assoc, back_populates='player')
+    groups = db.relationship('Group',  secondary=player_group_assoc, back_populates='player')
+    authored_challenges = db.relationship("Challenge", cascade="delete")
 
     def __init__(self, **kwargs):
         """
@@ -65,7 +73,9 @@ class Player(db.Model):
             "username": self.username,
             "points": self.points,
             "current_challenge": [c.serialize() for c in self.challenges if not c.completed],
-            "completed_challenges": [c.serialize() for c in self.challenges if c.completed]
+            "completed_challenges": [c.serialize() for c in self.challenges if c.completed],
+            "groups": [g.serialize() for g in self.groups],
+            "authored_challenges": [c.serialize() for c in self.authored_challenges]
         }
 
 class Challenge(db.Model):
@@ -86,9 +96,11 @@ class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
-    votes = db.Column(db.Integer, nullable=False)
+    # votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False)
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
 
     def __init__(self, **kwargs):
@@ -99,7 +111,9 @@ class Challenge(db.Model):
         self.description = kwargs.get('description')
         self.claimed = kwargs.get('claimed', False)
         self.completed = kwargs.get('completed', False)
-        self.votes = 0
+        self.author_id = kwargs.get('author_id')
+        self.group_id = kwargs.get('group_id')
+        # self.votes = 0
 
     def serialize(self):
         """
@@ -109,10 +123,39 @@ class Challenge(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            "votes": self.votes,
+            # "votes": self.votes,
             "claimed": self.claimed,
             "completed": self.completed,
+            "author_id": self.author_id,
+            "group_id": self.group_id,
             "player": [p.serialize() for p in self.player]
+        }
+
+class Group(db.Model):
+    """
+    """
+
+    __tablename__ = 'group'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    players = db.relationship('Player',  secondary=player_group_assoc, back_populates='group')
+    local_challenges = db.relationship("Challenge", cascade="delete")
+
+    def __init__(self, **kwargs):
+        """
+        Initialize variables
+        """
+        self.name = kwargs.get('name')
+
+    def serialize(self):
+        """
+        Return serialized data
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "players": [p.serialize() for p in self.players],
+            "challenges": [c.serialize() for c in self.local_challenges]
         }
 
 class Asset(db.Model):
