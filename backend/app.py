@@ -2,6 +2,8 @@ import json
 
 from flask import Flask, jsonify, request, redirect, send_file
 import os
+from PIL import Image
+from file import upload_file, list_files
 
 from db import db
 from db import Player, Challenge, Asset, Group
@@ -209,16 +211,31 @@ File upload route
 """
 @app.route('/upload/', methods=['POST'])
 def upload():
-    body = json.loads(request.data)
-    image_data = body.get('image_data')
-    if image_data is None:
+    f = request.files['file']
+    if f is None:
         return failure_response('No Image!')
-    asset = Asset(image_data=image_data)
+    img = Image.open(f)
+    asset = Asset(file=img)
     db.session.add(asset)
     db.session.commit()
     return success_response(asset.serialize(), 201)
 
+# @app.route("/storage/")
+# def storage():
+#     contents = list_files(bucket_name)
+#     return success_response(contents)
+
+# @app.route("/upload/", methods=['POST'])
+# def upload():
+#     if request.method == "POST":
+#         f = request.files['file']
+#         f.save(os.path.join(upload_folder, f.filename))
+#         response = upload_file(f"{upload_folder}/{f.filename}", bucket_name)
+
+#         return response
+
 
 if __name__ == "__main__":
-    port = os.environ.get('PORT', 500)
-    app.run(host="0.0.0.0", port=port)
+    # port = os.environ.get('PORT', 500)
+    # app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=5000, debug=True)
