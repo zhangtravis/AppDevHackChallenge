@@ -34,20 +34,14 @@ class HomeFragment : Fragment() {
         currentChallengeLayoutManager= LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
         currentChallengeRecyclerView.layoutManager=currentChallengeLayoutManager
         var currChallengeDataSet= mutableListOf<Challenge>()
-        currChallengeDataSet.add(Challenge("Challenge one"))
-        currChallengeDataSet.add(Challenge("Challenge two"))
-        currentChallengeAdapter = ChallengeAdapter(currChallengeDataSet)
+        currentChallengeAdapter = ChallengeAdapter(currChallengeDataSet,false)
         currentChallengeRecyclerView.adapter=currentChallengeAdapter
 
         pastChallengeRecyclerView=root.findViewById(R.id.past_challenges)
         pastChallengeLayoutManager = LinearLayoutManager(root.context)
         pastChallengeRecyclerView.layoutManager=pastChallengeLayoutManager
         var pastChallengeDataSet = mutableListOf<Challenge>()
-        pastChallengeDataSet.add(Challenge("Challenge three"))
-        pastChallengeDataSet.add(Challenge("Challenge four"))
-        pastChallengeDataSet.add(Challenge("Challenge five"))
-        pastChallengeDataSet.add(Challenge("Challenge six"))
-        pastChallengeAdapter=ChallengeAdapter(pastChallengeDataSet)
+        pastChallengeAdapter=ChallengeAdapter(pastChallengeDataSet,true)
         pastChallengeRecyclerView.adapter=pastChallengeAdapter
         return root
     }

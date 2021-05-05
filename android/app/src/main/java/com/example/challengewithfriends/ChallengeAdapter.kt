@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ChallengeAdapter(private var myDataset: MutableList<Challenge>):RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
+class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isCompleted:Boolean):RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
     class ViewHolder internal constructor(itemView: View): RecyclerView.ViewHolder(itemView){
         val title:TextView = itemView.findViewById(R.id.title)
+        val description:TextView = itemView.findViewById(R.id.description)
+        val author:TextView = itemView.findViewById(R.id.author)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,6 +20,8 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>):RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text=myDataset[position].title
+        holder.description.text=myDataset[position].description
+//        holder.author.text=myDataset[position].
     }
 
     override fun getItemCount(): Int {

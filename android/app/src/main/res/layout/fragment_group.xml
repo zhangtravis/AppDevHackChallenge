@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/find_challenges_text"
         android:text="@string/find_challenges"
+        android:fontFamily="@font/lavigne"
         android:textColor="@color/black"
         android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
@@ -38,6 +39,17 @@
         android:background="@color/transparent"
         android:text="@string/search"
         android:textSize="30dp"/>
+    <Button
+        android:id="@+id/clear_search_button"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/search_bar"
+        app:layout_constraintBottom_toBottomOf="@id/search_bar"
+        app:layout_constraintRight_toLeftOf="@id/search_button"
+        android:background="@color/transparent"
+        android:text="X"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
 
     <RadioGroup
         android:layout_width="match_parent"
