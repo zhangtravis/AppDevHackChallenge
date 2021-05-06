@@ -209,12 +209,26 @@ def assign_player_to_group():
     db.session.commit()
     return success_response(group.serialize())
 
-@app.route("/api/leaderboard/")
-def get_leaderboard():
-    leaderboard = Player.query.all()
+@app.route("/api/leaderboard/<int:group_id>/")
+def get_group_leaderboard(group_id):
+    group = Group.query.filter_by(id=group_id).first()
+    if group is None:
+        return failure_response("Group not found!")
+
+    group_players = group.players
 
     player_points_dict = {}
-    for player in leaderboard:
+    for player in group_players:
+        player_points_dict[player.name] = player.points
+    player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
+    return success_response(player_points_lst)
+
+@app.route("/api/leaderboard/")
+def get_leaderboard():
+    players = Player.query.all()
+
+    player_points_dict = {}
+    for player in players:
         player_points_dict[player.name] = player.points
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
     return success_response(player_points_lst)
