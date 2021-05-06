@@ -143,7 +143,7 @@ def delete_challenge(challenge_id):
     db.session.commit()
     return success_response(challenge.serialize())
 
-@app.route("/challenges/<int:challenge_id>/<int:player_id>/")
+@app.route("/api/challenges/<int:challenge_id>/<int:player_id>/")
 def assign_challenge_to_player(challenge_id, player_id):
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
@@ -191,8 +191,11 @@ def create_group():
     db.session.commit()
     return success_response(new_group.serialize(), 201)
 
-@app.route("/api/groups/<int:group_id>/<int:player_id>/")
-def assign_player_to_group(group_id, player_id):
+@app.route("/api/groups/assign_player_group/", methods=["POST"])
+def assign_player_to_group():
+    body = json.loads(request.data)
+    group_id = body.get('group_id')
+    player_id = body.get('player_id')
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
         return failure_response("Player not found!")
@@ -205,6 +208,55 @@ def assign_player_to_group(group_id, player_id):
     group.players.append(player)
     db.session.commit()
     return success_response(group.serialize())
+
+@app.route("/api/leaderboard/<int:group_id>/")
+def get_group_leaderboard(group_id):
+    group = Group.query.filter_by(id=group_id).first()
+    if group is None:
+        return failure_response("Group not found!")
+
+    group_players = group.players
+
+    player_points_dict = {}
+    for player in group_players:
+        player_points_dict[player.name] = player.points
+    player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
+    return success_response(player_points_lst)
+
+@app.route("/api/leaderboard/")
+def get_leaderboard():
+    players = Player.query.all()
+
+    player_points_dict = {}
+    for player in players:
+        player_points_dict[player.name] = player.points
+    player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
+    return success_response(player_points_lst)
+
+
+@app.route("/api/challenges/mark_completed/<int:challenge_id>/<int:player_id>/")
+def mark_completed(challenge_id, player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found")
+
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found")
+
+    for p in challenge.player:
+        challenge_player = p
+
+    if challenge_player.id != player.id:
+        return failure_response("Challenge not claimed by this player")
+
+    if challenge.completed == True:
+        return failure_response("Challenge already completed")
+
+    challenge.completed = True
+    player.points += 100
+    db.session.commit()
+    return success_response(challenge.serialize())
 
 """
 File upload route
