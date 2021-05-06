@@ -1,14 +1,18 @@
 package com.example.challengewithfriends
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.moshi.Moshi
@@ -61,11 +65,12 @@ class GroupFragment : Fragment() {
         searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()
         immutableAllChallengeDataSet=allChallengeDataSet.toMutableList()
 
-
+        setFilterStuff(root)
 
         return root
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setFilterStuff(root:View){
         radio=root.findViewById(R.id.radio)
         radio1=root.findViewById(R.id.radio_1)
@@ -80,13 +85,43 @@ class GroupFragment : Fragment() {
             radio.clearCheck()
             restoreData(searchSafeAllChallengeDataSet,allChallengeDataSet)
             allChallengeAdapter.notifyDataSetChanged()
+            radio1.background=resources.getDrawable(R.drawable.rounded_corner)
+            radio2.background=resources.getDrawable(R.drawable.rounded_corner)
+            radio3.background=resources.getDrawable(R.drawable.rounded_corner)
+        }
+        setRadioButton(radio1, "test", radio2, radio3)
+        setRadioButton(radio2, "test 2", radio1, radio3)
+        setRadioButton(radio3, "test 3", radio1, radio2)
+
+        setUpSearch(searchbar,searchButton,clearSearchButton,clearRadioButton)
+    }
+
+    private fun setUpSearch(searchBar:EditText, searchButton:Button, clearSearchButton:Button, clearRadioButton: Button){
+        searchBar.setOnClickListener(){
+            searchBar.setText("")
+            clearRadioButton.performClick()
+        }
+        searchButton.setOnClickListener(){
+            val search:String = searchBar.toString()
+            allChallengeDataSet.retainAll{ challenge:Challenge ->
+                challenge.title.contains(search) || challenge.description.contains(search) // || challenge.author_id.contains(search) || challenge.group_id.contains(search)
+            }
+            allChallengeAdapter.notifyDataSetChanged()
+            searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()
+        }
+        clearSearchButton.setOnClickListener(){
+            searchBar.setText("Search")
+            restoreData(immutableAllChallengeDataSet,allChallengeDataSet)
+            restoreData(immutableAllChallengeDataSet, searchSafeAllChallengeDataSet)
+            allChallengeAdapter.notifyDataSetChanged()
         }
 
     }
 
-    private fun setRadioButton(button:RadioButton, group:String){
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setRadioButton(button:RadioButton, group:String?, other1:RadioButton, other2:RadioButton){
         if(group==null){
-            button.visibility=View.INVISIBLE
+            button.visibility=View.GONE
             return
         }
         button.text=group
@@ -94,8 +129,12 @@ class GroupFragment : Fragment() {
             restoreData(searchSafeAllChallengeDataSet,allChallengeDataSet)
             allChallengeDataSet.retainAll { challenge:Challenge ->
 //                challenge.group == group
-            true
+            false
             }
+            allChallengeAdapter.notifyDataSetChanged()
+            button.background=resources.getDrawable(R.drawable.rounded_corner_selected)
+            other1.background=resources.getDrawable(R.drawable.rounded_corner)
+            other2.background=resources.getDrawable(R.drawable.rounded_corner)
         }
     }
 
@@ -115,7 +154,9 @@ class GroupFragment : Fragment() {
                     val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
-                        allChallengeDataSet.add(Challenge(it.id,it.title,it.description,it.claimed,it.completed,/*it.author_id,it.group_id,*/it.player))
+                        if(!it.claimed) {
+                            allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,/*it.author_id,it.group_id,*/it.player))
+                        }
                     }
                 }
             }

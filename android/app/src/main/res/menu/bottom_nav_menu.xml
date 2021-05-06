@@ -10,15 +10,9 @@
     <item
         android:id="@+id/groups_item"
         android:enabled="true"
-        android:icon="@drawable/groups"
-        android:title="Groups"
+        android:icon="@drawable/searching_magnifying_glass"
+        android:title="Find a Challenge"
         app:showAsAction="ifRoom" />
-<!--    <item-->
-<!--        android:id="@+id/global_item"-->
-<!--        android:enabled="true"-->
-<!--        android:icon="@drawable/global"-->
-<!--        android:title="Global"-->
-<!--        app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/new_challenge_item"
         android:enabled="true"

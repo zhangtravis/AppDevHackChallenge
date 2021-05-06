@@ -76,18 +76,6 @@ def get_current_challenge(player_id):
         return failure_response("Player not found!")
     return success_response([c.serialize() for c in player.challenges if not c.completed])
 
-@app.route("/api/players/<int:player_id>/challenge", methods=["DELETE"])
-def delete_current_challenge(player_id):
-    player = Player.query.filter_by(id=player_id).first()
-    if player is None:
-        return failure_response("Player not found!")
-    c = get_current_challenge(player.id)
-    if c is None:
-        return failure_response("No current challenge")
-    db.session.delete(c)
-    db.session.commit()
-    return success_response(c.serialize())
-
 @app.route("/api/challenges/<string:title>/")
 def get_challenge_by_name(title):
     challenge = Challenge.query.filter_by(title=title).first()
@@ -143,8 +131,11 @@ def delete_challenge(challenge_id):
     db.session.commit()
     return success_response(challenge.serialize())
 
-@app.route("/api/challenges/<int:challenge_id>/<int:player_id>/")
-def assign_challenge_to_player(challenge_id, player_id):
+@app.route("/api/challenges/assign_challenge_player/", methods=["POST"])
+def assign_challenge_to_player():
+    body = json.loads(request.data)
+    player_id = body.get('player_id')
+    challenge_id = body.get('challenge_id')
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
         return failure_response("Player not found!")
@@ -234,11 +225,10 @@ def get_leaderboard():
     return success_response(player_points_lst)
 
 
-@app.route("/api/challenges/mark_completed/<int:challenge_id>/<int:player_id>/")
-def mark_completed(challenge_id, player_id):
-    player = Player.query.filter_by(id=player_id).first()
-    if player is None:
-        return failure_response("Player not found")
+@app.route("/api/challenges/mark_completed/", methods=["POST"])
+def mark_completed():
+    body = json.loads(request.data)
+    challenge_id = body.get('challenge_id')
 
     challenge = Challenge.query.filter_by(id=challenge_id).first()
     if challenge is None:
@@ -247,8 +237,8 @@ def mark_completed(challenge_id, player_id):
     for p in challenge.player:
         challenge_player = p
 
-    if challenge_player.id != player.id:
-        return failure_response("Challenge not claimed by this player")
+    if challenge_player is None:
+        return failure_response("Challenge has not been claimed yet")
 
     if challenge.completed == True:
         return failure_response("Challenge already completed")

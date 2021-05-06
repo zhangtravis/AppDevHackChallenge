@@ -21,7 +21,10 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text=myDataset[position].title
         holder.description.text=myDataset[position].description
-//        holder.author.text=myDataset[position].
+//        holder.author.text=myDataset[position].author_id
+        holder.itemView.setOnClickListener(){
+
+        }
     }
 
     override fun getItemCount(): Int {
