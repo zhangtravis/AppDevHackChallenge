@@ -191,8 +191,11 @@ def create_group():
     db.session.commit()
     return success_response(new_group.serialize(), 201)
 
-@app.route("/api/groups/<int:group_id>/<int:player_id>/")
-def assign_player_to_group(group_id, player_id):
+@app.route("/api/groups/assign_player_group/", methods=["POST"])
+def assign_player_to_group():
+    body = json.loads(request.data)
+    group_id = body.get('group_id')
+    player_id = body.get('player_id')
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
         return failure_response("Player not found!")

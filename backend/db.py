@@ -111,7 +111,7 @@ class Challenge(db.Model):
     claimed = db.Column(db.Boolean, default=False, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
 
     def __init__(self, **kwargs):
