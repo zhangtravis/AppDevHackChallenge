@@ -1,13 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ProfileFragment"
+    android:background="@color/blue_3">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="temp5" />
+        android:id="@+id/password_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password:"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/username_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username:"
+        app:layout_constraintBottom_toTopOf="@id/password_text"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/group_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Groups:"
+        app:layout_constraintTop_toBottomOf="@id/password_text"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.5"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toTopOf="@id/username_text"
+        app:layout_constraintBottom_toBottomOf="@id/username_text"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="25dp"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.5"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toTopOf="@id/password_text"
+        app:layout_constraintBottom_toBottomOf="@id/password_text"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="25dp"/>
+
+    <EditText
+        android:id="@+id/group1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toTopOf="@id/group_text"
+        app:layout_constraintBottom_toBottomOf="@id/group_text"
+        app:layout_constraintLeft_toLeftOf="@id/password"/>
+    <EditText
+        android:id="@+id/group2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toBottomOf="@id/group1"
+        app:layout_constraintLeft_toLeftOf="@id/password"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        android:id="@+id/group3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.25"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toBottomOf="@id/group2"
+        app:layout_constraintLeft_toLeftOf="@id/password"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/group1_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/group1"
+        app:layout_constraintTop_toTopOf="@id/group1"
+        app:layout_constraintBottom_toBottomOf="@id/group1"
+        android:text="Leave Group"
+        android:backgroundTint="@color/red"
+        android:textSize="10dp"
+        android:layout_marginLeft="10dp"/>
+    <Button
+        android:id="@+id/group2_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/group2"
+        app:layout_constraintTop_toTopOf="@id/group2"
+        app:layout_constraintBottom_toBottomOf="@id/group2"
+        android:text="Leave Group"
+        android:backgroundTint="@color/red"
+        android:textSize="10dp"
+        android:layout_marginLeft="10dp"/>
+    <Button
+        android:id="@+id/group3_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/group3"
+        app:layout_constraintTop_toTopOf="@id/group3"
+        app:layout_constraintBottom_toBottomOf="@id/group3"
+        android:text="Leave Group"
+        android:backgroundTint="@color/red"
+        android:textSize="10dp"
+        android:layout_marginLeft="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:backgroundTint="@color/red"
+        android:text="Sign Out"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
