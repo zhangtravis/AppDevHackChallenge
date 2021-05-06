@@ -72,10 +72,21 @@ class Player(db.Model):
             "name": self.name,
             "username": self.username,
             "points": self.points,
-            "current_challenge": [c.serialize() for c in self.challenges if not c.completed],
-            "completed_challenges": [c.serialize() for c in self.challenges if c.completed],
-            "groups": [g.serialize() for g in self.groups],
-            "authored_challenges": [c.serialize() for c in self.authored_challenges]
+            "current_challenge": [c.serialize_condensed() for c in self.challenges if not c.completed],
+            "completed_challenges": [c.serialize_condensed() for c in self.challenges if c.completed],
+            "groups": [g.serialize_condensed() for g in self.groups],
+            "authored_challenges": [c.serialize_condensed() for c in self.authored_challenges]
+        }
+    
+    def serialize_condensed(self):
+        """
+        Return serialized data
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "username": self.username,
+            "points": self.points,
         }
 
 class Challenge(db.Model):
@@ -128,7 +139,22 @@ class Challenge(db.Model):
             "completed": self.completed,
             "author_id": self.author_id,
             "group_id": self.group_id,
-            "player": [p.serialize() for p in self.player]
+            "player": [p.serialize_condensed() for p in self.player]
+        }
+
+    def serialize_condensed(self):
+        """
+        Return serialized data
+        """
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            # "votes": self.votes,
+            "claimed": self.claimed,
+            "completed": self.completed,
+            "author_id": self.author_id,
+            "group_id": self.group_id,
         }
 
 class Group(db.Model):
@@ -154,8 +180,17 @@ class Group(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "players": [p.serialize() for p in self.players],
-            "challenges": [c.serialize() for c in self.local_challenges]
+            "players": [p.serialize_condensed() for p in self.players],
+            "challenges": [c.serialize_condensed() for c in self.local_challenges]
+        }
+
+    def serialize_condensed(self):
+        """
+        Return serialized data
+        """
+        return {
+            "id": self.id,
+            "name": self.name
         }
 
 class Asset(db.Model):
