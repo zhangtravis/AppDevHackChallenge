@@ -213,11 +213,33 @@ def get_leaderboard():
     player_points_dict = {}
     for player in leaderboard:
         player_points_dict[player.name] = player.points
-
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1])
-
     return success_response(player_points_lst)
 
+
+@app.route("/api/challenges/mark_completed/<int:challenge_id>/<int:player_id>/")
+def mark_completed(challenge_id, player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    if player is None:
+        return failure_response("Player not found")
+
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found")
+
+    for p in challenge.player:
+        challenge_player = p
+
+    if challenge_player.id != player.id:
+        return failure_response("Challenge not claimed by this player")
+
+    if challenge.completed == True:
+        return failure_response("Challenge already completed")
+
+    challenge.completed = True
+    player.points += 100
+    db.session.commit()
+    return success_response(challenge.serialize())
 
 """
 File upload route
