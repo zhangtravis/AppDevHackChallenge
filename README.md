@@ -48,6 +48,23 @@ Response:
     }
 }
 
+Delete player by id
+GET /api/players/{player_id}/
+Response:
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "test name",
+        "username": "test username",
+        "password": "test password",
+        "points": 0,
+        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "groups": [ <SERIALIZED GROUP>, ... ],
+        "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
+    }
+}
+
 Get player by username
 GET /api/players/{player_username}/
 Response:
@@ -91,6 +108,35 @@ Response:
 }
 
 
+Get current challenges by player id
+GET /api/players/<int:player_id>/challenge/
+Response:
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "title": "test title",
+            "description": "test description",
+            "claimed": false,
+            "completed": false,
+            "author_id": 1,
+            "group_id": 1,
+            "player": [ <SERIALIZED PLAYER>],
+        },
+        {
+            "id": 2,
+            "title": "test title 2",
+            "description": "test description 2",
+            "claimed": false,
+            "completed": false,
+            "author_id": 2,
+            "group_id": 3,
+            "player": [<SERIALIZED PLAYER>],
+        }
+        ...
+    ]
+}
 
 
 Get all challenges
@@ -123,6 +169,67 @@ Response:
     ]
 }
 
+Get unclaimed challenges
+GET /api/challenges/unclaimed/
+Response:
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "title": "test title",
+            "description": "test description",
+            "claimed": false,
+            "completed": false,
+            "author_id": 1,
+            "group_id": 1,
+            "player": [ ],
+        },
+        {
+            "id": 2,
+            "title": "test title 2",
+            "description": "test description 2",
+            "claimed": false,
+            "completed": false,
+            "author_id": 2,
+            "group_id": 3,
+            "player": [ ],
+        }
+        ...
+    ]
+}
+
+
+Get completed challenges
+GET /api/challenges/completed/
+Response:
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "title": "test title",
+            "description": "test description",
+            "claimed": true,
+            "completed": true,
+            "author_id": 1,
+            "group_id": 1,
+            "player": [ <SERIALIZED PLAYER>],
+        },
+        {
+            "id": 2,
+            "title": "test title 2",
+            "description": "test description 2",
+            "claimed": true,
+            "completed": true,
+            "author_id": 2,
+            "group_id": 3,
+            "player": [<SERIALIZED PLAYER> ],
+        }
+        ...
+    ]
+}
+
 
 Get challenge by id
 GET /api/challenges/{challenge_id}/
@@ -140,6 +247,9 @@ Response:
         "player": [ <SERIALIZED PLAYER>]
     }
 }
+
+
+
 
 Get challenge by title
 GET /api/challenges/{challenge_title}/
@@ -181,6 +291,54 @@ Response:
         "author_id": 1,
         "group_id": 1,
         "player": [ ]
+    }
+}
+
+
+Assign challenge to player by ids
+
+POST /api/challenges/assign_player_challenge/
+Request: 
+{
+    "player_id": <USER INPUT>,
+    "challenge_id": <USER INPUT>,
+}
+
+Response:
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "test title",
+        "description": "test description",
+        "claimed": true,
+        "completed": false,
+        "author_id": 1,
+        "group_id": 1,
+        "player": [<SERIALIZED PLAYER> ]
+    }
+}
+
+Mark challenge completed by id
+
+POST /api/challenges/mark_completed/
+Request: 
+{
+    "challenge_id": <USER INPUT>,
+}
+
+Response:
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "test title",
+        "description": "test description",
+        "claimed": true,
+        "completed": true,
+        "author_id": 1,
+        "group_id": 1,
+        "player": [<SERIALIZED PLAYER> ]
     }
 }
 
@@ -248,5 +406,26 @@ Response:
         "name": "test name",
         "players": [ ],
         "challenges": [ ]
+    }
+}
+
+
+Assign player to group by ids
+
+POST /api/groups/assign_player_group/
+Request: 
+{
+    "player_id": <USER INPUT>,
+    "group_id": <USER INPUT>,
+}
+
+Response:
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "test name",
+        "players": [<SERIALIZED PLAYER>, ... ],
+        "challenges": [<SERIALIZED CHALLENGE>, ...  ]
     }
 }
