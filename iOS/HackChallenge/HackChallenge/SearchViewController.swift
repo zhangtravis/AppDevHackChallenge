@@ -13,12 +13,14 @@ class SearchViewController: UIViewController {
     private var titleView = UIView()
     private var titleLabel = UILabel()
     private var findChallengesLabel = UILabel()
-    private var showGroupsLabel = UILabel()
-    private var groupsSwitch = UISwitch()
     private var searchTextField = UITextField()
     
     private let unclaimedChallengesTableView = UITableView()
+    private var groupFilterCollectionView: UICollectionView!
+    private var groupFilters: [GroupFilter] = []
     private let unclaimedChallengesReuseIdentifier = "unclaimedChallengesReuseIdentifier"
+    private let groupFilterCellReuseIdentifier = "filterCellReuseIdentifier"
+    private let groupFilterCellPadding: CGFloat = 10
     
     private var challengeData: [UnclaimedChallenge] = []
     private var selectedchallengeIndex : Int?
@@ -52,15 +54,6 @@ class SearchViewController: UIViewController {
         findChallengesLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(findChallengesLabel)
         
-        showGroupsLabel.text = "Show Groups Only"
-        showGroupsLabel.textColor = .black
-        showGroupsLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        showGroupsLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(showGroupsLabel)
-        
-        groupsSwitch.onTintColor = challengeBlue
-        groupsSwitch.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(groupsSwitch)
         
         searchTextField.font = UIFont.systemFont(ofSize: 12)
         searchTextField.backgroundColor = .white
@@ -85,10 +78,32 @@ class SearchViewController: UIViewController {
         unclaimedChallengesTableView.register(UnclaimedChallengeTableViewCell.self, forCellReuseIdentifier: unclaimedChallengesReuseIdentifier)
         view.addSubview(unclaimedChallengesTableView)
         
+        // Setup flow layout
+        let groupFilterLayout = UICollectionViewFlowLayout()
+        groupFilterLayout.scrollDirection = .horizontal
+        groupFilterLayout.minimumInteritemSpacing = groupFilterCellPadding
+        groupFilterLayout.minimumLineSpacing = groupFilterCellPadding
+        
+        // Instantiate collectionView
+        groupFilterCollectionView = UICollectionView(frame: .zero, collectionViewLayout: groupFilterLayout)
+        groupFilterCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        groupFilterCollectionView.showsHorizontalScrollIndicator = false
+        groupFilterCollectionView.backgroundColor = .clear
+
+        groupFilterCollectionView.register(GroupFilterCollectionViewCell.self, forCellWithReuseIdentifier: groupFilterCellReuseIdentifier)
+        
+        groupFilterCollectionView.dataSource = self
+        groupFilterCollectionView.delegate = self
+        view.addSubview(groupFilterCollectionView)
+        
+        
         setupConstraints()
         createDummyData()
     }
     func createDummyData() {
+        groupFilters = [
+            GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell")
+        ]
         challengeData = [
             UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
              UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
@@ -124,15 +139,6 @@ class SearchViewController: UIViewController {
             findChallengesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
         ])
 
-        NSLayoutConstraint.activate([
-            groupsSwitch.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 10),
-            groupsSwitch.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
-        ])
-        
-        NSLayoutConstraint.activate([
-            showGroupsLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 20),
-            showGroupsLabel.trailingAnchor.constraint(equalTo: groupsSwitch.leadingAnchor, constant: -5)
-        ])
 
         NSLayoutConstraint.activate([
             searchTextField.topAnchor.constraint(equalTo: findChallengesLabel.bottomAnchor, constant: 15),
@@ -141,7 +147,13 @@ class SearchViewController: UIViewController {
             searchTextField.heightAnchor.constraint(equalToConstant: 32)
         ])
         NSLayoutConstraint.activate([
-            unclaimedChallengesTableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 30),
+            groupFilterCollectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 15),
+            groupFilterCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            groupFilterCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            groupFilterCollectionView.heightAnchor.constraint(equalToConstant: 21)
+        ])
+        NSLayoutConstraint.activate([
+            unclaimedChallengesTableView.topAnchor.constraint(equalTo: groupFilterCollectionView.bottomAnchor, constant: 20),
             unclaimedChallengesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             unclaimedChallengesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             unclaimedChallengesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -189,4 +201,48 @@ extension SearchViewController : UITableViewDelegate {
 //        self.present(editSongController, animated: true, completion: nil)
 //        editSongController.delegate = self
     }
+}
+
+
+
+extension SearchViewController: UICollectionViewDataSource {
+    // Specify number of items in section (required).
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return groupFilters.count
+
+        
+    }
+    // Specify cell to return (required).
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: groupFilterCellReuseIdentifier, for: indexPath) as! GroupFilterCollectionViewCell
+        cell.configure(for: groupFilters[indexPath.item])
+        return cell
+        
+
+    }
+    
+    
+}
+
+extension SearchViewController : UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+    // Override default flow (optional, has default flow).
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 111, height: 21)
+        
+    }
+    
+    // Provide selection functionality.
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == groupFilterCollectionView {
+            groupFilters[indexPath.item].selected = !groupFilters[indexPath.item].selected
+            
+//            let selectedTitle = groupFilters[indexPath.item].title
+//            if groupFilters[indexPath.item].selected
+
+            collectionView.reloadData()
+            unclaimedChallengesTableView.reloadData()
+        }
+    }
+    
+    
 }
