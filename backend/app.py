@@ -143,7 +143,7 @@ def delete_challenge(challenge_id):
     db.session.commit()
     return success_response(challenge.serialize())
 
-@app.route("/challenges/<int:challenge_id>/<int:player_id>/")
+@app.route("/api/challenges/<int:challenge_id>/<int:player_id>/")
 def assign_challenge_to_player(challenge_id, player_id):
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
@@ -205,6 +205,19 @@ def assign_player_to_group(group_id, player_id):
     group.players.append(player)
     db.session.commit()
     return success_response(group.serialize())
+
+@app.route("/api/leaderboard/")
+def get_leaderboard():
+    leaderboard = Player.query.all()
+
+    player_points_dict = {}
+    for player in leaderboard:
+        player_points_dict[player.name] = player.points
+
+    player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1])
+
+    return success_response(player_points_lst)
+
 
 """
 File upload route
