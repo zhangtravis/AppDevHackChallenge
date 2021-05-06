@@ -32,3 +32,32 @@ struct PastChallenge : Codable {
     var upvotes: Int
     var downvotes: Int
 }
+
+//struct Player : Codable {
+//    var id: Int
+//    var name: String
+//    var username: String
+//    var password: String
+//    var points: Int
+//    var challenges: [Challenge]
+//    var groups: [Group]
+//    var authored_challenges: [Challenge]
+//}
+//
+//struct Group : Codable {
+//    var id: Int
+//    var name: String
+//    var players: [ Player ]
+//    var challenges: [Challenge]
+//}
+//
+//struct Challenge : Codable {
+//    var id : Int
+//    var title : String
+//    var description: String
+//    var claimed: Bool
+//    var completed: Bool
+//    var author_id: Int
+//    var group_id: Int
+//    var player: [Player]
+//}
