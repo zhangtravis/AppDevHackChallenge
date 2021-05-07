@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/find_challenges_text"
         android:background="@drawable/rounded_corner_white"
-        android:text="Search"/>
+        android:text="@string/search"
+        android:maxLength="@string/search_max"/>
     <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
@@ -37,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="@id/search_bar"
         app:layout_constraintLeft_toRightOf="@id/search_bar"
         android:background="@color/transparent"
-        android:text="@string/search"
+        android:text="@string/search_icon"
         android:textSize="30dp"/>
     <Button
         android:id="@+id/clear_search_button"
