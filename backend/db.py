@@ -10,6 +10,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 import random
 import re
 import string
+import bcrypt
 
 db = SQLAlchemy()
 
@@ -39,7 +40,7 @@ class Player(db.Model):
     id: Database column to denote the IDs of each player
     name: Database column to denote the names of each player
     username: Database column for usernames of each player
-    password: Database column for passwords of each player
+    password_digest: Database column for passwords (encoded) of each player
     points: Database column for # of points each player has
     challenge: Denotes what challenge the player is currently doing
     """
@@ -48,7 +49,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     username = db.Column(db.String, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    password_digest = db.Column(db.String, nullable=False)
     points = db.Column(db.Integer, nullable=False)
     challenges = db.relationship('Challenge',  secondary=player_challenge_assoc, back_populates='player')
     groups = db.relationship('Group',  secondary=player_group_assoc, back_populates='players')
@@ -60,8 +61,11 @@ class Player(db.Model):
         """
         self.name = kwargs.get('name')
         self.username = kwargs.get('username')
-        self.password = kwargs.get('password')
+        self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
         self.points = 0
+
+    def verify_password(self, password):
+        return bcrypt.checkpw(password.encode("utf8"), self.password_digest)
 
     def serialize(self):
         """

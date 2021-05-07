@@ -54,10 +54,32 @@ def create_player():
     if name is None or username is None or password is None:
         return failure_response("Name, username, or password not provided")
 
+    optional_player = Player.query.filter(Player.username == username).first()
+
+    if optional_player is not None:
+        return failure_response("Error: Player already exists")
+
     new_player = Player(name=name, username=username, password=password)
     db.session.add(new_player)
     db.session.commit()
     return success_response(new_player.serialize(), 201)
+
+@app.route('/api/login/', methods=["POST"])
+def login():
+    body = json.loads(request.data)
+    username = body.get('username')
+    pw = body.get('password')
+
+    if username is None or pw is None:
+        return failure_response("Error: Invalid email or password")
+
+    player = Player.query.filter(Player.username == username).first()
+    success = player is not None and player.verify_password(pw)
+
+    if not success:
+        return failure_response("Error: Incorrect email or password")
+    
+    return success_response(player.serialize())
 
 @app.route("/api/players/<int:player_id>/", methods=["DELETE"])
 def delete_player(player_id):
@@ -66,7 +88,7 @@ def delete_player(player_id):
         return failure_response("Player not found!")
     db.session.delete(player)
     db.session.commit()
-    return success_response(player.serialize())
+    return success_response(player.serialize(), 204)
 
 @app.route("/api/players/<int:player_id>/challenge/")
 def get_current_challenge(player_id):
@@ -252,7 +274,6 @@ File upload route
 """
 @app.route('/api/upload/', methods=['POST'])
 def upload():
-    #TODO: Add player points
     body = json.loads(request.data)
     image_data = body.get('image_data')
     if image_data is None:
