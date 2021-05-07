@@ -3,7 +3,6 @@ import json
 from flask import Flask, jsonify, request, redirect, send_file
 import os
 from PIL import Image
-from file import upload_file, list_files
 
 from db import db
 from db import Player, Challenge, Asset, Group
@@ -251,30 +250,17 @@ def mark_completed():
 """
 File upload route
 """
-@app.route('/upload/', methods=['POST'])
+@app.route('/api/upload/', methods=['POST'])
 def upload():
-    f = request.files['file']
-    if f is None:
+    #TODO: Add player points
+    body = json.loads(request.data)
+    image_data = body.get('image_data')
+    if image_data is None:
         return failure_response('No Image!')
-    img = Image.open(f)
-    asset = Asset(file=img)
+    asset = Asset(image_data=image_data)
     db.session.add(asset)
     db.session.commit()
     return success_response(asset.serialize(), 201)
-
-# @app.route("/storage/")
-# def storage():
-#     contents = list_files(bucket_name)
-#     return success_response(contents)
-
-# @app.route("/upload/", methods=['POST'])
-# def upload():
-#     if request.method == "POST":
-#         f = request.files['file']
-#         f.save(os.path.join(upload_folder, f.filename))
-#         response = upload_file(f"{upload_folder}/{f.filename}", bucket_name)
-
-#         return response
 
 
 if __name__ == "__main__":
