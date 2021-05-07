@@ -10,4 +10,12 @@
     <string name="title_sub">Give your challenge a title.</string>
     <string name="description_sub">Write a description of your challenge.</string>
     <string name="group_sub">Propose your challenge to a group or globally.</string>
+    <string name="password">Password:</string>
+    <string name="username">Username:</string>
+    <string name="groups">Groups:</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="log_out">Log Out</string>
+    <string name="submit">Submit</string>
+    <string name="user_pass_max">20</string>
+    <string name="group_max">10</string>
 </resources>
