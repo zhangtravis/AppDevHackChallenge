@@ -14,10 +14,6 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
     private var proofImage : UIImageView = UIImageView()
     private var descriptionLabel: UILabel = UILabel()
     private var senderLabel: UILabel = UILabel()
-    private var upvotesImageView: UIImageView = UIImageView()
-    private var upvotesLabel: UILabel = UILabel()
-    private var downvotesImageView: UIImageView = UIImageView()
-    private var downvotesLabel: UILabel = UILabel()
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     
     override init(frame: CGRect) {
@@ -39,6 +35,7 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
 //        img.layer.borderColor = CGColor(red: 255, green: 255, blue: 255, alpha: 1)
         proofImage.layer.masksToBounds = true
         proofImage.translatesAutoresizingMaskIntoConstraints = false
+        proofImage.image = UIImage(named: "mountain_example.png")
         contentView.addSubview(proofImage)
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -55,24 +52,7 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
         senderLabel.textColor = .white
         senderLabel.textAlignment = .left
         contentView.addSubview(senderLabel)
-        
-        upvotesImageView.translatesAutoresizingMaskIntoConstraints = false
-        upvotesImageView.image = UIImage(named: "up_arrow.png")
-        contentView.addSubview(upvotesImageView)
-        
-        downvotesImageView.translatesAutoresizingMaskIntoConstraints = false
-        downvotesImageView.image = UIImage(named: "down_arrow.png")
-        contentView.addSubview(downvotesImageView)
-        
-        upvotesLabel.translatesAutoresizingMaskIntoConstraints = false
-        upvotesLabel.textColor = .white
-        upvotesLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        contentView.addSubview(upvotesLabel)
-        
-        downvotesLabel.translatesAutoresizingMaskIntoConstraints = false
-        downvotesLabel.textColor = .white
-        downvotesLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        contentView.addSubview(downvotesLabel)
+
         
         
         setupConstraints()
@@ -108,34 +88,18 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
             senderLabel.widthAnchor.constraint(equalToConstant: 300),
             senderLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor)
         ])
-        NSLayoutConstraint.activate([
-            downvotesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            downvotesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
-        NSLayoutConstraint.activate([
-            downvotesImageView.trailingAnchor.constraint(equalTo: downvotesLabel.leadingAnchor, constant: -5),
-            downvotesImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
-        NSLayoutConstraint.activate([
-            upvotesLabel.trailingAnchor.constraint(equalTo: downvotesImageView.leadingAnchor, constant: -5),
-            upvotesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
-        NSLayoutConstraint.activate([
-            upvotesImageView.trailingAnchor.constraint(equalTo: upvotesLabel.leadingAnchor, constant: -5),
-            upvotesImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
+
 
     }
 
-    func configure(for challenge: PastChallenge) {
+    func configure(for challenge: Challenge) {
         titleLabel.text = challenge.title
         descriptionLabel.text = challenge.description
-        proofImage.image = challenge.image.getImage()
-        senderLabel.text = "Challenged by: " + challenge.sender
-        upvotesLabel.text = String(challenge.upvotes)
-        downvotesLabel.text = String(challenge.downvotes)
-        
-        
+//        proofImage.image = challenge.image.getImage()
+
+        senderLabel.text = "Challenged by: "
+//            + challenge.player.name
+
     }
     
     required init?(coder: NSCoder) {

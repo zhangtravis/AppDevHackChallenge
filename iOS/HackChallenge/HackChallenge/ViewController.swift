@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol SubmitChallengeDelegate: class {
+    func submitChallenge(image: String)
+}
+
 class ViewController: UIViewController {
+    
     // Views
     private var currentCollectionView: UICollectionView!
     private var pastCollectionView: UICollectionView!
@@ -20,7 +25,8 @@ class ViewController: UIViewController {
     
     // Data
     private var currentChallenges: [CurrentChallenge] = []
-    private var pastChallenges: [PastChallenge] = []
+    private var pastChallenges: [Challenge] = []
+    private var shownPastChallenges: [Challenge] = []
     private var sections: [String] = []
 
     // Constants
@@ -65,10 +71,7 @@ class ViewController: UIViewController {
             CurrentChallenge(title: "Make An App", description: "Make any app and share it with your friends", sender: "John Doe"),
             CurrentChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "John Doe")
         ]
-        pastChallenges = [
-            PastChallenge(title: "Climb Mount Everast", image: Image(withImage: UIImage(named: "mountain.png")!), description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person", upvotes: 0, downvotes: 0),
-            PastChallenge(title: "Climb Mount Everast", image: Image(withImage: UIImage(named: "mountain.png")!), description: "This is gonna be a super long message. Gotta test the spacing.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "A Person", upvotes: 1, downvotes: 0)
-        ]
+
         
         // Setup flow layout
         let currentLayout = UICollectionViewFlowLayout()
@@ -113,6 +116,25 @@ class ViewController: UIViewController {
         view.addSubview(currentCollectionView)
         view.addSubview(pastCollectionView)
         setupConstraints()
+        createDummyData()
+    }
+    
+    func sortPastChallengeData() {
+        pastChallenges.sort { (leftPost, rightPost) -> Bool in
+            return leftPost.id > rightPost.id
+        }
+    }
+    
+    func createDummyData() {
+        
+        NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
+            
+                self.pastChallenges = pastChallengeList
+                self.sortPastChallengeData()
+                self.shownPastChallenges = self.pastChallenges
+                self.pastCollectionView.reloadData()
+        })
+        
     }
     func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -212,6 +234,9 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
 //            collectionView.reloadData()
             
             print("selected a current challenge")
+            let submitChallengeController = SubmitChallengeViewController()
+            self.present(submitChallengeController, animated: true, completion: nil)
+            submitChallengeController.delegate = self
             
         }
         else {
@@ -219,5 +244,10 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
 //            pastChallenges[indexPath.item].selected = !pastChallenges[indexPath.item].selected
 //            collectionView.reloadData()
         }
+    }
+}
+extension ViewController : SubmitChallengeDelegate {
+    func submitChallenge(image: String) {
+        print(image)
     }
 }
