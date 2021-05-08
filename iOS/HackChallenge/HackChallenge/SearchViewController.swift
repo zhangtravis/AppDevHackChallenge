@@ -19,7 +19,7 @@ class SearchViewController: UIViewController {
     private var groupFilterCollectionView: UICollectionView!
     private var groupFilters: [GroupFilter] = []
     private let unclaimedChallengesReuseIdentifier = "unclaimedChallengesReuseIdentifier"
-    private let groupFilterCellReuseIdentifier = "filterCellReuseIdentifier"
+    private let groupFilterCellReuseIdentifier = "groupFilterCellReuseIdentifier"
     private let groupFilterCellPadding: CGFloat = 10
     
     private var challengeData: [UnclaimedChallenge] = []

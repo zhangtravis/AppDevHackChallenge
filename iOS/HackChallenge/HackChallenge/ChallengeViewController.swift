@@ -72,6 +72,14 @@ class ChallengeViewController: UIViewController {
         setupLabelView(titleLabel: descriptionTitleLabel, infoLabel: descriptionInfoTitleLabel, titleText: "DESCRIPTION", infoText: "Write a description of your challenge. Max ___ Characters")
         setupLabelView(titleLabel: groupTitleLabel, infoLabel: groupInfoTitleLabel, titleText: "GROUP", infoText: "Propose your challenge to a group or globally")
         
+        submitButton.setTitle("SUBMIT", for: .normal)
+        submitButton.setTitleColor(.white, for: .normal)
+        submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        submitButton.backgroundColor = challengeBlue
+        submitButton.layer.cornerRadius = 10
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(submitButton)
+        
         setupConstraints()
     }
     func setupLabelView(titleLabel: UILabel, infoLabel: UILabel,titleText: String, infoText: String) {
@@ -169,6 +177,11 @@ class ChallengeViewController: UIViewController {
             descriptionInfoTitleLabel.widthAnchor.constraint(equalToConstant: 107)
         ])
         setupLabelConstraints(titleLabel: groupTitleLabel, infoLabel: groupInfoTitleLabel, textField: groupTextField)
+        NSLayoutConstraint.activate([
+            submitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -62),
+            submitButton.heightAnchor.constraint(equalToConstant: 32),
+            submitButton.widthAnchor.constraint(equalToConstant: 178), submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
 
 }
