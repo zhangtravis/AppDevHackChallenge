@@ -13,6 +13,7 @@
 		AC2CA79E2647258100DF48A8 /* Leaderboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA79D2647258100DF48A8 /* Leaderboards.swift */; };
 		AC2CA7A226472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A126472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift */; };
 		AC2CA7A52647392700DF48A8 /* SubmitChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */; };
+		AC2CA7A826483C0700DF48A8 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A726483C0700DF48A8 /* UIImage.swift */; };
 		AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A37263FBC3E00D1245F /* SearchViewController.swift */; };
 		AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */; };
 		AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */; };
@@ -43,6 +44,7 @@
 		AC2CA79D2647258100DF48A8 /* Leaderboards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboards.swift; sourceTree = "<group>"; };
 		AC2CA7A126472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardCollectionViewCell.swift; sourceTree = "<group>"; };
 		AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitChallengeViewController.swift; sourceTree = "<group>"; };
+		AC2CA7A726483C0700DF48A8 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		AC753A37263FBC3E00D1245F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallenge.swift; sourceTree = "<group>"; };
 		AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallengeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				ACDFFF45263DF45B00E4D96B /* Assets.xcassets */,
 				ACDFFF47263DF45B00E4D96B /* LaunchScreen.storyboard */,
 				ACDFFF4A263DF45B00E4D96B /* Info.plist */,
+				AC2CA7A726483C0700DF48A8 /* UIImage.swift */,
 			);
 			path = HackChallenge;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACDFFF5B263DFE4200E4D96B /* LeaderboardViewController.swift in Sources */,
+				AC2CA7A826483C0700DF48A8 /* UIImage.swift in Sources */,
 				AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */,
 				ACDFFF41263DF45B00E4D96B /* ViewController.swift in Sources */,
 				AC753A502640D8B800D1245F /* NetworkManager.swift in Sources */,

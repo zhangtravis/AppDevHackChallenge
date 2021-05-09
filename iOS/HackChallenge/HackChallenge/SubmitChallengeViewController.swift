@@ -16,7 +16,6 @@ class SubmitChallengeViewController: UIViewController{
     private var imageView = UIImageView()
     private var submitButton = UIButton()
     private var selectionButton = UIButton()
-    private var selectedImage = UIImage()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -75,7 +74,10 @@ class SubmitChallengeViewController: UIViewController{
     }
     
     @objc func submitButtonPressed() {
-        delegate?.submitChallenge(image: selectedImage)
+//        delegate?.submitChallenge(image: selectedImage)
+        if let profileImageBase64 = imageView.image?.pngData()?.base64EncodedString() {
+            print(profileImageBase64)
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -90,9 +92,9 @@ extension SubmitChallengeViewController : UIImagePickerControllerDelegate & UINa
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 50, height: 50))
             imageView.contentMode = .scaleAspectFit
-            imageView.image = pickedImage
-            selectedImage = pickedImage
+            imageView.image = resizedPickedImage
         }
 
         dismiss(animated: true, completion: nil)
