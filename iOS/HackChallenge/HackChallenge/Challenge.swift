@@ -62,6 +62,11 @@ struct Challenge : Codable {
     var player: [Player]
 }
 
+struct ChallengeResponse : Codable {
+    var success : Bool
+    var data : Challenge
+}
+
 struct ChallengesResponse : Codable {
     var success : Bool
     var data : [Challenge]
