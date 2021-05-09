@@ -3,5 +3,23 @@
     <string name="current_challenges">Current Challenges</string>
     <string name="past_challenges">Past Challenges</string>
     <string name="find_challenges">Find Challenges</string>
-    <string name="search">&#x1F50D;</string>
+    <string name="search_icon">&#x1F50D;</string>
+    <string name="search">Search</string>
+    <string name="new_challenge_title">Challenge Title</string>
+    <string name="new_challenge_description">Description</string>
+    <string name="group">Group</string>
+    <string name="title_sub">Give your challenge a title.</string>
+    <string name="description_sub">Write a description of your challenge.</string>
+    <string name="group_sub">Propose your challenge to a group or globally.</string>
+    <string name="password">Password:</string>
+    <string name="username">Username:</string>
+    <string name="groups">Groups:</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="log_out">Log Out</string>
+    <string name="submit">Submit</string>
+    <string name="user_pass_max">20</string>
+    <string name="group_max">10</string>
+    <string name="search_max">22</string>
+    <string name="title_max">19</string>
+    <string name="description_max">140</string>
 </resources>

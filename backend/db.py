@@ -10,6 +10,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 import random
 import re
 import string
+import bcrypt
 
 db = SQLAlchemy()
 
@@ -39,7 +40,7 @@ class Player(db.Model):
     id: Database column to denote the IDs of each player
     name: Database column to denote the names of each player
     username: Database column for usernames of each player
-    password: Database column for passwords of each player
+    password_digest: Database column for passwords (encoded) of each player
     points: Database column for # of points each player has
     challenge: Denotes what challenge the player is currently doing
     """
@@ -48,7 +49,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     username = db.Column(db.String, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    password_digest = db.Column(db.String, nullable=False)
     points = db.Column(db.Integer, nullable=False)
     challenges = db.relationship('Challenge',  secondary=player_challenge_assoc, back_populates='player')
     groups = db.relationship('Group',  secondary=player_group_assoc, back_populates='players')
@@ -60,8 +61,11 @@ class Player(db.Model):
         """
         self.name = kwargs.get('name')
         self.username = kwargs.get('username')
-        self.password = kwargs.get('password')
+        self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
         self.points = 0
+
+    def verify_password(self, password):
+        return bcrypt.checkpw(password.encode("utf8"), self.password_digest)
 
     def serialize(self):
         """
@@ -113,6 +117,7 @@ class Challenge(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
+    asset = db.relationship('Asset', uselist=False, backref='challenge')
 
     def __init__(self, **kwargs):
         """
@@ -203,6 +208,8 @@ class Asset(db.Model):
     base_url: Database column for base_url of each file
     salt: Database column that represent unique identifier for images
     extension: Database column to store the extensions in each file
+    height: Database column for image height
+    width: Database column for image width
     created_at: Database column for when file was created
     """
 
@@ -211,14 +218,16 @@ class Asset(db.Model):
     base_url = db.Column(db.String, nullable=False)
     salt = db.Column(db.String, nullable=False)
     extension = db.Column(db.String, nullable=False)
-    created_at =db.Column(db.DateTime, nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    width = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'))
 
     def __init__(self, **kwargs):
         """
         Initialize variables
         """
-        f = kwargs.get('file')
-        self.upload(kwargs.get('file'))
+        self.create(kwargs.get('image_data'))
 
     def serialize(self):
         """
@@ -229,62 +238,57 @@ class Asset(db.Model):
             'created_at': str(self.created_at)
         }
 
-    def upload(self, img):
+    def create(self, image_data):
         """
         Tries to create an image from base64 code and upload to Amazon s3 bucket
 
-        @param img: image to upload
+        @param image_data: base64 encoded data of image
         """
         try:
-            ext = img.format.lower()
+            ext = guess_extension(guess_type(image_data)[0])[1:]
             if ext not in EXTENSIONS:
                 raise Exception(f'Extension {ext} not supported!')
             
             salt = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for i in range(16))
             
+            img_str = re.sub("^data:image/.+;base64,", "", image_data)
+            img_data = base64.b64decode(img_str)
+            img = Image.open(BytesIO(img_data))
+
             self.base_url = S3_BASE_URL
             self.salt = salt
             self.extension = ext
+            self.height = img.height
+            self.width = img.width
             self.created_at = datetime.datetime.now()
 
             img_filename = f'{salt}.{ext}'
-
-            try:
-                img_temploc = f'{BASE_DIR}/uploads/{img_filename}'
-                img.save(img_temploc)
-
-                s3_client = boto3.client('s3')
-                s3_client.upload_file(img_temploc, S3_BUCKET, img_filename)
-
-                s3_resource = boto3.resource('s3')
-                object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
-                object_acl.put(ACL="public-read")
-                os.remove(img_temploc)
-
-            except Exception as e:
-                print('Upload Failed: ', e)
+            self.upload(img, img_filename)
 
         except Exception as e:
             print('Error: ', e)
 
-    # def upload(self, img, img_filename):
-    #     """
-    #     Tries to upload image to Amazon s3 bucket
+    def upload(self, img, img_filename):
+        """
+        Tries to upload image to Amazon s3 bucket
 
-    #     @param img: the image to upload
-    #     @param img_filename: Filename for image
-    #     """
-    #     try:
-    #         img_temploc = f'{BASE_DIR}/uploads/{img_filename}'
-    #         img.save(img_temploc)
+        @param img: the image to upload
+        @param img_filename: Filename for image
+        """
+        try:
+            img_tempdir = f'{BASE_DIR}/uploads/'
+            img_temploc = f'{img_tempdir}{img_filename}'
+            if not os.path.isdir(img_tempdir):
+                os.mkdir(img_tempdir)
+            img.save(img_temploc)
 
-    #         s3_client = boto3.client('s3')
-    #         s3_client.upload_file(img_temploc, S3_BUCKET, img_filename)
+            s3_client = boto3.client('s3')
+            s3_client.upload_file(img_temploc, S3_BUCKET, img_filename)
 
-    #         s3_resource = boto3.resource('s3')
-    #         object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
-    #         object_acl.put(ACL="public-read")
-    #         os.remove(img_temploc)
+            s3_resource = boto3.resource('s3')
+            object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
+            object_acl.put(ACL="public-read")
+            os.remove(img_temploc)
 
-    #     except Exception as e:
-    #         print('Upload Failed: ', e)
+        except Exception as e:
+            print('Upload Failed: ', e)

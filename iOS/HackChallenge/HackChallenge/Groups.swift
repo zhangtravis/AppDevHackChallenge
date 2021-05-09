@@ -16,3 +16,13 @@ class GroupFilter {
         self.selected = false
     }
 }
+
+class GroupInfo {
+    var title: String
+    var selected : Bool
+
+    init(title: String) {
+        self.title = title
+        self.selected = false
+    }
+}
