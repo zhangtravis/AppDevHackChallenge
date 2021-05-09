@@ -59,7 +59,7 @@ class GroupFragment : Fragment() {
         allChallengeLayoutManager= LinearLayoutManager(root.context)
         allChallengeRecyclerView.layoutManager=allChallengeLayoutManager
         getChallengeList()
-        allChallengeAdapter = ChallengeAdapter(allChallengeDataSet,false)
+        allChallengeAdapter = ChallengeAdapter(allChallengeDataSet,false, false)
         allChallengeRecyclerView.adapter=allChallengeAdapter
 
         searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()
@@ -102,7 +102,7 @@ class GroupFragment : Fragment() {
             clearRadioButton.performClick()
         }
         searchButton.setOnClickListener(){
-            val search:String = searchBar.toString()
+            val search:String = searchBar.text.toString()
             allChallengeDataSet.retainAll{ challenge:Challenge ->
                 challenge.title.contains(search) || challenge.description.contains(search) // || challenge.author_id.contains(search) || challenge.group_id.contains(search)
             }
