@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SubmitChallengeDelegate: class {
-    func submitChallenge(image: String)
+    func submitChallenge(image: UIImage)
 }
 
 class ViewController: UIViewController {
@@ -247,7 +247,7 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
 }
 extension ViewController : SubmitChallengeDelegate {
-    func submitChallenge(image: String) {
-        print(image)
+    func submitChallenge(image: UIImage) {
+        print("TEST")
     }
 }
