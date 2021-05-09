@@ -26,6 +26,10 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"success": False, "error": message}, default=str), code
 
+@app.route("/")
+def hello_world():
+    return success_response("HELLO I AM TESTING THIS OUT!!!")
+
 @app.route("/api/players/")
 def get_players():
     return success_response([t.serialize() for t in Player.query.all()]) 
