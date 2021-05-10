@@ -152,7 +152,7 @@ Response:
 }
 ```
 
-In this route, `challenge_id` in the image branch will be `null` because the image is associated with the challenge and not the player.
+In this route, `challenge_id` in the image branch will be `null` because the image is associated with the player and not the challenge.
 
 ## Login
 
