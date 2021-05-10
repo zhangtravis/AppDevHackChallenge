@@ -14,19 +14,19 @@ Response:
             "id": 1,
             "name": "test name",
             "username": "test username",
-            "password": "test password",
             "points": 0,
-            "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
             "groups": [ <SERIALIZED GROUP>, ... ],
             "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
         },
         {
             "id": 2,
             "name": "test name 2",
-            "username": "test username 2",
-            "password": "test password 2",
-            "points": 1,
-            "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "username": "user2",
+            "points": 0,
+            "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
             "groups": [ <SERIALIZED GROUP>, ... ],
             "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
         }
@@ -48,9 +48,9 @@ Response:
         "id": 1,
         "name": "test name",
         "username": "test username",
-        "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -59,7 +59,7 @@ Response:
 
 ## Delete player by id
 
-**GET** `/api/players/{player_id}/`
+**DELETE** `/api/players/{player_id}/`
 
 Response:
 
@@ -70,9 +70,9 @@ Response:
         "id": 1,
         "name": "test name",
         "username": "test username",
-        "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -92,9 +92,9 @@ Response:
         "id": 1,
         "name": "test name",
         "username": "test username",
-        "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -124,11 +124,11 @@ Response:
         "id": 1,
         "name": "test name",
         "username": "test username",
-        "password": "test password",
         "points": 0,
-        "challenges": [  ],
-        "groups": [  ],
-        "authored_challenges": [  ]
+        "current challenges": [ ],
+        "completed challenges": [ ],
+        "groups": [ ],
+        "authored_challenges": [ ]
     }
 }
 ```
@@ -148,7 +148,7 @@ Request:
 
 ## Get current challenges by player id
 
-**GET** `/api/players/<int:player_id>/challenge/`
+**GET** `/api/players/<int:player_id>/challenges/`
 
 Response:
 
@@ -157,24 +157,26 @@ Response:
     "success": true,
     "data": [
         {
-            "id": 1,
+           "id": 1,
             "title": "test title",
             "description": "test description",
-            "claimed": false,
+            "claimed": true,
             "completed": false,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
-            "player": [ <SERIALIZED PLAYER>],
+            "player": [<SERIALIZED PLAYER> ],
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
-            "claimed": false,
+            "title": "test title",
+            "description": "test description",
+            "claimed": true,
             "completed": false,
-            "author_id": 2,
-            "group_id": 3,
-            "player": [<SERIALIZED PLAYER>],
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
+            "player": [<SERIALIZED PLAYER> ],
         }
         ...
     ]
@@ -197,19 +199,21 @@ Response:
             "description": "test description",
             "claimed": false,
             "completed": false,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
-            "player": [ <SERIALIZED PLAYER>],
+            "player": [ ],
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
+            "title": "test title",
+            "description": "test description",
             "claimed": true,
             "completed": true,
-            "author_id": 2,
-            "group_id": 3,
-            "player": [<SERIALIZED PLAYER>],
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
+            "player": [<SERIALIZED PLAYER> ],
         }
         ...
     ]
@@ -239,13 +243,13 @@ Response:
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
+            "title": "test title",
+            "description": "test description",
             "claimed": false,
             "completed": false,
-            "author_username": "user2",
-            "author_id": 2,
-            "group_id": 3,
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
             "player": [ ],
         }
         ...
@@ -313,6 +317,29 @@ Response:
 }
 ```
 
+## Delete challenge by id
+
+**DELETE** `/api/challenges/{challenge_id}/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "test title",
+        "description": "test description",
+        "claimed": false,
+        "completed": false,
+        "author_username": "user1",
+        "author_id": 1,
+        "group_id": 1,
+        "player": [ <SERIALIZED PLAYER>]
+    }
+}
+```
+
 ## Get challenge by title
 
 **GET** `/api/challenges/{challenge_title}/`
@@ -346,7 +373,7 @@ Request:
 {
     "title": <USER INPUT>,
     "description": <USER INPUT>,
-    "author_username": <USER INPUT>,
+    "username": <USER INPUT>,
     "author_id": <USER INPUT>,
     "group_id": <USER INPUT>
 }

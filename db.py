@@ -76,7 +76,7 @@ class Player(db.Model):
             "name": self.name,
             "username": self.username,
             "points": self.points,
-            "current_challenge": [c.serialize_condensed() for c in self.challenges if not c.completed],
+            "current_challenges": [c.serialize_condensed() for c in self.challenges if not c.completed],
             "completed_challenges": [c.serialize_condensed() for c in self.challenges if c.completed],
             "groups": [g.serialize_condensed() for g in self.groups],
             "authored_challenges": [c.serialize_condensed() for c in self.authored_challenges]
