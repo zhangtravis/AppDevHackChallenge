@@ -59,7 +59,7 @@ class GroupFragment : Fragment() {
         allChallengeLayoutManager= LinearLayoutManager(root.context)
         allChallengeRecyclerView.layoutManager=allChallengeLayoutManager
         getChallengeList()
-        allChallengeAdapter = ChallengeAdapter(allChallengeDataSet,false, false)
+        allChallengeAdapter = ChallengeAdapter(allChallengeDataSet,false, false, fragmentManager)
         allChallengeRecyclerView.adapter=allChallengeAdapter
 
         searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()

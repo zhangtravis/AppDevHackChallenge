@@ -4,11 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isCompleted:Boolean, var isCurrent:Boolean):RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
+class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isCompleted:Boolean, var isCurrent:Boolean, fragmentManager: FragmentManager?):RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
+    val fragmentManager=fragmentManager
     class ViewHolder internal constructor(itemView: View): RecyclerView.ViewHolder(itemView){
         val title:TextView = itemView.findViewById(R.id.title)
         val description:TextView = itemView.findViewById(R.id.description)
@@ -33,7 +37,13 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
         }
         holder.itemView.setOnClickListener(){
             if (isCurrent){
-                //launch fragment, mark as completed, upload picture
+                // launch fragment, mark as completed, upload picture
+                if (fragmentManager != null) {
+                    fragmentManager.beginTransaction()
+                        .add(R.id.upload_container,UploadFragment())
+                        .commit()
+                }
+
             }else if (!isCompleted){
                 // mark as claimed
             }

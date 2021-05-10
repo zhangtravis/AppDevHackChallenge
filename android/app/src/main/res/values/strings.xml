@@ -22,6 +22,6 @@
     <string name="search_max">22</string>
     <string name="title_max">19</string>
     <string name="description_max">140</string>
-    <string name="Submit">Submit</string>
     <string name="add_group">Add Group</string>
+    <string name="select">Select</string>
 </resources>
