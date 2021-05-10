@@ -24,10 +24,11 @@ Response:
         {
             "id": 2,
             "name": "test name 2",
-            "username": "test username 2",
-            "password": "test password 2",
-            "points": 1,
-            "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "username": "uer2",
+            "password": "pass2",
+            "points": 0,
+            "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
             "groups": [ <SERIALIZED GROUP>, ... ],
             "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
         }
@@ -51,7 +52,8 @@ Response:
         "username": "test username",
         "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -60,7 +62,7 @@ Response:
 
 ## Delete player by id
 
-**GET** `/api/players/{player_id}/`
+**DELETE** `/api/players/{player_id}/`
 
 Response:
 
@@ -73,7 +75,8 @@ Response:
         "username": "test username",
         "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -95,7 +98,8 @@ Response:
         "username": "test username",
         "password": "test password",
         "points": 0,
-        "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
         "groups": [ <SERIALIZED GROUP>, ... ],
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
@@ -127,9 +131,10 @@ Response:
         "username": "test username",
         "password": "test password",
         "points": 0,
-        "challenges": [  ],
-        "groups": [  ],
-        "authored_challenges": [  ]
+        "current challenges": [ ],
+        "completed challenges": [ ],
+        "groups": [ ],
+        "authored_challenges": [ ]
     }
 }
 ```
