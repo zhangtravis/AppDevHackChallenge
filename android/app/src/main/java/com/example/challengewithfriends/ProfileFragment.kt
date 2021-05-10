@@ -62,7 +62,7 @@ class ProfileFragment : Fragment() {
         add1=root.findViewById(R.id.group1_add)
         add2=root.findViewById(R.id.group2_add)
         add3=root.findViewById(R.id.group3_add)
-        val sharedPref = root.context?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         val usernameString=sharedPref?.getString("username", null)
         val passwordString=sharedPref?.getString("password", null)
         if (usernameString!=null && passwordString!=null){
@@ -71,18 +71,18 @@ class ProfileFragment : Fragment() {
         }
         submit.setOnClickListener(){
 //            getPlayerByUsername()
-            login(root)
+            login()
         }
         logout.setOnClickListener(){
             playerID=null
-            setSharedPref(root)
+            setSharedPref()
         }
         setGroupStuff(root)
         return root
     }
 
-    private fun setSharedPref(root:View){
-        val sharedPref = root.context?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+    private fun setSharedPref(){
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         with(sharedPref!!.edit()){
             if (playerID!=null){
               playerID?.let { putInt("playerID", it) }
@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun login(root:View){
+    private fun login(){
         val usernameString=username.text.toString()
         val passwordString=password.text.toString()
         CoroutineScope(Dispatchers.Main).launch {
@@ -131,7 +131,7 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                setSharedPref(root)
+                setSharedPref()
             }
         }
     }

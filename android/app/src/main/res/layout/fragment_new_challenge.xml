@@ -92,6 +92,7 @@
         android:background="@drawable/rounded_corner_white"/>
 
     <Button
+        android:id="@+id/submit_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
