@@ -400,7 +400,7 @@ Response:
 
 ## Assign challenge to player by ids
 
-**POST** `/api/challenges/assign_player_challenge/`
+**POST** `/api/challenges/assign_challenge_player/`
 
 Request:
 

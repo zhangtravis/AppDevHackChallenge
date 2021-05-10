@@ -270,7 +270,7 @@ def mark_completed():
         return failure_response("Challenge already completed")
 
     challenge.completed = True
-    player.points += 100
+    challenge_player.points += 100
     db.session.commit()
     return success_response(challenge.serialize())
 
