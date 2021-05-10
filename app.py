@@ -226,6 +226,27 @@ def assign_player_to_group():
     db.session.commit()
     return success_response(group.serialize())
 
+
+@app.route("/api/groups/<int:group_id>/<int:player_id>/", methods=["DELETE"])
+def delete_player_from_group(group_id, player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    group = Group.query.filter_by(id=group_id).first()
+
+    if player is None:
+        return failure_response("Player not found!")
+    if group is None:
+        return failure_response("Group not found!")
+    try:
+        group.players.index(player)
+    except:
+        return failure_response("Player not in group!")
+
+    group.players.remove(player)
+    db.session.commit()
+    group = Group.query.filter_by(id=group_id).first()
+    return success_response(group.serialize())
+
+
 @app.route("/api/leaderboard/<int:group_id>/")
 def get_group_leaderboard(group_id):
     group = Group.query.filter_by(id=group_id).first()
