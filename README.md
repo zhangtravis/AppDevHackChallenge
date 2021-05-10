@@ -540,6 +540,36 @@ Response:
 }
 ```
 
+## Get group leaderboard in order of points from most to least
+
+**GET** `/api/leaderboard/{group_id}/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": [ [<USERNAME>, <POINTS>], ... ]
+    }
+}
+```
+
+
+## Get global leaderboard in order of points from most to least
+
+**GET** `/api/leaderboard/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": [ [<USERNAME>, <POINTS>], ... ]
+    }
+}
+```
+
+
 ## Upload Image
 
 **POST** `/api/upload/`
