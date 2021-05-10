@@ -143,7 +143,7 @@ def create_challenge():
     if title is None or description is None or author_id is None or author_username or group_id is None:
         return failure_response("Title or description or author_id or group_id not provided")
 
-    new_challenge = Challenge(title=title, description=description, author_id=author_id, author_username=author_username group_id=group_id)
+    new_challenge = Challenge(title=title, description=description, author_id=author_id, author_username=author_username, group_id=group_id)
     db.session.add(new_challenge)
     db.session.commit()
     return success_response(new_challenge.serialize(), 201)
@@ -225,6 +225,27 @@ def assign_player_to_group():
     group.players.append(player)
     db.session.commit()
     return success_response(group.serialize())
+
+
+@app.route("/api/groups/<int:group_id>/<int:player_id>/", methods=["DELETE"])
+def delete_player_from_group(group_id, player_id):
+    player = Player.query.filter_by(id=player_id).first()
+    group = Group.query.filter_by(id=group_id).first()
+
+    if player is None:
+        return failure_response("Player not found!")
+    if group is None:
+        return failure_response("Group not found!")
+    try:
+        group.players.index(player)
+    except:
+        return failure_response("Player not in group!")
+
+    group.players.remove(player)
+    db.session.commit()
+    group = Group.query.filter_by(id=group_id).first()
+    return success_response(group.serialize())
+
 
 @app.route("/api/leaderboard/<int:group_id>/")
 def get_group_leaderboard(group_id):
