@@ -37,7 +37,14 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
            title: "Uploaded Challenge", message: "Your challenge has been successfully uploaded!", preferredStyle: .alert)
     let closeAction = UIAlertAction(
            title: "Close Alert", style: .default, handler: nil)
+    
+//    private var player = PlayerData()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
+//        player = (self.tabBarController as! TabBarController).player
+    }
     
     
     override func viewDidLoad() {
@@ -226,7 +233,8 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
         }
     }
     @objc func createChallenge() {
-        NetworkManager.createChallenge(title: challengeTitleTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines), description: descriptionTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines), author_id: "1", group_id: groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (newChallenge) in
+        let player = (self.tabBarController as! TabBarController).player
+        NetworkManager.createChallenge(title: challengeTitleTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines), description: descriptionTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines), author_id: player.id, username: player.username, group_id: groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (newChallenge) in
             //MARK: QUESTION: Make groupText get group id for group name and read author_id from somewhere?? (note doesn't use newchallenge)
             
             self.present(self.confrmationAlert, animated: true, completion: nil)
@@ -243,3 +251,4 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
     }
 
 }
+

@@ -35,14 +35,15 @@ import UIKit
 
 struct Player : Codable {
     var id: Int
-    var name: String
     var username: String
-    var password: String
-    var points: Int
-    var challenges: [Challenge]
-    var groups: [Group]
-    var authored_challenges: [Challenge]
+//    var password: String
+//    var points: Int
+//    var challenges: [Challenge]
+//    var groups: [Group]
+//    var authored_challenges: [Challenge]
 }
+//{"id": 6, "username": "hi", "points": 0, "current_challenges": [], "completed_challenges":
+//[], "groups": [], "authored_challenges": []}]}
 
 struct Group : Codable {
     var id: Int
@@ -57,9 +58,13 @@ struct Challenge : Codable {
     var description: String
     var claimed: Bool
     var completed: Bool
-//    var author_id: Int
-//    var group_id: Int
+    var author_id: Int
+    var group_id: Int
     var player: [Player]
+}
+struct PlayerResponse : Codable {
+    var success : Bool
+    var data : Player
 }
 
 struct ChallengeResponse : Codable {

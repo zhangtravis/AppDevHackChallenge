@@ -22,17 +22,37 @@ class SearchViewController: UIViewController {
     private let groupFilterCellReuseIdentifier = "groupFilterCellReuseIdentifier"
     private let groupFilterCellPadding: CGFloat = 10
     
-    private var challengeData: [UnclaimedChallenge] = []
+    private var challengeData: [Challenge] = []
+    private var shownchallengeData: [Challenge] = []
     private var selectedchallengeIndex : Int?
     private var selectedCell : UnclaimedChallengeTableViewCell?
+    private var currentIndexPathToUpdate: IndexPath?
     
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
+    
+    private let refreshControl = UIRefreshControl()
+    
+//    private var player = PlayerData()
+    let claimAlert = UIAlertController(title: "Claim this challenge", message: nil, preferredStyle: .alert)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        refreshData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = backgroundGrey
+        
+        if #available(iOS 10.0, *) {
+            unclaimedChallengesTableView.refreshControl = refreshControl
+        } else {
+            unclaimedChallengesTableView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -96,25 +116,40 @@ class SearchViewController: UIViewController {
         groupFilterCollectionView.delegate = self
         view.addSubview(groupFilterCollectionView)
         
+        claimAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        claimAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { action in
+            let player = (self.tabBarController as! TabBarController).player
+//            MARK: Claim post NetworkManager
+            if let indexPath = self.currentIndexPathToUpdate {
+                NetworkManager.claimChallenge(player_id: player.id, challenge_id: self.challengeData[indexPath.row].id) { (claimedChallenge) in
+                    print("claiming challenge")
+                    self.challengeData.remove(at: indexPath.row)
+                    self.sortChallengeData()
+                    self.shownchallengeData = self.challengeData
+                    self.unclaimedChallengesTableView.reloadData()
+                }
+            }
+            
+        }))
         
         setupConstraints()
         createDummyData()
+    }
+    func sortChallengeData() {
+        challengeData.sort { (leftPost, rightPost) -> Bool in
+            return leftPost.id > rightPost.id
+        }
     }
     func createDummyData() {
         groupFilters = [
             GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell")
         ]
-        challengeData = [
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-             UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),
-            UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0),UnclaimedChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "Tabby Cat", upvotes: 1, downvotes: 0)
-        ]
+        NetworkManager.getAllUnclaimedChallenges { (challengesList) in
+            self.challengeData = challengesList
+            self.sortChallengeData()
+            self.shownchallengeData = self.challengeData
+            self.unclaimedChallengesTableView.reloadData()
+        }
     }
     
     func setupConstraints() {
@@ -159,6 +194,26 @@ class SearchViewController: UIViewController {
             unclaimedChallengesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    @objc func refreshData() {
+        // MARK: Use getAllPosts
+        /**
+         We want to retrieve data from the server here upon refresh. Make sure to
+         1) Sort the posts with `sortPostData`
+         2) Update `postData` & `shownPostData` and reload `postTableView`
+         3) End the refreshing on `refreshControl`
+         
+         DO NOT USE `DispatchQueue.main.asyncAfter` as currently is - just use `getAllPosts`
+         */
+
+        NetworkManager.getAllUnclaimedChallenges(completion: { (challengeList) in
+            self.challengeData = challengeList
+            self.sortChallengeData()
+            self.shownchallengeData = self.challengeData
+            self.unclaimedChallengesTableView.reloadData()
+            self.refreshControl.endRefreshing()
+        })
+
+    }
 }
 
 extension SearchViewController : UITableViewDataSource {
@@ -193,6 +248,8 @@ extension SearchViewController : UITableViewDataSource {
 extension SearchViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! UnclaimedChallengeTableViewCell
+        currentIndexPathToUpdate = indexPath
+        present(claimAlert, animated: true)
         print("selected")
 //        let songObject = songData[indexPath.row]
 //        selectedSongIndex = indexPath.row
