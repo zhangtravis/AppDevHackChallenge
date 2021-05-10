@@ -33,11 +33,9 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
         }
         holder.itemView.setOnClickListener(){
             if (isCurrent){
-
-            }else if (isCompleted){
-
-            }else{
-
+                //launch fragment, mark as completed, upload picture
+            }else if (!isCompleted){
+                // mark as claimed
             }
         }
     }

@@ -5,11 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class LeaderboardFragment : Fragment() {
-
-
+    private lateinit var leaderborardRecyclerView : RecyclerView
+    private lateinit var leaderborardAdapter : RecyclerView.Adapter<*>
+    private lateinit var leaderboardLayoutManager : RecyclerView.LayoutManager
+    private var leaderboardDataSet= mutableListOf<Leaderboard>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -21,7 +25,14 @@ class LeaderboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val root:View =  inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        leaderborardRecyclerView=root.findViewById(R.id.leaderboard_recycler)
+        leaderboardLayoutManager= LinearLayoutManager(root.context)
+        leaderborardRecyclerView.layoutManager=leaderboardLayoutManager
+        // get data set
+        leaderborardAdapter=LeaderboardAdapter(leaderboardDataSet)
+        leaderborardRecyclerView.adapter=leaderborardAdapter
+        return root
     }
 
     companion object {
