@@ -51,11 +51,10 @@ def get_player_by_username(username):
 @app.route("/api/players/", methods=["POST"])
 def create_player():
     body = json.loads(request.data)
-    name = body.get('name')
     username = body.get('username')
     password = body.get('password')
 
-    if name is None or username is None or password is None:
+    if username is None or password is None:
         return failure_response("Name, username, or password not provided")
 
     optional_player = Player.query.filter(Player.username == username).first()
@@ -63,7 +62,7 @@ def create_player():
     if optional_player is not None:
         return failure_response("Error: Player already exists")
 
-    new_player = Player(name=name, username=username, password=password)
+    new_player = Player(username=username, password=password)
     db.session.add(new_player)
     db.session.commit()
     return success_response(new_player.serialize(), 201)

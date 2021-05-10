@@ -46,7 +46,6 @@ Response:
     "success": true,
     "data": {
         "id": 1,
-        "name": "test name",
         "username": "test username",
         "points": 0,
         "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
@@ -68,7 +67,6 @@ Response:
     "success": true,
     "data": {
         "id": 1,
-        "name": "test name",
         "username": "test username",
         "points": 0,
         "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
@@ -90,7 +88,6 @@ Response:
     "success": true,
     "data": {
         "id": 1,
-        "name": "test name",
         "username": "test username",
         "points": 0,
         "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
@@ -109,7 +106,6 @@ Request:
 
 ```
 {
-    "name": <USER INPUT>,
     "username": <USER INPUT>,
     "password": <USER INPUT>
 }
@@ -122,7 +118,6 @@ Response:
     "success": true,
     "data": {
         "id": 1,
-        "name": "test name",
         "username": "test username",
         "points": 0,
         "current challenges": [ ],

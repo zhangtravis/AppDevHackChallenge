@@ -47,7 +47,6 @@ class Player(db.Model):
 
     __tablename__ = 'player'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
     username = db.Column(db.String, nullable=False)
     password_digest = db.Column(db.String, nullable=False)
     points = db.Column(db.Integer, nullable=False)
@@ -59,7 +58,6 @@ class Player(db.Model):
         """
         Initialize variables
         """
-        self.name = kwargs.get('name')
         self.username = kwargs.get('username')
         self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
         self.points = 0
@@ -73,7 +71,6 @@ class Player(db.Model):
         """
         return {
             "id": self.id,
-            "name": self.name,
             "username": self.username,
             "points": self.points,
             "current_challenges": [c.serialize_condensed() for c in self.challenges if not c.completed],
@@ -88,7 +85,6 @@ class Player(db.Model):
         """
         return {
             "id": self.id,
-            "name": self.name,
             "username": self.username,
             "points": self.points,
         }
