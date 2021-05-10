@@ -114,6 +114,7 @@ class Challenge(db.Model):
     # votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
+    author_username = db.Column(db.String, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
@@ -127,6 +128,7 @@ class Challenge(db.Model):
         self.description = kwargs.get('description')
         self.claimed = kwargs.get('claimed', False)
         self.completed = kwargs.get('completed', False)
+        self.author_username = kwargs.get('author_username')
         self.author_id = kwargs.get('author_id')
         self.group_id = kwargs.get('group_id')
         # self.votes = 0
@@ -142,6 +144,7 @@ class Challenge(db.Model):
             # "votes": self.votes,
             "claimed": self.claimed,
             "completed": self.completed,
+            "author_username": self.author_username,
             "author_id": self.author_id,
             "group_id": self.group_id,
             "player": [p.serialize_condensed() for p in self.player]
