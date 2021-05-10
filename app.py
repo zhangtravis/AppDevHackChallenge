@@ -201,7 +201,7 @@ def create_group():
     name = body.get('name')
 
     if name is None :
-        return failure_response("name not provided")
+        return failure_response("Group Name not provided")
 
     new_group = Group(name=name)
     db.session.add(new_group)
@@ -271,10 +271,10 @@ def get_leaderboard():
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
     return success_response(player_points_lst)
 
-
-@app.route("/api/challenges/mark_completed/", methods=["POST"])
+@app.route('/api/challenges/mark_completed/', methods=['POST'])
 def mark_completed():
     body = json.loads(request.data)
+    image_data = body.get('image_data')
     challenge_id = body.get('challenge_id')
 
     challenge = Challenge.query.filter_by(id=challenge_id).first()
@@ -292,19 +292,10 @@ def mark_completed():
 
     challenge.completed = True
     challenge_player.points += 100
-    db.session.commit()
-    return success_response(challenge.serialize())
 
-"""
-File upload route
-"""
-@app.route('/api/upload/', methods=['POST'])
-def upload():
-    body = json.loads(request.data)
-    image_data = body.get('image_data')
     if image_data is None:
         return failure_response('No Image!')
-    asset = Asset(image_data=image_data)
+    asset = Asset(image_data=image_data, challenge_id=challenge_id)
     db.session.add(asset)
     db.session.commit()
     return success_response(asset.serialize(), 201)
@@ -312,4 +303,4 @@ def upload():
 
 if __name__ == "__main__":
     port = os.environ.get('PORT', 5000)
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)

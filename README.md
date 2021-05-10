@@ -434,11 +434,14 @@ Response:
 
 **POST** `/api/challenges/mark_completed/`
 
+Allowable files: `.png`, `.jpeg`, `.jpe`, `.jpg`, `.gif`
+
 Request:
 
 ```
 {
     "challenge_id": <USER INPUT>,
+    "image_data": <USER INPUT (HAS TO BE BASE64 ENCODED)>
 }
 ```
 
@@ -448,15 +451,9 @@ Response:
 {
     "success": true,
     "data": {
-        "id": 1,
-        "title": "test title",
-        "description": "test description",
-        "claimed": true,
-        "completed": true,
-        "author_username": "user1",
-        "author_id": 1,
-        "group_id": 1,
-        "player": [<SERIALIZED PLAYER> ]
+        "url": "url here",
+        "created_at": "time here",
+        "challenge_id": "id here"
     }
 }
 ```
@@ -591,7 +588,6 @@ Response:
 }
 ```
 
-
 ## Get global leaderboard in order of points from most to least
 
 **GET** `/api/leaderboard/`
@@ -602,33 +598,6 @@ Response:
 {
     "success": true,
     "data": [ [<USERNAME>, <POINTS>], ... ]
-    }
-}
-```
-
-
-## Upload Image
-
-**POST** `/api/upload/`
-
-Allowable files: `.png`, `.jpeg`, `.jpe`, `.jpg`, `.gif`
-
-Request:
-
-```
-{
-    "image_data": <USER INPUT (HAS TO BE BASE64 ENCODED)>
-}
-```
-
-Response:
-
-```
-{
-    "success": true,
-    "data": {
-        "url": "url here",
-        "created_at": "time here"
     }
 }
 ```

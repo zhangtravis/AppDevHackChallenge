@@ -231,6 +231,7 @@ class Asset(db.Model):
         Initialize variables
         """
         self.create(kwargs.get('image_data'))
+        self.challenge_id = kwargs.get('challenge_id')
 
     def serialize(self):
         """
@@ -238,7 +239,8 @@ class Asset(db.Model):
         """
         return {
             'url': f'{self.base_url}/{self.salt}.{self.extension}',
-            'created_at': str(self.created_at)
+            'created_at': str(self.created_at),
+            'challenge_id': self.challenge_id
         }
 
     def create(self, image_data):
