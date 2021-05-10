@@ -140,7 +140,7 @@ def create_challenge():
     author_id = body.get('author_id')
     group_id = body.get('group_id')
 
-    if title is None or description is None or author_id is None or author_username or group_id is None:
+    if title is None or description is None or author_id is None or author_username is None or group_id is None:
         return failure_response("Title or description or author_id or group_id not provided")
 
     new_challenge = Challenge(title=title, description=description, author_id=author_id, author_username=author_username, group_id=group_id)

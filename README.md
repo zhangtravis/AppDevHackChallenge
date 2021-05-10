@@ -16,7 +16,8 @@ Response:
             "username": "test username",
             "password": "test password",
             "points": 0,
-            "challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+            "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
             "groups": [ <SERIALIZED GROUP>, ... ],
             "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
         },
