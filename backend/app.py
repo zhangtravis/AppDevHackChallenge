@@ -231,7 +231,7 @@ def get_group_leaderboard(group_id):
 
     player_points_dict = {}
     for player in group_players:
-        player_points_dict[player.name] = player.points
+        player_points_dict[player.username] = player.points
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
     return success_response(player_points_lst)
 
@@ -241,7 +241,7 @@ def get_leaderboard():
 
     player_points_dict = {}
     for player in players:
-        player_points_dict[player.name] = player.points
+        player_points_dict[player.username] = player.points
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
     return success_response(player_points_lst)
 
