@@ -539,3 +539,29 @@ Response:
     }
 }
 ```
+
+## Upload Image
+
+**POST** `/api/upload/`
+
+Allowable files: `.png`, `.jpeg`, `.jpe`, `.jpg`, `.gif`
+
+Request:
+
+```
+{
+    "image_data": <USER INPUT (HAS TO BE BASE64 ENCODED)>
+}
+```
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "url": "url here",
+        "created_at": "time here"
+    }
+}
+```
