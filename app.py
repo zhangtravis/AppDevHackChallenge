@@ -75,13 +75,13 @@ def login():
     pw = body.get('password')
 
     if username is None or pw is None:
-        return failure_response("Error: Invalid email or password")
+        return failure_response("Error: Invalid username or password")
 
     player = Player.query.filter(Player.username == username).first()
     success = player is not None and player.verify_password(pw)
 
     if not success:
-        return failure_response("Error: Incorrect email or password")
+        return failure_response("Error: Incorrect username or password")
     
     return success_response(player.serialize())
 
