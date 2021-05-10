@@ -154,7 +154,7 @@ Request:
 
 ## Get current challenges by player id
 
-**GET** `/api/players/<int:player_id>/challenge/`
+**GET** `/api/players/<int:player_id>/challenges/`
 
 Response:
 
@@ -163,24 +163,26 @@ Response:
     "success": true,
     "data": [
         {
-            "id": 1,
+           "id": 1,
             "title": "test title",
             "description": "test description",
-            "claimed": false,
+            "claimed": true,
             "completed": false,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
-            "player": [ <SERIALIZED PLAYER>],
+            "player": [<SERIALIZED PLAYER> ],
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
-            "claimed": false,
+            "title": "test title",
+            "description": "test description",
+            "claimed": true,
             "completed": false,
-            "author_id": 2,
-            "group_id": 3,
-            "player": [<SERIALIZED PLAYER>],
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
+            "player": [<SERIALIZED PLAYER> ],
         }
         ...
     ]
@@ -203,19 +205,21 @@ Response:
             "description": "test description",
             "claimed": false,
             "completed": false,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
-            "player": [ <SERIALIZED PLAYER>],
+            "player": [ ],
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
+            "title": "test title",
+            "description": "test description",
             "claimed": true,
             "completed": true,
-            "author_id": 2,
-            "group_id": 3,
-            "player": [<SERIALIZED PLAYER>],
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
+            "player": [<SERIALIZED PLAYER> ],
         }
         ...
     ]
@@ -245,13 +249,13 @@ Response:
         },
         {
             "id": 2,
-            "title": "test title 2",
-            "description": "test description 2",
+            "title": "test title",
+            "description": "test description",
             "claimed": false,
             "completed": false,
-            "author_username": "user2",
-            "author_id": 2,
-            "group_id": 3,
+            "author_username": "user1",
+            "author_id": 1,
+            "group_id": 1,
             "player": [ ],
         }
         ...

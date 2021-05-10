@@ -94,7 +94,7 @@ def delete_player(player_id):
     db.session.commit()
     return success_response(player.serialize(), 204)
 
-@app.route("/api/players/<int:player_id>/challenge/")
+@app.route("/api/players/<int:player_id>/challenges/")
 def get_current_challenge(player_id):
     player = Player.query.filter_by(id=player_id).first()
     if player is None:
