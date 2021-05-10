@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -25,6 +26,7 @@ class ProfileFragment : Fragment() {
     private lateinit var password:EditText
     private val client = OkHttpClient()
     private var playerID:Int? = null
+    private var groupID:Int?=null
     private lateinit var submit: Button
     private lateinit var group1:EditText
     private lateinit var group2:EditText
@@ -67,7 +69,7 @@ class ProfileFragment : Fragment() {
             password.setText(passwordString)
         }
         submit.setOnClickListener(){
-//            getPlayerByUsername()
+            getPlayerByUsername()
             setSharedPref(root)
         }
         setGroupStuff(root)
@@ -78,7 +80,7 @@ class ProfileFragment : Fragment() {
         val sharedPref = root.context?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         with(sharedPref!!.edit()){
             if (playerID!=null){
-//              playerID?.let { putInt("playerID", it) }
+              playerID?.let { putInt("playerID", it) }
             }else{
                 username.setText("")
                 password.setText("")
@@ -90,8 +92,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getPlayerByUsername(){
-        val usernameString=username.toString()
-        val passwordString=password.toString()
+        val usernameString=username.text.toString()
+        val passwordString=password.text.toString()
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
                 .url("https://challenge-with-friends.herokuapp.com/api/players/$usernameString")
@@ -99,14 +101,29 @@ class ProfileFragment : Fragment() {
 
             withContext(Dispatchers.IO) {
                 client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
+                    if (!response.isSuccessful) {
+                        val json = "application/json; charset=utf-8".toMediaType()
+                        val body = "{\"name\":\"\",\"username\":\"$usernameString\",\"password\":\"$passwordString\"}".toRequestBody(json)
+                        var request = Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/players/")
+                            .post(body)
+                            .build()
+                        client.newCall(request).execute().use { response ->
+                            if (!response.isSuccessful) throw IOException("Here Unexpected code $response")
+                        }
+                        request = Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/players/$usernameString")
+                            .build()
+                        client.newCall(request).execute().use { response ->
+                            if (!response.isSuccessful) throw IOException("Here2 Unexpected code $response")
+                        }
+                    }
                     val moshi = Moshi.Builder()
                         .addLast(KotlinJsonAdapterFactory())
                         .build()
-                    val issueAdapter = moshi.adapter(Player::class.java)
+                    val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
-                    playerID = if(passwordString == issue?.password) issue.id else null
+                    playerID = if(passwordString == issue?.data?.password) issue.data.id else null
                 }
             }
         }
@@ -134,7 +151,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addToGroup(name:String){
-        var groupID:Int?=null
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
                 .url("https://challenge-with-friends.herokuapp.com/api/groups/$name")
@@ -142,47 +158,48 @@ class ProfileFragment : Fragment() {
 
             withContext(Dispatchers.IO) {
                 client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
+                    if (!response.isSuccessful) {
+                        val json = "application/json; charset=utf-8".toMediaType()
+                        val body = "{\"name\":\"$name\"}".toRequestBody(json)
+                        val request =Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/groups/")
+                            .post(body)
+                            .build()
+                        client.newCall(request).execute().use { response ->
+                            if (!response.isSuccessful) throw IOException("Here3 Unexpected code $response")
+                        }
+                    }
                     val moshi = Moshi.Builder()
                         .addLast(KotlinJsonAdapterFactory())
                         .build()
-                    val issueAdapter = moshi.adapter(SuccessTest::class.java)
+                    val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
-                    if (issue!= null && issue.success){
-                        val moshi = Moshi.Builder()
-                            .addLast(KotlinJsonAdapterFactory())
-                            .build()
-                        val issueAdapter = moshi.adapter(Group::class.java)
-                        val issue = issueAdapter.fromJson(response.body?.string())
-                        groupID=issue?.id
-                    }else{
-                        val request = Request.Builder()
-                            .url("https://challenge-with-friends.herokuapp.com/api/groups/")
-                            .post("{\"name\": $name}".toRequestBody())
-                            .build()
+                    groupID=issue?.data?.id
 
+                    if (playerID!=null && groupID!=null){
+                        val json= "application/json; charset=utf-8".toMediaType()
+                        val body = "{\"player_id\":\"$playerID\",\"group_id\":\"$groupID\"}".toRequestBody(json)
+                        val request=Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/groups/assign_player_group")
+                            .post(body)
+                            .build()
                         client.newCall(request).execute().use { response ->
-                            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                            val moshi = Moshi.Builder()
-                                .addLast(KotlinJsonAdapterFactory())
-                                .build()
-                            val issueAdapter = moshi.adapter(Group::class.java)
-                            val issue = issueAdapter.fromJson(response.body?.string())
-                            groupID=issue?.id
+                            if (!response.isSuccessful) throw IOException("Here4 Unexpected code $response")
                         }
                     }
+
+/*
                     if (playerID!=null && groupID!=null){
                         val request = Request.Builder()
                             .url("https://challenge-with-friends.herokuapp.com/api/groups/assign_player_group")
-                            .post("{\"player_id\":$playerID,\"group_id\":$groupID}".toRequestBody())
+                            .post("{\"player_id\":\"$playerID\",\"group_id\":\"$groupID\"}".toRequestBody())
                             .build()
 
                         client.newCall(request).execute().use { response ->
                             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                         }
-                    }
+                    }*/
                 }
             }
         }
