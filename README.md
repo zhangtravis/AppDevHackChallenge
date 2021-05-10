@@ -323,6 +323,29 @@ Response:
 }
 ```
 
+## Delete challenge by id
+
+**DELETE** `/api/challenges/{challenge_id}/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "test title",
+        "description": "test description",
+        "claimed": false,
+        "completed": false,
+        "author_username": "user1",
+        "author_id": 1,
+        "group_id": 1,
+        "player": [ <SERIALIZED PLAYER>]
+    }
+}
+```
+
 ## Get challenge by title
 
 **GET** `/api/challenges/{challenge_title}/`
