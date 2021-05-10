@@ -6,7 +6,7 @@ data class Challenge(
     val description:String,
     val claimed:Boolean,
     val completed:Boolean,
-//    val author_id:String,
-//    val group_id:Int,
+    val author_id:String,
+    val group_id:Int,
     val player:Array<Player>
     )

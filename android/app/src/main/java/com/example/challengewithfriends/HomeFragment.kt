@@ -75,9 +75,9 @@ class HomeFragment : Fragment() {
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
                         if(it.claimed && !it.completed) {
-                            currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,/*it.author_id,it.group_id,*/it.player))
+                            currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
                         }else if (it.claimed && it.completed){
-                            pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,/*it.author_id,it.group_id,*/it.player))
+                            pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
                         }
                     }
                 }

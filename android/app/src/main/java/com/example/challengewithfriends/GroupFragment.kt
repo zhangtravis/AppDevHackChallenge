@@ -155,7 +155,7 @@ class GroupFragment : Fragment() {
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
                         if(!it.claimed) {
-                            allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,/*it.author_id,it.group_id,*/it.player))
+                            allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
                         }
                     }
                 }
