@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         currentChallengeRecyclerView  = root.findViewById(R.id.curr_challenges)
         currentChallengeLayoutManager= LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
         currentChallengeRecyclerView.layoutManager=currentChallengeLayoutManager
-        getChallengeList()
+//        getChallengeList()
         currentChallengeAdapter = ChallengeAdapter(currChallengeDataSet,false, true,fragmentManager)
         currentChallengeRecyclerView.adapter=currentChallengeAdapter
 

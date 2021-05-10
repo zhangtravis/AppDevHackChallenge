@@ -141,7 +141,7 @@ class GroupFragment : Fragment() {
     private fun getChallengeList(){
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
-                    .url("https://challenge-with-friends.herokuapp.com/api/challenges/")
+                    .url("https://challenge-with-friends.herokuapp.com/api/challenges/unclaimed")
                     .build()
 
             withContext(Dispatchers.IO) {
@@ -154,9 +154,7 @@ class GroupFragment : Fragment() {
                     val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
-                        if(!it.claimed) {
-                            allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
-                        }
+                        allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
                     }
                 }
             }

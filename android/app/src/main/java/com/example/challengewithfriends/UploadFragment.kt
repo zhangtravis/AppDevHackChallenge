@@ -33,8 +33,8 @@ class UploadFragment : Fragment() {
         imageView=root.findViewById(R.id.upload_imageview)
         select.setOnClickListener(){
             // get pic from internal storage
-            val gallary = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallary,100) //100 = request code?
+            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery,100) //100 = request code?
         }
         submit.setOnClickListener(){
             // encode as b64 and send

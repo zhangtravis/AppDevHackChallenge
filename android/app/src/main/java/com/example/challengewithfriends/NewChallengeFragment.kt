@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +44,9 @@ class NewChallengeFragment : Fragment() {
         submit=root.findViewById(R.id.submit_add)
         submit.setOnClickListener(){
             createChallenge(newChallengeTitle.text.toString(), newChallengeDescription.text.toString())
+            newChallengeTitle.setText("")
+            newChallengeDescription.setText("")
+            Toast.makeText(activity?.applicationContext, "Challenge Created!", Toast.LENGTH_LONG).show()
         }
         return root
     }
@@ -54,7 +58,7 @@ class NewChallengeFragment : Fragment() {
         val groupID=0
         CoroutineScope(Dispatchers.Main).launch {
             val json = "application/json; charset=utf-8".toMediaType()
-            val body = "{\"title\":\"$title\",\"description\":\"$description\",\"username\":,\"$username\",\"author_id\":,\"$playerID\",\"group_id\":,\"$groupID\"}".toRequestBody(json)
+            val body = "{\"title\":\"$title\",\"description\":\"$description\",\"username\":\"$username\",\"author_id\":\"$playerID\",\"group_id\":\"$groupID\"}".toRequestBody(json)
             val request = Request.Builder()
                     .url("https://challenge-with-friends.herokuapp.com/api/challenges/")
                     .post(body)
