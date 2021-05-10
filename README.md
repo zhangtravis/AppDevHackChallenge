@@ -379,7 +379,7 @@ Request:
 {
     "title": <USER INPUT>,
     "description": <USER INPUT>,
-    "author_username": <USER INPUT>,
+    "username": <USER INPUT>,
     "author_id": <USER INPUT>,
     "group_id": <USER INPUT>
 }
