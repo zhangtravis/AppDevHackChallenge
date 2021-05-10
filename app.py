@@ -136,13 +136,14 @@ def create_challenge():
     body = json.loads(request.data)
     title = body.get('title')
     description = body.get('description')
+    author_username = body.get('username')
     author_id = body.get('author_id')
     group_id = body.get('group_id')
 
-    if title is None or description is None or author_id is None or group_id is None:
+    if title is None or description is None or author_id is None or author_username or group_id is None:
         return failure_response("Title or description or author_id or group_id not provided")
 
-    new_challenge = Challenge(title=title, description=description, author_id=author_id, group_id=group_id)
+    new_challenge = Challenge(title=title, description=description, author_id=author_id, author_username=author_username group_id=group_id)
     db.session.add(new_challenge)
     db.session.commit()
     return success_response(new_challenge.serialize(), 201)

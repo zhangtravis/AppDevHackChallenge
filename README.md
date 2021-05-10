@@ -232,6 +232,7 @@ Response:
             "description": "test description",
             "claimed": false,
             "completed": false,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
             "player": [ ],
@@ -242,6 +243,7 @@ Response:
             "description": "test description 2",
             "claimed": false,
             "completed": false,
+            "author_username": "user2",
             "author_id": 2,
             "group_id": 3,
             "player": [ ],
@@ -267,6 +269,7 @@ Response:
             "description": "test description",
             "claimed": true,
             "completed": true,
+            "author_username": "user1",
             "author_id": 1,
             "group_id": 1,
             "player": [ <SERIALIZED PLAYER>],
@@ -277,6 +280,7 @@ Response:
             "description": "test description 2",
             "claimed": true,
             "completed": true,
+            "author_username": "user2",
             "author_id": 2,
             "group_id": 3,
             "player": [<SERIALIZED PLAYER> ],
@@ -301,6 +305,7 @@ Response:
         "description": "test description",
         "claimed": false,
         "completed": false,
+        "author_username": "user1",
         "author_id": 1,
         "group_id": 1,
         "player": [ <SERIALIZED PLAYER>]
@@ -323,6 +328,7 @@ Response:
         "description": "test description",
         "claimed": false,
         "completed": false,
+        "author_username": "user1",
         "author_id": 1,
         "group_id": 1,
         "player": [ <SERIALIZED PLAYER>]
@@ -340,6 +346,7 @@ Request:
 {
     "title": <USER INPUT>,
     "description": <USER INPUT>,
+    "author_username": <USER INPUT>,
     "author_id": <USER INPUT>,
     "group_id": <USER INPUT>
 }
@@ -356,6 +363,7 @@ Response:
         "description": "test description",
         "claimed": false,
         "completed": false,
+        "author_username": "user1",
         "author_id": 1,
         "group_id": 1,
         "player": [ ]
@@ -387,6 +395,7 @@ Response:
         "description": "test description",
         "claimed": true,
         "completed": false,
+        "author_username": "user1",
         "author_id": 1,
         "group_id": 1,
         "player": [<SERIALIZED PLAYER> ]
@@ -417,6 +426,7 @@ Response:
         "description": "test description",
         "claimed": true,
         "completed": true,
+        "author_username": "user1",
         "author_id": 1,
         "group_id": 1,
         "player": [<SERIALIZED PLAYER> ]
