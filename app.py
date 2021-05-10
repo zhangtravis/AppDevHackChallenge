@@ -53,9 +53,13 @@ def create_player():
     body = json.loads(request.data)
     username = body.get('username')
     password = body.get('password')
+    image_data = body.get('image_data')
+
+    if image_data is None:
+        return failure_response('No Image!')
 
     if username is None or password is None:
-        return failure_response("Name, username, or password not provided")
+        return failure_response("Username or password not provided")
 
     optional_player = Player.query.filter(Player.username == username).first()
 
@@ -64,6 +68,12 @@ def create_player():
 
     new_player = Player(username=username, password=password)
     db.session.add(new_player)
+    db.session.commit()
+
+    asset = Asset(image_data=image_data, player_id=new_player.id)
+    new_player.asset = asset
+
+    db.session.add(asset)
     db.session.commit()
     return success_response(new_player.serialize(), 201)
 
@@ -280,6 +290,9 @@ def mark_completed():
     if challenge is None:
         return failure_response("Challenge not found")
 
+    if len(challenge.player) == 0:
+        return failure_response("A player has not been assigned to the challenge")
+
     for p in challenge.player:
         challenge_player = p
 
@@ -295,9 +308,10 @@ def mark_completed():
     if image_data is None:
         return failure_response('No Image!')
     asset = Asset(image_data=image_data, challenge_id=challenge_id)
+    challenge.asset = asset
     db.session.add(asset)
     db.session.commit()
-    return success_response(asset.serialize(), 201)
+    return success_response(challenge.serialize(), 201)
 
 
 if __name__ == "__main__":

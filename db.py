@@ -31,6 +31,18 @@ player_group_assoc = db.Table(
     db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
 )
 
+player_image_assoc = db.Table(
+    'player_image_assoc',
+    db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
+    db.Column('asset_id', db.Integer, db.ForeignKey('asset.id'))
+)
+
+challenge_image_assoc = db.Table(
+    'challenge_image_assoc',
+    db.Column('challenge_id', db.Integer, db.ForeignKey('challenge.id')),
+    db.Column('asset_id', db.Integer, db.ForeignKey('asset.id'))
+)
+
 class Player(db.Model):
     """
     Class used to represent Players Database
@@ -42,7 +54,10 @@ class Player(db.Model):
     username: Database column for usernames of each player
     password_digest: Database column for passwords (encoded) of each player
     points: Database column for # of points each player has
-    challenge: Denotes what challenge the player is currently doing
+    challenges: Denotes what challenge the player is currently doing
+    groups: Denotes what groups the player is in
+    authored_challenges: Denoted which challenges were created by a player
+    asset: Stores a profile picture for a player
     """
 
     __tablename__ = 'player'
@@ -53,6 +68,7 @@ class Player(db.Model):
     challenges = db.relationship('Challenge',  secondary=player_challenge_assoc, back_populates='player')
     groups = db.relationship('Group',  secondary=player_group_assoc, back_populates='players')
     authored_challenges = db.relationship("Challenge", cascade="delete")
+    asset = db.relationship('Asset', secondary=player_image_assoc, uselist=False, cascade="delete")
 
     def __init__(self, **kwargs):
         """
@@ -76,7 +92,8 @@ class Player(db.Model):
             "current_challenges": [c.serialize_condensed() for c in self.challenges if not c.completed],
             "completed_challenges": [c.serialize_condensed() for c in self.challenges if c.completed],
             "groups": [g.serialize_condensed() for g in self.groups],
-            "authored_challenges": [c.serialize_condensed() for c in self.authored_challenges]
+            "authored_challenges": [c.serialize_condensed() for c in self.authored_challenges],
+            "image": self.asset.serialize() if self.asset != None else None
         }
     
     def serialize_condensed(self):
@@ -98,23 +115,26 @@ class Challenge(db.Model):
     id: Database column to denote the IDs of each challenge
     title: Database column to denote the title of each challenge
     description: Database column for description of each challenge
-    votes: Database column for # of votes (approval rating) for each challenge
     claimed: Database column for whether a challenge has been claimed or not
+    completed: Database column for whether a challenge has been completed or not
+    author_username: Database column for the author username for a challenge
+    author_id: Database Column for the author id for a challenge
+    group_id: Database Column for group id for a challenge
     player: Denotes what player is partaking in a challenge right now
+    asset: Ties a picture to a challenge
     """
     
     __tablename__ = 'challenge'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
-    # votes = db.Column(db.Integer, nullable=False)
     claimed = db.Column(db.Boolean, default=False, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
     author_username = db.Column(db.String, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("player.id"), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     player = db.relationship('Player', secondary=player_challenge_assoc, back_populates='challenges')
-    asset = db.relationship('Asset', uselist=False, backref='challenge')
+    asset = db.relationship('Asset', secondary=challenge_image_assoc, uselist=False, cascade="delete")
 
     def __init__(self, **kwargs):
         """
@@ -127,7 +147,6 @@ class Challenge(db.Model):
         self.author_username = kwargs.get('author_username')
         self.author_id = kwargs.get('author_id')
         self.group_id = kwargs.get('group_id')
-        # self.votes = 0
 
     def serialize(self):
         """
@@ -137,13 +156,13 @@ class Challenge(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            # "votes": self.votes,
             "claimed": self.claimed,
             "completed": self.completed,
             "author_username": self.author_username,
             "author_id": self.author_id,
             "group_id": self.group_id,
-            "player": [p.serialize_condensed() for p in self.player]
+            "player": [p.serialize_condensed() for p in self.player],
+            "image": self.asset.serialize() if self.asset != None else None
         }
 
     def serialize_condensed(self):
@@ -154,7 +173,6 @@ class Challenge(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            # "votes": self.votes,
             "claimed": self.claimed,
             "completed": self.completed,
             "author_id": self.author_id,
@@ -163,6 +181,14 @@ class Challenge(db.Model):
 
 class Group(db.Model):
     """
+    Class used to represent Group Database
+
+    Attributes:
+    -------
+    id: Database column to denote the IDs of each group
+    name: Database column for name of each group
+    players: Stores all players in the group
+    local_challenges: Stores all challenges within the group
     """
 
     __tablename__ = 'group'
@@ -210,6 +236,8 @@ class Asset(db.Model):
     height: Database column for image height
     width: Database column for image width
     created_at: Database column for when file was created
+    player_id: Database column for player id (CAN BE NULL)
+    challenge_id: Database column for challenge id (CAN BE NULL)
     """
 
     __tablename__ = 'asset'
@@ -220,14 +248,16 @@ class Asset(db.Model):
     height = db.Column(db.Integer, nullable=False)
     width = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
-    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'))
+    player_id = db.Column(db.Integer, nullable=True)
+    challenge_id = db.Column(db.Integer, nullable=True)
 
     def __init__(self, **kwargs):
         """
         Initialize variables
         """
         self.create(kwargs.get('image_data'))
-        self.challenge_id = kwargs.get('challenge_id')
+        self.challenge_id = kwargs.get('challenge_id', None)
+        self.player_id = kwargs.get('player_id', None)
 
     def serialize(self):
         """
@@ -236,7 +266,8 @@ class Asset(db.Model):
         return {
             'url': f'{self.base_url}/{self.salt}.{self.extension}',
             'created_at': str(self.created_at),
-            'challenge_id': self.challenge_id
+            'challenge_id': self.challenge_id if hasattr(self, 'challenge_id') else None,
+            'player_id': self.player_id if hasattr(self, 'player_id') else None
         }
 
     def create(self, image_data):
