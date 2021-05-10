@@ -1,8 +1,12 @@
 # AppDevHackChallenge
 
-Get all players
-GET /api/players/
+## Get all players
+
+**GET** `/api/players/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -29,11 +33,15 @@ Response:
         ...
     ]
 }
+```
 
+## Get player by id
 
-Get player by id
-GET /api/players/{player_id}/
+**GET** `/api/players/{player_id}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -47,10 +55,15 @@ Response:
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
 }
+```
 
-Delete player by id
-GET /api/players/{player_id}/
+## Delete player by id
+
+**GET** `/api/players/{player_id}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -64,10 +77,15 @@ Response:
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
 }
+```
 
-Get player by username
-GET /api/players/{player_username}/
+## Get player by username
+
+**GET** `/api/players/{player_username}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -81,18 +99,25 @@ Response:
         "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
 }
+```
 
+## Create a player
 
-Create a player
-POST /api/players/
-Request: 
+**POST** `/api/players/`
+
+Request:
+
+```
 {
     "name": <USER INPUT>,
     "username": <USER INPUT>,
     "password": <USER INPUT>
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -106,11 +131,28 @@ Response:
         "authored_challenges": [  ]
     }
 }
+```
 
+## Login
 
-Get current challenges by player id
-GET /api/players/<int:player_id>/challenge/
+**POST** `/api/login/`
+
+Request:
+
+```
+{
+    "username": <USER INPUT>,
+    "password": <USER INPUT>
+}
+```
+
+## Get current challenges by player id
+
+**GET** `/api/players/<int:player_id>/challenge/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -137,11 +179,15 @@ Response:
         ...
     ]
 }
+```
 
+## Get all challenges
 
-Get all challenges
-GET /api/challenges/
+**GET** `/api/challenges/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -168,10 +214,15 @@ Response:
         ...
     ]
 }
+```
 
-Get unclaimed challenges
-GET /api/challenges/unclaimed/
+## Get unclaimed challenges
+
+**GET** `/api/challenges/unclaimed/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -198,11 +249,15 @@ Response:
         ...
     ]
 }
+```
 
+## Get completed challenges
 
-Get completed challenges
-GET /api/challenges/completed/
+**GET** `/api/challenges/completed/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -229,11 +284,15 @@ Response:
         ...
     ]
 }
+```
 
+## Get challenge by id
 
-Get challenge by id
-GET /api/challenges/{challenge_id}/
+**GET** `/api/challenges/{challenge_id}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -247,13 +306,15 @@ Response:
         "player": [ <SERIALIZED PLAYER>]
     }
 }
+```
 
+## Get challenge by title
 
+**GET** `/api/challenges/{challenge_title}/`
 
-
-Get challenge by title
-GET /api/challenges/{challenge_title}/
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -267,19 +328,26 @@ Response:
         "player": [ <SERIALIZED PLAYER>]
     }
 }
+```
 
+## Create a challenge
 
-Create a challenge
-POST /api/challenges/
-Request: 
+**POST** `/api/challenges/`
+
+Request:
+
+```
 {
     "title": <USER INPUT>,
     "description": <USER INPUT>,
     "author_id": <USER INPUT>,
     "group_id": <USER INPUT>
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -293,18 +361,24 @@ Response:
         "player": [ ]
     }
 }
+```
 
+## Assign challenge to player by ids
 
-Assign challenge to player by ids
+**POST** `/api/challenges/assign_player_challenge/`
 
-POST /api/challenges/assign_player_challenge/
-Request: 
+Request:
+
+```
 {
     "player_id": <USER INPUT>,
     "challenge_id": <USER INPUT>,
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -318,16 +392,23 @@ Response:
         "player": [<SERIALIZED PLAYER> ]
     }
 }
+```
 
-Mark challenge completed by id
+## Mark challenge completed by id
 
-POST /api/challenges/mark_completed/
-Request: 
+**POST** `/api/challenges/mark_completed/`
+
+Request:
+
+```
 {
     "challenge_id": <USER INPUT>,
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -341,10 +422,15 @@ Response:
         "player": [<SERIALIZED PLAYER> ]
     }
 }
+```
 
-Get all groups
-GET /api/groups/
+## Get all groups
+
+**GET** `/api/groups/`
+
 Response:
+
+```
 {
     "success": true,
     "data": [
@@ -363,11 +449,15 @@ Response:
         ...
     ]
 }
+```
 
+## Get group by id
 
-Get group by id
-GET /api/groups/{group_id}/
+**GET** `/api/groups/{group_id}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -377,10 +467,15 @@ Response:
         "challenges": [ <SERIALIZED CHALLENGE>, ... ],
     }
 }
+```
 
-Get group by name
-GET /api/groups/{group_name}/
+## Get group by name
+
+**GET** `/api/groups/{group_name}/`
+
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -390,15 +485,23 @@ Response:
         "challenges": [ <SERIALIZED CHALLENGE>, ... ]
     }
 }
+```
 
-Create a group
-POST /api/groups/
-Request: 
+## Create a group
+
+**POST** `/api/groups/`
+
+Request:
+
+```
 {
     "name": <USER INPUT>,
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -408,18 +511,24 @@ Response:
         "challenges": [ ]
     }
 }
+```
 
+## Assign player to group by ids
 
-Assign player to group by ids
+**POST** `/api/groups/assign_player_group/`
 
-POST /api/groups/assign_player_group/
-Request: 
+Request:
+
+```
 {
     "player_id": <USER INPUT>,
     "group_id": <USER INPUT>,
 }
+```
 
 Response:
+
+```
 {
     "success": true,
     "data": {
@@ -429,3 +538,4 @@ Response:
         "challenges": [<SERIALIZED CHALLENGE>, ...  ]
     }
 }
+```
