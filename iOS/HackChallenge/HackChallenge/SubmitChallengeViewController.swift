@@ -102,7 +102,7 @@ extension SubmitChallengeViewController : UIImagePickerControllerDelegate & UINa
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 10, height: 10))
+            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 100, height: 100))
             imageView.contentMode = .scaleAspectFit
             imageView.image = resizedPickedImage
         }

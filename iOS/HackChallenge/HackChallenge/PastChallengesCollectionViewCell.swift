@@ -101,6 +101,9 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
         sender_name = challenge.author_username
         print("sender name is " + sender_name)
         senderLabel.text = "Challenged by: " + sender_name
+        let url = URL(string: challenge.image!.url)
+        let data = try? Data(contentsOf: url!)
+        self.proofImage.image = UIImage(data: data!)
 
     }
     

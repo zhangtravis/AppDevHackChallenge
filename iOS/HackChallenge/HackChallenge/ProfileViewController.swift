@@ -328,9 +328,9 @@ class ProfileViewController: UIViewController {
         NetworkManager.logInPlayer(username: player.username, password: player.password) { (loggedPlayer) in
             //MARK: ADD URL DOWNLOAD ONCE LINK FIXED
 //            self.profileView.downloaded(from: loggedPlayer.image.url)
-//            let url = URL(string: loggedPlayer.image.url)
-//            let data = try? Data(contentsOf: url!)
-//            self.profileView.image = UIImage(data: data!)
+            let url = URL(string: loggedPlayer.image.url)
+            let data = try? Data(contentsOf: url!)
+            self.profileView.image = UIImage(data: data!)
             player.id = loggedPlayer.id
             self.groupInfo = loggedPlayer.groups
             self.groupsCollectionView.reloadData()
@@ -394,7 +394,7 @@ extension ProfileViewController : UIImagePickerControllerDelegate & UINavigation
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 10, height: 10))
+            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 100, height: 100))
             profileView.contentMode = .scaleAspectFit
             profileView.image = resizedPickedImage
             if let profileImageBase64 = profileView.image?.pngData()?.base64EncodedString() {

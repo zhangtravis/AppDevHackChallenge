@@ -27,7 +27,7 @@ struct Challenge : Codable {
 //    var author_id: Int
 //    var group_id: Int
     var player: [ChallengePlayer]
-//    var image : AppImage?
+    var image : AppImage?
 }
 struct AppImage : Codable {
     var url : String
