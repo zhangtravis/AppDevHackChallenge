@@ -10,6 +10,10 @@ import UIKit
 protocol SubmitChallengeDelegate: class {
     func submitChallenge(challenge: Challenge, index: Int)
 }
+protocol LogInDelegate: class {
+//    func logInPlayer(username: String, password: String, player_id: Int)
+    func logInPlayer(player: PlayerData)
+}
 
 class ViewController: UIViewController {
     
@@ -41,12 +45,21 @@ class ViewController: UIViewController {
     
     private let refreshControl = UIRefreshControl()
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshData()
 //        player = (self.tabBarController as! TabBarController).player
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let player = (self.tabBarController as! TabBarController).player
+        if (player.login == false ) {
+            let logInViewController = LogInViewController(player: (self.tabBarController as! TabBarController).player)
+            self.present(logInViewController, animated: true, completion: nil)
+            logInViewController.delegate = self
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = backgroundGrey
@@ -319,5 +332,20 @@ extension ViewController : SubmitChallengeDelegate {
         self.shownPastChallenges = self.pastChallenges
         self.pastCollectionView.reloadData()
 
+    }
+}
+
+extension ViewController : LogInDelegate {
+//    func logInPlayer(username: String, password: String, player_id: Int) {
+//        let player = (self.tabBarController as! TabBarController).player
+//        player.username = username
+//        player.password = password
+//        player.id = player_id
+//        player.login = true
+//
+//    }
+    func logInPlayer(player: PlayerData) {
+        var player_actual = (self.tabBarController as! TabBarController).player
+        player_actual = player
     }
 }

@@ -12,6 +12,8 @@ class PlayerData {
     var id = -1
     var username = ""
     var password = ""
+    var login = false
+    var image = UIImage(named: "player.png")
 }
 
 class TabBarController: UITabBarController {
@@ -19,6 +21,7 @@ class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.selectedIndex = 4
     }
 
     

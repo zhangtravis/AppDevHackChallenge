@@ -1,67 +1,49 @@
 //
-//  ProfileViewController.swift
+//  LogInViewController.swift
 //  HackChallenge
 //
-//  Created by Samantha Zhang on 5/1/21.
+//  Created by Samantha Zhang on 5/11/21.
 //
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-
-    //Views
+class LogInViewController: UIViewController {
+    weak var delegate : LogInDelegate?
+    
+    private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
+    private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
+    
     private var titleFiller = UIView()
     private var titleView = UIView()
     private var titleLabel = UILabel()
     
     private var profileBackgroundCircle = UIView()
     private var profileView = UIImageView()
-    private var profileImage : String = ""
     private var profileButton = UIButton()
+    private var profileImage : String = ""
     
     private var usernameLabel = UILabel()
     private var usernameTextField = UITextField()
     private var passwordLabel = UILabel()
     private var passwordTextField = UITextField()
-    private var groupLabel = UILabel()
     
     private var logInButton = UIButton()
-    private var addGroupButton = UIButton()
     private var signUpButton = UIButton()
     
-    private var groupsCollectionView: UICollectionView!
-    private var groupInfo: [Group] = []
-    private var signedIn : Bool = false
-//    private var player = PlayerData()
-//
-    private let groupsInfoCellReuseIdentifier = "groupsInfoCellReuseIdentifier"
-//
-//    private var username = "Person12345"
-//    private var password = "12345"
-    let createGroupAlert = UIAlertController(
-           title: "Create Group", message: "Fill in the information below to create a group", preferredStyle: .alert)
-    let joinGroupAlert = UIAlertController(
-              title: "Join Group", message: "Fill in the name of the group you are joining", preferredStyle: .alert)
-    private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
-    private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
-    private let challengeRed = UIColor(red: 237/255, green: 72/255, blue: 72/255, alpha: 1)
+    private let player: PlayerData
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let player = (self.tabBarController as! TabBarController).player
-        print("THIS SHOULD HAPPNE")
-        profileView.image = player.image
-//        player = (self.tabBarController as! TabBarController).player
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    init(player : PlayerData) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        let player = (self.tabBarController as! TabBarController).player
-        // Do any additional setup after loading the view.
         view.backgroundColor = backgroundGrey
+        
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -86,8 +68,7 @@ class ProfileViewController: UIViewController {
         //profileView
         profileView.layer.borderWidth = 5
         profileView.layer.borderColor = CGColor.init(red: 1, green: 1, blue: 1, alpha: 1)
-//        profileView.image = UIImage(named: "profile.png")
-        profileView.image = player.image
+        profileView.image = UIImage(named: "profile.png")
         profileView.layer.cornerRadius = 165.0 / 2.0
         profileView.translatesAutoresizingMaskIntoConstraints = false
         profileView.clipsToBounds = true
@@ -98,15 +79,10 @@ class ProfileViewController: UIViewController {
         profileButton.layer.cornerRadius = 165.0 / 2.0
         view.addSubview(profileButton)
         
-        setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: player.username)
-        setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: player.password)
-        
-        groupLabel.text = "GROUPS"
-        groupLabel.textColor = .black
-        groupLabel.font = UIFont.systemFont(ofSize: 12, weight: .black)
-        groupLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(groupLabel)
-        
+        setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: "")
+        setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: "")
+
+   
         logInButton.setTitle("LOG IN", for: .normal)
         logInButton.setTitleColor(.white, for: .normal)
         logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -115,16 +91,7 @@ class ProfileViewController: UIViewController {
         logInButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         logInButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logInButton)
-        
-        addGroupButton.setTitle("ADD GROUP", for: .normal)
-        addGroupButton.setTitleColor(.white, for: .normal)
-        addGroupButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        addGroupButton.backgroundColor = challengeBlue
-        addGroupButton.layer.cornerRadius = 8
-        addGroupButton.translatesAutoresizingMaskIntoConstraints = false
-        addGroupButton.addTarget(self, action: #selector(createGroup), for: .touchUpInside)
-        view.addSubview(addGroupButton)
-        
+
         signUpButton.setTitle("SIGN UP", for: .normal)
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -134,64 +101,8 @@ class ProfileViewController: UIViewController {
         signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
         view.addSubview(signUpButton)
         
-        let groupLayout = UICollectionViewFlowLayout()
-        groupLayout.scrollDirection = .vertical
-        groupLayout.minimumInteritemSpacing = 0
-        groupLayout.minimumLineSpacing = 20
-
-        
-        groupsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: groupLayout)
-        groupsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        groupsCollectionView.showsVerticalScrollIndicator = false
-        groupsCollectionView.backgroundColor = .clear
-        groupsCollectionView.register(GroupsCollectionViewCell.self, forCellWithReuseIdentifier: groupsInfoCellReuseIdentifier)
-        
-        groupsCollectionView.dataSource = self
-        groupsCollectionView.delegate = self
-        view.addSubview(groupsCollectionView)
-        
-        createGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        createGroupAlert.addTextField(configurationHandler: { textField in
-            textField.placeholder = "Input the group name here..."
-        })
-        createGroupAlert.addAction(UIAlertAction(title: "Create", style: .default, handler: { action in
-            if let textFields = self.createGroupAlert.textFields,
-               let input = textFields[0].text?.trimmingCharacters(in: .whitespacesAndNewlines),
-               input != "" {
-                NetworkManager.createGroup(name: input) { (newGroup) in
-                    NetworkManager.addPlayerToGroup(player_id: player.id, group_id: newGroup.id) { (group) in
-                        
-                    }
-                    self.groupInfo.append(newGroup)
-                    self.groupsCollectionView.reloadData()
-                }
-            }
-            
-        }))
-        //MARK: Make button and test
-        joinGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        joinGroupAlert.addTextField(configurationHandler: { textField in
-            textField.placeholder = "Input the group name here..."
-        })
-        joinGroupAlert.addAction(UIAlertAction(title: "Join", style: .default, handler: { action in
-            if let textFields = self.createGroupAlert.textFields,
-               let input = textFields[0].text?.trimmingCharacters(in: .whitespacesAndNewlines),
-               input != "" {
-                
-                NetworkManager.getGroup(name: input) { (selectedGroup) in
-                    NetworkManager.addPlayerToGroup(player_id: player.id, group_id: selectedGroup.id) { (addedgroup) in
-                        self.groupInfo.append(addedgroup)
-                        self.groupsCollectionView.reloadData()
-                    }
-                }
-                
-            }
-            
-        }))
         setupConstraints()
-       
     }
-    
     func setupLabelView(titleLabel: UILabel, textField: UITextField,titleText: String, textFieldText: String) {
         titleLabel.text = titleText
         titleLabel.textColor = .black
@@ -215,7 +126,6 @@ class ProfileViewController: UIViewController {
         view.addSubview(textField)
         
     }
-    
     func setupConstraints() {
         NSLayoutConstraint.activate([
             titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -284,120 +194,59 @@ class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            groupLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 21),
-            groupLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 41)
-        ])
-        
-        NSLayoutConstraint.activate([
-            groupsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),
-            groupsCollectionView.widthAnchor.constraint(equalToConstant: 220),
-            groupsCollectionView.heightAnchor.constraint(equalToConstant: 140),
-            groupsCollectionView.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30)
-        ])
-        
-        NSLayoutConstraint.activate([
             logInButton.widthAnchor.constraint(equalToConstant: 94),
             logInButton.heightAnchor.constraint(equalToConstant: 35),
             logInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
             logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
         ])
-        NSLayoutConstraint.activate([
-            addGroupButton.widthAnchor.constraint(equalToConstant: 127),
-            addGroupButton.heightAnchor.constraint(equalToConstant: 35),
-            addGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            addGroupButton.leadingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: 10)
-        ])
+
         NSLayoutConstraint.activate([
             signUpButton.widthAnchor.constraint(equalToConstant: 101),
             signUpButton.heightAnchor.constraint(equalToConstant: 35),
             signUpButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            signUpButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+            signUpButton.leadingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: 10)
         ])
-
     }
     @objc func changeProfilePressed() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
         picker.delegate = self
         present(picker, animated: true)
+        
     }
     @objc func signUp() {
         
-        let player = (self.tabBarController as! TabBarController).player
         player.username = usernameTextField.text ?? ""
         player.password = usernameTextField.text ?? ""
         print("SIGN UP")
         NetworkManager.createPlayer(username: player.username, password: player.password, image_data: profileImage) { (playerInfo) in
-            player.id = playerInfo.id
-            print("SIGN UP player id : \(player.id)")
+            self.player.id = playerInfo.id
+            let url = URL(string: playerInfo.image.url)
+            let data = try? Data(contentsOf: url!)
+            self.player.image =  UIImage(data: data!)
+            print("SIGN UP player id : \(self.player.id)")
         }
+        self.delegate?.logInPlayer(player: player)
+        self.dismiss(animated: true, completion: nil)
+
 //        print("updated player info")
     }
     @objc func logIn() {
-        let player = (self.tabBarController as! TabBarController).player
+
         player.username = usernameTextField.text ?? ""
         player.password = usernameTextField.text ?? ""
         NetworkManager.logInPlayer(username: player.username, password: player.password) { (loggedPlayer) in
-            //MARK: ADD URL DOWNLOAD ONCE LINK FIXED
-//            self.profileView.downloaded(from: loggedPlayer.image.url)
+            self.player.id = loggedPlayer.id
             let url = URL(string: loggedPlayer.image.url)
             let data = try? Data(contentsOf: url!)
-            self.profileView.image = UIImage(data: data!)
-            player.id = loggedPlayer.id
-            self.groupInfo = loggedPlayer.groups
-            self.groupsCollectionView.reloadData()
-            print("LOG IN player id : \(player.id)")
+            self.player.image =  UIImage(data: data!)
+            print("LOG IN player id : \(self.player.id)")
         }
-    }
-    @objc func createGroup() {
-        self.present(self.createGroupAlert, animated: true, completion: nil)
+        self.delegate?.logInPlayer(player: player)
+        self.dismiss(animated: true, completion: nil)
     }
 }
-
-
-
-extension ProfileViewController: UICollectionViewDataSource {
-    // Specify number of items in section (required).
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return groupInfo.count
-
-        
-    }
-    // Specify cell to return (required).
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: groupsInfoCellReuseIdentifier, for: indexPath) as! GroupsCollectionViewCell
-        cell.configure(for: groupInfo[indexPath.item])
-        return cell
-        
-
-    }
-
-    
-    
-}
-
-extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
-    // Override default flow (optional, has default flow).
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 220, height: 35)
-        
-    }
-    
-    // Provide selection functionality.
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//            groupInfo[indexPath.item].selected = !groupInfo[indexPath.item].selected
-            
-//            let selectedTitle = groupFilters[indexPath.item].title
-//            if groupFilters[indexPath.item].selected
-
-            collectionView.reloadData()
-        
-    }
-
-
-    
-}
-extension ProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+extension LogInViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
@@ -409,7 +258,7 @@ extension ProfileViewController : UIImagePickerControllerDelegate & UINavigation
                 profileImage = "data:image/png;base64," + profileImageBase64
             }
         }
-
+        self.player.image = self.profileView.image
         dismiss(animated: true, completion: nil)
     }
 }
