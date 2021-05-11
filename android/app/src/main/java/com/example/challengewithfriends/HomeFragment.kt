@@ -53,9 +53,12 @@ class HomeFragment : Fragment() {
         pastChallengeRecyclerView=root.findViewById(R.id.past_challenges)
         pastChallengeLayoutManager = LinearLayoutManager(root.context)
         pastChallengeRecyclerView.layoutManager=pastChallengeLayoutManager
-
+        getPastChallenges()
         pastChallengeAdapter=ChallengeAdapter(pastChallengeDataSet,true, false,fragmentManager)
         pastChallengeRecyclerView.adapter=pastChallengeAdapter
+
+        currentChallengeAdapter.notifyDataSetChanged()
+        pastChallengeAdapter.notifyDataSetChanged()
         return root
     }
 
@@ -78,13 +81,38 @@ class HomeFragment : Fragment() {
                     val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
-                        currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id))//,it.player))
-//                            pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id))//,it.player))
+                        currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id, null))//,it.player))
                     }
                 }
             }
             currentChallengeAdapter.notifyDataSetChanged()
-//            pastChallengeAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun getPastChallenges(){
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        val playerID = sharedPref?.getInt("playerID",0)
+        if (playerID==0) return
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                    .url("https://challenge-with-friends.herokuapp.com/api/challenges/completed/")
+                    .build()
+
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                    val moshi = Moshi.Builder()
+                            .addLast(KotlinJsonAdapterFactory())
+                            .build()
+                    val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
+                    val issue = issueAdapter.fromJson(response.body?.string())
+                    issue?.data?.forEach {
+                        pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id, it.image))//,it.player))
+                    }
+                }
+            }
+            pastChallengeAdapter.notifyDataSetChanged()
         }
     }
 

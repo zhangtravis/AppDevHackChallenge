@@ -8,6 +8,7 @@ data class Challenge(
     val completed:Boolean,
     val author_username:String,
     val author_id:String,
-    val group_id:Int
+    val group_id:Int,
 //    val player:Array<Player>
+    val image:ImageCustom?
     )

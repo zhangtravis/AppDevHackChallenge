@@ -45,24 +45,23 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
         holder.description.text=myDataset[position].description
         holder.author.text=myDataset[position].author_username
         if (isCompleted){
-//            Glide.with(holder.itemView.context).load(myDataset[position].url).into(holder.imageView)
+            holder.imageView?.let { Glide.with(holder.itemView.context).load(myDataset[position].image?.url).into(it) }
         }
         holder.itemView.setOnClickListener(){
             if (isCurrent){
                 // launch fragment, mark as completed, upload picture
-                if (fragmentManager != null) {
-                    fragmentManager.beginTransaction()
-                        .add(R.id.upload_container,UploadFragment.newInstance(myDataset[position].id))
-                        .commit()
-                }
-
+                fragmentManager?.beginTransaction()
+                        ?.add(R.id.upload_container,UploadFragment.newInstance(myDataset[position].id))
+                        ?.commit()
+                delItem(position)
             }else if (!isCompleted){
                 // mark as claimed
                 val sharedPref = holder.itemView.context?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
                 val playerID = sharedPref?.getInt("playerID",0)
+                val challengeID=myDataset[position].id
                 CoroutineScope(Dispatchers.Main).launch {
                     val json = "application/json; charset=utf-8".toMediaType()
-                    val body = "{\"player_id\":\"$playerID\",\"challenge_id\":\"${myDataset[position].id}\"}".toRequestBody(json)
+                    val body = "{\"player_id\":\"$playerID\",\"challenge_id\":\"$challengeID\"}".toRequestBody(json)
                     val request = Request.Builder()
                             .url("https://challenge-with-friends.herokuapp.com/api/challenges/assign_challenge_player/")
                             .post(body)
@@ -72,12 +71,17 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
                         client.newCall(request).execute().use { response ->
                             if (!response.isSuccessful) throw IOException("Unexpected code $response")
                         }
-
                     }
                 }
-                Toast.makeText(holder.itemView.context, "Challenge Claimed! Please refresh this page.", Toast.LENGTH_LONG).show()
+                Toast.makeText(holder.itemView.context, "Challenge Claimed!", Toast.LENGTH_SHORT).show()
+                delItem(position)
             }
         }
+    }
+
+    private fun delItem(pos:Int){
+        myDataset.removeAt(pos)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
