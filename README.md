@@ -655,6 +655,25 @@ Response:
 }
 ```
 
+
+## Delete player from group by ids
+
+**DELETE** `/api/groups/group_id/player_id/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "test name",
+        "players": [<SERIALIZED PLAYER>, ... ],
+        "challenges": [<SERIALIZED CHALLENGE>, ...  ]
+    }
+}
+```
+
 ## Get group leaderboard in order of points from most to least
 
 **GET** `/api/leaderboard/{group_id}/`
