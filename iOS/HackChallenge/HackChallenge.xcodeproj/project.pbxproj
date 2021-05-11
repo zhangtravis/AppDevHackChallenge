@@ -14,13 +14,13 @@
 		AC2CA7A226472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A126472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift */; };
 		AC2CA7A52647392700DF48A8 /* SubmitChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */; };
 		AC2CA7A826483C0700DF48A8 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A726483C0700DF48A8 /* UIImage.swift */; };
+		AC2CA7AC2648F72500DF48A8 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7AB2648F72500DF48A8 /* CustomTabBarController.swift */; };
 		AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A37263FBC3E00D1245F /* SearchViewController.swift */; };
 		AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */; };
 		AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */; };
 		AC753A44263FC0FB00D1245F /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A43263FC0FB00D1245F /* Challenge.swift */; };
 		AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */; };
 		AC753A502640D8B800D1245F /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A4F2640D8B800D1245F /* NetworkManager.swift */; };
-		AC753A532640E09500D1245F /* UnclaimedChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A522640E09500D1245F /* UnclaimedChallenge.swift */; };
 		AC753A5A2640E8B500D1245F /* UnclaimedChallengeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A592640E8B500D1245F /* UnclaimedChallengeTableViewCell.swift */; };
 		ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */; };
 		ACDFFF3F263DF45B00E4D96B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDFFF3E263DF45B00E4D96B /* SceneDelegate.swift */; };
@@ -45,13 +45,13 @@
 		AC2CA7A126472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardCollectionViewCell.swift; sourceTree = "<group>"; };
 		AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitChallengeViewController.swift; sourceTree = "<group>"; };
 		AC2CA7A726483C0700DF48A8 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		AC2CA7AB2648F72500DF48A8 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		AC753A37263FBC3E00D1245F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallenge.swift; sourceTree = "<group>"; };
 		AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallengeCollectionViewCell.swift; sourceTree = "<group>"; };
 		AC753A43263FC0FB00D1245F /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
 		AC753A46263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastChallengesCollectionViewCell.swift; sourceTree = "<group>"; };
 		AC753A4F2640D8B800D1245F /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		AC753A522640E09500D1245F /* UnclaimedChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnclaimedChallenge.swift; sourceTree = "<group>"; };
 		AC753A592640E8B500D1245F /* UnclaimedChallengeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnclaimedChallengeTableViewCell.swift; sourceTree = "<group>"; };
 		ACDFFF39263DF45B00E4D96B /* HackChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACDFFF3C263DF45B00E4D96B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,12 +132,12 @@
 				AC2CA79026438AA100DF48A8 /* GroupFilterCollectionViewCell.swift */,
 				AC2CA78D264389EB00DF48A8 /* Groups.swift */,
 				AC753A592640E8B500D1245F /* UnclaimedChallengeTableViewCell.swift */,
-				AC753A522640E09500D1245F /* UnclaimedChallenge.swift */,
 				ACDFFF57263DFE3600E4D96B /* ChallengeViewController.swift */,
 				ACDFFF5A263DFE4200E4D96B /* LeaderboardViewController.swift */,
 				AC2CA7A126472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift */,
 				AC2CA79D2647258100DF48A8 /* Leaderboards.swift */,
 				ACDFFF54263DFB8D00E4D96B /* ProfileViewController.swift */,
+				AC2CA7AB2648F72500DF48A8 /* CustomTabBarController.swift */,
 				AC2CA799264712D400DF48A8 /* GroupsCollectionViewCell.swift */,
 				ACDFFF42263DF45B00E4D96B /* Main.storyboard */,
 				ACDFFF45263DF45B00E4D96B /* Assets.xcassets */,
@@ -278,10 +278,10 @@
 				ACDFFF3D263DF45B00E4D96B /* AppDelegate.swift in Sources */,
 				AC753A47263FC1AA00D1245F /* PastChallengesCollectionViewCell.swift in Sources */,
 				AC2CA79A264712D400DF48A8 /* GroupsCollectionViewCell.swift in Sources */,
+				AC2CA7AC2648F72500DF48A8 /* CustomTabBarController.swift in Sources */,
 				AC2CA7A226472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift in Sources */,
 				AC753A44263FC0FB00D1245F /* Challenge.swift in Sources */,
 				ACDFFF58263DFE3600E4D96B /* ChallengeViewController.swift in Sources */,
-				AC753A532640E09500D1245F /* UnclaimedChallenge.swift in Sources */,
 				ACDFFF3F263DF45B00E4D96B /* SceneDelegate.swift in Sources */,
 				AC2CA78E264389EB00DF48A8 /* Groups.swift in Sources */,
 			);

@@ -74,10 +74,17 @@ class CurrentChallengeCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    func configure(for challenge: CurrentChallenge) {
+    func configure(for challenge: Challenge) {
         titleLabel.text = challenge.title
         descriptionLabel.text = challenge.description
-        senderLabel.text = "Challenged by: " + challenge.sender
+        var sender_name = ""
+        NetworkManager.getPlayerById(id: challenge.author_id, completion: { (sender) in
+            print("GET ID of " + sender.username + " is \(challenge.author_id)")
+            
+            sender_name = sender.username
+            self.senderLabel.text = "Challenged by: " + sender_name
+            
+        })
     }
     
     required init?(coder: NSCoder) {

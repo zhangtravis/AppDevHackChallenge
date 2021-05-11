@@ -25,20 +25,28 @@ class ProfileViewController: UIViewController {
     
     private var submitButton = UIButton()
     private var addGroupButton = UIButton()
-    private var logOutButton = UIButton()
+    private var logButton = UIButton()
     
     private var groupsCollectionView: UICollectionView!
     private var groupInfo: [GroupInfo] = []
-    
+    private var signedIn : Bool = false
+//    private var player = PlayerData()
+//
     private let groupsInfoCellReuseIdentifier = "groupsInfoCellReuseIdentifier"
-    
-    private var username = "Person12345"
-    private var password = "12345"
+//
+//    private var username = "Person12345"
+//    private var password = "12345"
     
     
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     private let challengeRed = UIColor(red: 237/255, green: 72/255, blue: 72/255, alpha: 1)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+//        player = (self.tabBarController as! TabBarController).player
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,8 +81,9 @@ class ProfileViewController: UIViewController {
         profileView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileView)
         
-        setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: username)
-        setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: password)
+        let player = (self.tabBarController as! TabBarController).player
+        setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: player.username)
+        setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: player.password)
         
         groupLabel.text = "GROUPS"
         groupLabel.textColor = .black
@@ -98,13 +107,14 @@ class ProfileViewController: UIViewController {
         addGroupButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addGroupButton)
         
-        logOutButton.setTitle("LOG OUT", for: .normal)
-        logOutButton.setTitleColor(.white, for: .normal)
-        logOutButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        logOutButton.backgroundColor = challengeRed
-        logOutButton.layer.cornerRadius = 8
-        logOutButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logOutButton)
+        logButton.setTitle("LOG IN", for: .normal)
+        logButton.setTitleColor(.white, for: .normal)
+        logButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        logButton.backgroundColor = challengeBlue
+        logButton.layer.cornerRadius = 8
+        logButton.translatesAutoresizingMaskIntoConstraints = false
+        logButton.addTarget(self, action: #selector(editUser), for: .touchUpInside)
+        view.addSubview(logButton)
         
         let groupLayout = UICollectionViewFlowLayout()
         groupLayout.scrollDirection = .vertical
@@ -238,10 +248,10 @@ class ProfileViewController: UIViewController {
             addGroupButton.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 10)
         ])
         NSLayoutConstraint.activate([
-            logOutButton.widthAnchor.constraint(equalToConstant: 101),
-            logOutButton.heightAnchor.constraint(equalToConstant: 35),
-            logOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            logOutButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+            logButton.widthAnchor.constraint(equalToConstant: 101),
+            logButton.heightAnchor.constraint(equalToConstant: 35),
+            logButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
+            logButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
         ])
 
     }
@@ -263,6 +273,18 @@ extension ProfileViewController: UICollectionViewDataSource {
         return cell
         
 
+    }
+    @objc func editUser() {
+        
+        let player = (self.tabBarController as! TabBarController).player
+        player.username = usernameTextField.text ?? ""
+        player.password = usernameTextField.text ?? ""
+        //MARK: LOG IN VS MAKE NEW PLAYER
+        NetworkManager.createPlayer(username: player.username, password: player.password) { (playerInfo) in
+            print("TESTTTT")
+            player.id = playerInfo.id
+        }
+        print("updated player info")
     }
     
     

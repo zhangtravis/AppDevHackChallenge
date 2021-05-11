@@ -24,7 +24,8 @@ class ViewController: UIViewController {
 
     
     // Data
-    private var currentChallenges: [CurrentChallenge] = []
+    private var currentChallenges: [Challenge] = []
+    private var shownCurrentChallenges: [Challenge] = []
     private var pastChallenges: [Challenge] = []
     private var shownPastChallenges: [Challenge] = []
     private var sections: [String] = []
@@ -37,10 +38,20 @@ class ViewController: UIViewController {
     private let sectionPadding: CGFloat = 4
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
-
+    
+    private let refreshControl = UIRefreshControl()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshData()
+//        player = (self.tabBarController as! TabBarController).player
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = backgroundGrey
+        
+
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -67,10 +78,6 @@ class ViewController: UIViewController {
         view.addSubview(pastTitleLabel)
         
         sections = ["CURRENT CHALLENGES", "PAST CHALLENGES"]
-        currentChallenges = [
-            CurrentChallenge(title: "Make An App", description: "Make any app and share it with your friends", sender: "John Doe"),
-            CurrentChallenge(title: "Draw a cat", description: "This is gonna be a super long message. Gotta test the spacing. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.s", sender: "John Doe")
-        ]
 
         
         // Setup flow layout
@@ -115,6 +122,16 @@ class ViewController: UIViewController {
         
         view.addSubview(currentCollectionView)
         view.addSubview(pastCollectionView)
+        
+        if #available(iOS 10.0, *) {
+            currentCollectionView.refreshControl = refreshControl
+            pastCollectionView.refreshControl = refreshControl
+        } else {
+            currentCollectionView.addSubview(refreshControl)
+            pastCollectionView.addSubview(refreshControl)
+        }
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
         setupConstraints()
         createDummyData()
     }
@@ -124,9 +141,22 @@ class ViewController: UIViewController {
             return leftPost.id > rightPost.id
         }
     }
+    func sortCurrentChallengeData() {
+        currentChallenges.sort { (leftPost, rightPost) -> Bool in
+            return leftPost.id > rightPost.id
+        }
+    }
     
     func createDummyData() {
-        
+        let player = (self.tabBarController as! TabBarController).player
+        print("trying to get current")
+        NetworkManager.getAllCurrentChallenges(playerid: player.id) { (currentChallengeList) in
+//            print("getting all current challengers from player with id \(player.id)")
+            self.currentChallenges = currentChallengeList
+            self.shownCurrentChallenges = self.currentChallenges
+            self.currentCollectionView.reloadData()
+        }
+        print("trying to get past")
         NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
             
                 self.pastChallenges = pastChallengeList
@@ -175,6 +205,34 @@ class ViewController: UIViewController {
             pastCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -collectionViewPadding),
             pastCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
+
+    }
+    @objc func refreshData() {
+        // MARK: Use getAllPosts
+        /**
+         We want to retrieve data from the server here upon refresh. Make sure to
+         1) Sort the posts with `sortPostData`
+         2) Update `postData` & `shownPostData` and reload `postTableView`
+         3) End the refreshing on `refreshControl`
+         
+         DO NOT USE `DispatchQueue.main.asyncAfter` as currently is - just use `getAllPosts`
+         */
+        let player = (self.tabBarController as! TabBarController).player
+        NetworkManager.getAllCurrentChallenges(playerid: player.id, completion: { (currentChallengeList) in
+            self.currentChallenges = currentChallengeList
+            //
+            self.shownCurrentChallenges = self.currentChallenges
+            self.currentCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        })
+
+        NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
+            self.pastChallenges = pastChallengeList
+            self.sortPastChallengeData()
+            self.shownPastChallenges = self.pastChallenges
+            self.pastCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        })
 
     }
 

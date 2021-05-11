@@ -8,7 +8,19 @@
 
 import UIKit
 
+class PlayerData {
+    var id = -1
+    var username = ""
+    var password = ""
+}
+
 class TabBarController: UITabBarController {
+    var player = PlayerData()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
