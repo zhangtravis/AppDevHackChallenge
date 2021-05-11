@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SubmitChallengeDelegate: class {
-    func submitChallenge(image: UIImage)
+    func submitChallenge(challenge: Challenge, index: Int)
 }
 
 class ViewController: UIViewController {
@@ -149,14 +149,14 @@ class ViewController: UIViewController {
     
     func createDummyData() {
         let player = (self.tabBarController as! TabBarController).player
-        print("trying to get current")
-        NetworkManager.getAllCurrentChallenges(playerid: player.id) { (currentChallengeList) in
-//            print("getting all current challengers from player with id \(player.id)")
-            self.currentChallenges = currentChallengeList
-            self.shownCurrentChallenges = self.currentChallenges
-            self.currentCollectionView.reloadData()
+        if player.id != -1 {
+            NetworkManager.getAllCurrentChallenges(playerid: player.id) { (currentChallengeList) in
+                self.currentChallenges = currentChallengeList
+                self.shownCurrentChallenges = self.currentChallenges
+                self.currentCollectionView.reloadData()
+            }
         }
-        print("trying to get past")
+
         NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
             
                 self.pastChallenges = pastChallengeList
@@ -218,13 +218,16 @@ class ViewController: UIViewController {
          DO NOT USE `DispatchQueue.main.asyncAfter` as currently is - just use `getAllPosts`
          */
         let player = (self.tabBarController as! TabBarController).player
-        NetworkManager.getAllCurrentChallenges(playerid: player.id, completion: { (currentChallengeList) in
-            self.currentChallenges = currentChallengeList
-            //
-            self.shownCurrentChallenges = self.currentChallenges
-            self.currentCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        })
+        if player.id != -1 {
+            NetworkManager.getAllCurrentChallenges(playerid: player.id, completion: { (currentChallengeList) in
+                self.currentChallenges = currentChallengeList
+                //
+                self.shownCurrentChallenges = self.currentChallenges
+                self.currentCollectionView.reloadData()
+                self.refreshControl.endRefreshing()
+            })
+        }
+
 
         NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
             self.pastChallenges = pastChallengeList
@@ -292,7 +295,7 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
 //            collectionView.reloadData()
             
             print("selected a current challenge")
-            let submitChallengeController = SubmitChallengeViewController()
+            let submitChallengeController = SubmitChallengeViewController(selectedChallenge: currentChallenges[indexPath.item], index : indexPath.row)
             self.present(submitChallengeController, animated: true, completion: nil)
             submitChallengeController.delegate = self
             
@@ -305,7 +308,16 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
 }
 extension ViewController : SubmitChallengeDelegate {
-    func submitChallenge(image: UIImage) {
-        print("TEST")
+    func submitChallenge(challenge: Challenge, index: Int) {
+        self.currentChallenges.remove(at: index)
+        self.sortCurrentChallengeData()
+        self.shownCurrentChallenges = self.currentChallenges
+        self.currentCollectionView.reloadData()
+        
+        self.pastChallenges.append(challenge)
+        self.sortPastChallengeData()
+        self.shownPastChallenges = self.pastChallenges
+        self.pastCollectionView.reloadData()
+
     }
 }

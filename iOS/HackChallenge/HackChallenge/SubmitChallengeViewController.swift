@@ -16,8 +16,12 @@ class SubmitChallengeViewController: UIViewController{
     private var imageView = UIImageView()
     private var submitButton = UIButton()
     private var selectionButton = UIButton()
+    private var selectedChallenge : Challenge
+    private let index : Int
     
-    init() {
+    init(selectedChallenge: Challenge, index: Int) {
+        self.selectedChallenge = selectedChallenge
+        self.index = index
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -74,9 +78,15 @@ class SubmitChallengeViewController: UIViewController{
     }
     
     @objc func submitButtonPressed() {
-//        delegate?.submitChallenge(image: selectedImage)
+
         if let profileImageBase64 = imageView.image?.pngData()?.base64EncodedString() {
-//            print(profileImageBase64)
+            print(profileImageBase64)
+            NetworkManager.completeChallenge(challenge_id: selectedChallenge.id, image_data: "data:image/png;base64," + profileImageBase64) { (completedChallenge) in
+                print("PROBLEM?")
+                self.delegate?.submitChallenge(challenge: completedChallenge, index: self.index)
+                
+            }
+            
         }
         self.dismiss(animated: true, completion: nil)
     }
@@ -92,7 +102,7 @@ extension SubmitChallengeViewController : UIImagePickerControllerDelegate & UINa
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 100, height: 100))
+            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 10, height: 10))
             imageView.contentMode = .scaleAspectFit
             imageView.image = resizedPickedImage
         }

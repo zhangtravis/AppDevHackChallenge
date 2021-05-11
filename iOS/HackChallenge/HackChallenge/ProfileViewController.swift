@@ -16,6 +16,8 @@ class ProfileViewController: UIViewController {
     
     private var profileBackgroundCircle = UIView()
     private var profileView = UIImageView()
+    private var profileImage : String = ""
+    private var profileButton = UIButton()
     
     private var usernameLabel = UILabel()
     private var usernameTextField = UITextField()
@@ -23,9 +25,9 @@ class ProfileViewController: UIViewController {
     private var passwordTextField = UITextField()
     private var groupLabel = UILabel()
     
-    private var submitButton = UIButton()
+    private var logInButton = UIButton()
     private var addGroupButton = UIButton()
-    private var logButton = UIButton()
+    private var signUpButton = UIButton()
     
     private var groupsCollectionView: UICollectionView!
     private var groupInfo: [GroupInfo] = []
@@ -79,7 +81,13 @@ class ProfileViewController: UIViewController {
         profileView.image = UIImage(named: "profile.png")
         profileView.layer.cornerRadius = 165.0 / 2.0
         profileView.translatesAutoresizingMaskIntoConstraints = false
+        profileView.clipsToBounds = true
         view.addSubview(profileView)
+        
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
+        profileButton.addTarget(self, action: #selector(changeProfilePressed), for: .touchUpInside)
+        profileButton.layer.cornerRadius = 165.0 / 2.0
+        view.addSubview(profileButton)
         
         let player = (self.tabBarController as! TabBarController).player
         setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: player.username)
@@ -91,13 +99,14 @@ class ProfileViewController: UIViewController {
         groupLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(groupLabel)
         
-        submitButton.setTitle("SUBMIT", for: .normal)
-        submitButton.setTitleColor(.white, for: .normal)
-        submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        submitButton.backgroundColor = challengeBlue
-        submitButton.layer.cornerRadius = 8
-        submitButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(submitButton)
+        logInButton.setTitle("LOG IN", for: .normal)
+        logInButton.setTitleColor(.white, for: .normal)
+        logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        logInButton.backgroundColor = challengeBlue
+        logInButton.layer.cornerRadius = 8
+        logInButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
+        logInButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logInButton)
         
         addGroupButton.setTitle("ADD GROUP", for: .normal)
         addGroupButton.setTitleColor(.white, for: .normal)
@@ -107,14 +116,14 @@ class ProfileViewController: UIViewController {
         addGroupButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addGroupButton)
         
-        logButton.setTitle("LOG IN", for: .normal)
-        logButton.setTitleColor(.white, for: .normal)
-        logButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        logButton.backgroundColor = challengeBlue
-        logButton.layer.cornerRadius = 8
-        logButton.translatesAutoresizingMaskIntoConstraints = false
-        logButton.addTarget(self, action: #selector(editUser), for: .touchUpInside)
-        view.addSubview(logButton)
+        signUpButton.setTitle("SIGN UP", for: .normal)
+        signUpButton.setTitleColor(.white, for: .normal)
+        signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        signUpButton.backgroundColor = challengeBlue
+        signUpButton.layer.cornerRadius = 8
+        signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+        view.addSubview(signUpButton)
         
         let groupLayout = UICollectionViewFlowLayout()
         groupLayout.scrollDirection = .vertical
@@ -198,6 +207,13 @@ class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            profileButton.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
+            profileButton.centerYAnchor.constraint(equalTo: profileView.centerYAnchor),
+            profileButton.heightAnchor.constraint(equalToConstant: 183),
+            profileButton.widthAnchor.constraint(equalToConstant: 183)
+        ])
+        
+        NSLayoutConstraint.activate([
             usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 21),
             usernameLabel.topAnchor.constraint(equalTo: profileBackgroundCircle.bottomAnchor, constant: 52),
             usernameLabel.trailingAnchor.constraint(equalTo: usernameTextField.leadingAnchor, constant: 49)
@@ -236,24 +252,50 @@ class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            submitButton.widthAnchor.constraint(equalToConstant: 94),
-            submitButton.heightAnchor.constraint(equalToConstant: 35),
-            submitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
+            logInButton.widthAnchor.constraint(equalToConstant: 94),
+            logInButton.heightAnchor.constraint(equalToConstant: 35),
+            logInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
+            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
         ])
         NSLayoutConstraint.activate([
             addGroupButton.widthAnchor.constraint(equalToConstant: 127),
             addGroupButton.heightAnchor.constraint(equalToConstant: 35),
             addGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            addGroupButton.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 10)
+            addGroupButton.leadingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: 10)
         ])
         NSLayoutConstraint.activate([
-            logButton.widthAnchor.constraint(equalToConstant: 101),
-            logButton.heightAnchor.constraint(equalToConstant: 35),
-            logButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            logButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+            signUpButton.widthAnchor.constraint(equalToConstant: 101),
+            signUpButton.heightAnchor.constraint(equalToConstant: 35),
+            signUpButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
+            signUpButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
         ])
 
+    }
+    @objc func signUp() {
+        
+        let player = (self.tabBarController as! TabBarController).player
+        player.username = usernameTextField.text ?? ""
+        player.password = usernameTextField.text ?? ""
+//        print("LOGIN")
+        NetworkManager.createPlayer(username: player.username, password: player.password, image_data: profileImage) { (playerInfo) in
+            player.id = playerInfo.id
+//            print("player id : \(player.id)")
+        }
+//        print("updated player info")
+    }
+    @objc func logIn() {
+        let player = (self.tabBarController as! TabBarController).player
+        player.username = usernameTextField.text ?? ""
+        player.password = usernameTextField.text ?? ""
+        NetworkManager.logInPlayer(username: player.username, password: player.password) { (loggedPlayer) in
+            //MARK: ADD URL DOWNLOAD ONCE LINK FIXED
+//            self.profileView.downloaded(from: loggedPlayer.image.url)
+//            let url = URL(string: loggedPlayer.image.url)
+//            let data = try? Data(contentsOf: url!)
+//            self.profileView.image = UIImage(data: data!)
+            player.id = loggedPlayer.id
+            print("player id : \(player.id)")
+        }
     }
 }
 
@@ -274,18 +316,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         
 
     }
-    @objc func editUser() {
-        
-        let player = (self.tabBarController as! TabBarController).player
-        player.username = usernameTextField.text ?? ""
-        player.password = usernameTextField.text ?? ""
-        //MARK: LOG IN VS MAKE NEW PLAYER
-        NetworkManager.createPlayer(username: player.username, password: player.password) { (playerInfo) in
-            print("TESTTTT")
-            player.id = playerInfo.id
-        }
-        print("updated player info")
-    }
+
     
     
 }
@@ -307,6 +338,27 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
             collectionView.reloadData()
         
     }
+    @objc func changeProfilePressed() {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
     
+}
+extension ProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 10, height: 10))
+            profileView.contentMode = .scaleAspectFit
+            profileView.image = resizedPickedImage
+            if let profileImageBase64 = profileView.image?.pngData()?.base64EncodedString() {
+//                print("data:image/png;base64," + profileImageBase64)
+                profileImage = "data:image/png;base64," + profileImageBase64
+            }
+        }
+
+        dismiss(animated: true, completion: nil)
+    }
 }

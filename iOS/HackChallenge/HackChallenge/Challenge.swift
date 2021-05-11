@@ -32,40 +32,51 @@ import UIKit
 //    var upvotes: Int
 //    var downvotes: Int
 //}
-
-struct Player : Codable {
-    var id: Int
-    var username: String
-//    var password: String
-//    var points: Int
-//    var challenges: [Challenge]
-//    var groups: [Group]
-//    var authored_challenges: [Challenge]
-}
-//{"id": 6, "username": "hi", "points": 0, "current_challenges": [], "completed_challenges":
-//[], "groups": [], "authored_challenges": []}]}
-
 struct Group : Codable {
     var id: Int
     var name: String
     var players: [ Player ]
     var challenges: [Challenge]
 }
-
 struct Challenge : Codable {
     var id : Int
     var title : String
     var description: String
-    var claimed: Bool
-    var completed: Bool
-    var author_id: Int
-    var group_id: Int
-    var player: [Player]
+//    var claimed: Bool
+//    var completed: Bool
+    var author_username: String
+//    var author_id: Int
+//    var group_id: Int
+    var player: [ChallengePlayer]
+//    var image : AppImage?
+}
+struct AppImage : Codable {
+    var url : String
+//    var created_at : String
+//    var challenge_id : Int?
+//    var player_id : Int?
+}
+struct Player : Codable {
+    var id: Int
+    var username: String
+//    var points: Int
+//    var challenges: [Challenge]
+//    var groups: [Group]
+//    var authored_challenges: [Challenge]
+    var image : AppImage
 }
 struct PlayerResponse : Codable {
     var success : Bool
     var data : Player
 }
+struct ChallengePlayer : Codable {
+    var id: Int
+    var username: String
+    var points : Int
+}
+
+
+
 
 struct ChallengeResponse : Codable {
     var success : Bool
@@ -77,6 +88,10 @@ struct ChallengesResponse : Codable {
     var data : [Challenge]
 }
 
+//struct CompletionResponse : Codable {
+//    var success : Bool
+//    var data : AppImage
+//}
 //struct PastChallenges : Codable {
 //    var success : Bool
 //    var data : [Challenge]

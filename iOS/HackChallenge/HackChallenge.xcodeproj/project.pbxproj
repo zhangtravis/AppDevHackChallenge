@@ -15,6 +15,7 @@
 		AC2CA7A52647392700DF48A8 /* SubmitChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */; };
 		AC2CA7A826483C0700DF48A8 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7A726483C0700DF48A8 /* UIImage.swift */; };
 		AC2CA7AC2648F72500DF48A8 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2CA7AB2648F72500DF48A8 /* CustomTabBarController.swift */; };
+		AC701D5A264A35EC007F821D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC701D59264A35EC007F821D /* UIImageView.swift */; };
 		AC753A38263FBC3E00D1245F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A37263FBC3E00D1245F /* SearchViewController.swift */; };
 		AC753A3B263FBDC800D1245F /* CurrentChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */; };
 		AC753A3E263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */; };
@@ -46,6 +47,7 @@
 		AC2CA7A42647392700DF48A8 /* SubmitChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitChallengeViewController.swift; sourceTree = "<group>"; };
 		AC2CA7A726483C0700DF48A8 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		AC2CA7AB2648F72500DF48A8 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		AC701D59264A35EC007F821D /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		AC753A37263FBC3E00D1245F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		AC753A3A263FBDC800D1245F /* CurrentChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallenge.swift; sourceTree = "<group>"; };
 		AC753A3D263FBE3A00D1245F /* CurrentChallengeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChallengeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				ACDFFF47263DF45B00E4D96B /* LaunchScreen.storyboard */,
 				ACDFFF4A263DF45B00E4D96B /* Info.plist */,
 				AC2CA7A726483C0700DF48A8 /* UIImage.swift */,
+				AC701D59264A35EC007F821D /* UIImageView.swift */,
 			);
 			path = HackChallenge;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				AC2CA7AC2648F72500DF48A8 /* CustomTabBarController.swift in Sources */,
 				AC2CA7A226472E3D00DF48A8 /* LeaderboardCollectionViewCell.swift in Sources */,
 				AC753A44263FC0FB00D1245F /* Challenge.swift in Sources */,
+				AC701D5A264A35EC007F821D /* UIImageView.swift in Sources */,
 				ACDFFF58263DFE3600E4D96B /* ChallengeViewController.swift in Sources */,
 				ACDFFF3F263DF45B00E4D96B /* SceneDelegate.swift in Sources */,
 				AC2CA78E264389EB00DF48A8 /* Groups.swift in Sources */,

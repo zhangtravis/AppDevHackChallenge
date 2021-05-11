@@ -120,15 +120,22 @@ class SearchViewController: UIViewController {
         claimAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { action in
             let player = (self.tabBarController as! TabBarController).player
 //            MARK: Claim post NetworkManager
-            if let indexPath = self.currentIndexPathToUpdate {
-                NetworkManager.claimChallenge(player_id: player.id, challenge_id: self.challengeData[indexPath.row].id) { (claimedChallenge) in
-                    print("claiming challenge")
+            print("claiming challenge")
+            print("\(player.id)")
+
+            if player.id != -1 {
+                if let indexPath = self.currentIndexPathToUpdate {
+                    NetworkManager.claimChallenge(player_id: player.id, challenge_id: self.challengeData[indexPath.row].id) { (claimedChallenge) in
+                        print("using claim info")
+                        
+                    }
                     self.challengeData.remove(at: indexPath.row)
                     self.sortChallengeData()
                     self.shownchallengeData = self.challengeData
                     self.unclaimedChallengesTableView.reloadData()
                 }
             }
+
             
         }))
         
