@@ -1,6 +1,7 @@
 package com.example.challengewithfriends
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import androidx.core.net.toUri
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +22,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import com.bumptech.glide.Glide
+
 
 
 class ProfileFragment : Fragment() {
@@ -37,6 +42,7 @@ class ProfileFragment : Fragment() {
     private lateinit var add1:Button
     private lateinit var add2:Button
     private lateinit var add3:Button
+    private lateinit var profilePic:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,7 +68,9 @@ class ProfileFragment : Fragment() {
         add1=root.findViewById(R.id.group1_add)
         add2=root.findViewById(R.id.group2_add)
         add3=root.findViewById(R.id.group3_add)
+        profilePic=root.findViewById(R.id.profile_pic_profile)
         val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        playerID=sharedPref?.getInt("playerID",0)
         val usernameString=sharedPref?.getString("username", null)
         val passwordString=sharedPref?.getString("password", null)
         if (usernameString!=null && passwordString!=null){
@@ -73,13 +81,14 @@ class ProfileFragment : Fragment() {
             login()
         }
         logout.setOnClickListener(){
-            playerID=null
-            setSharedPref()
-//            fragmentManager?.beginTransaction()
-//                ?.replace(R.id.fragment_container,MakeAccountFragment())
-//                ?.commit()
+//            playerID=null
+//            setSharedPref()
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container,MakeAccountFragment())
+                ?.commit()
         }
         setGroupStuff(root)
+        setPic()
         return root
     }
 
@@ -87,7 +96,7 @@ class ProfileFragment : Fragment() {
         val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         with(sharedPref!!.edit()){
             if (playerID!=null){
-              playerID?.let { putInt("playerID", it) }
+              putInt("playerID", playerID!!)
             }else{
                 username.setText("")
                 password.setText("")
@@ -104,8 +113,11 @@ class ProfileFragment : Fragment() {
         val usernameString=username.text.toString()
         val passwordString=password.text.toString()
         CoroutineScope(Dispatchers.Main).launch {
+            val json = "application/json; charset=utf-8".toMediaType()
+            val body ="{\"username\":\"$usernameString\",\"password\":\"$passwordString\"}".toRequestBody(json)
             val request = Request.Builder()
-                .url("https://challenge-with-friends.herokuapp.com/api/players/$usernameString")
+                .url("https://challenge-with-friends.herokuapp.com/api/login/")
+                .post(body)
                 .build()
             withContext(Dispatchers.IO) {
                 client.newCall(request).execute().use { response ->
@@ -115,46 +127,62 @@ class ProfileFragment : Fragment() {
                             .build()
                         val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
                         val issue = issueAdapter.fromJson(response.body?.string())
-                        playerID =  issue?.data?.id
-                    }else{
-                        val json = "application/json; charset=utf-8".toMediaType()
-                        val body = "{\"username\":\"$usernameString\",\"password\":\"$passwordString\",\"image_data\":\"null\"}".toRequestBody(json)
-                        val request = Request.Builder()
-                                .url("https://challenge-with-friends.herokuapp.com/api/players/")
-                                .post(body)
-                                .build()
-                        client.newCall(request).execute().use { response ->
-                            if (response.isSuccessful) {
-                                val moshi = Moshi.Builder()
-                                        .addLast(KotlinJsonAdapterFactory())
-                                        .build()
-                                val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
-                                val issue = issueAdapter.fromJson(response.body?.string())
-                                playerID = issue?.data?.id
+                        playerID = issue?.data?.id
+                        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+                        with(sharedPref!!.edit()) {
+                            if (playerID != null) {
+                                putInt("playerID", playerID!!)
                             }
+                            putString("username", usernameString)
+                            putString("password", passwordString)
+                            apply()
                         }
+                        fragmentManager?.beginTransaction()
+                            ?.replace(R.id.fragment_container,HomeFragment())
+                            ?.commit()
                     }
                 }
-                setSharedPref()
             }
+
         }
     }
 
-
+    private fun setPic(){
+        if (playerID==null || playerID == 0) return
+        var url:String? = null
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                .url("https://challenge-with-friends.herokuapp.com/api/players/$playerID/")
+                .build()
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        val moshi = Moshi.Builder()
+                            .addLast(KotlinJsonAdapterFactory())
+                            .build()
+                        val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
+                        val issue = issueAdapter.fromJson(response.body?.string())
+                        url=issue?.data?.image?.url
+                    }
+                }
+            }
+            if (url !=null) Glide.with(context!!).load(url).into(profilePic)
+        }
+    }
 
     private fun setGroupStuff(root:View){
         add1.setOnClickListener(){
-            addToGroup(group1.text.toString())
+            addGroup(group1.text.toString())
             leave1.visibility=View.VISIBLE
             add1.visibility=View.GONE
         }
         add2.setOnClickListener(){
-            addToGroup(group2.text.toString())
+            addGroup(group2.text.toString())
             leave2.visibility=View.VISIBLE
             add2.visibility=View.GONE
         }
         add3.setOnClickListener(){
-            addToGroup(group3.text.toString())
+            addGroup(group3.text.toString())
             leave3.visibility=View.VISIBLE
             add3.visibility=View.GONE
         }
@@ -172,6 +200,63 @@ class ProfileFragment : Fragment() {
             //leave group
             leave3.visibility=View.GONE
             add3.visibility=View.VISIBLE
+        }
+    }
+
+
+    private fun addGroup(groupName: String){
+        var groupID:Int?= null
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                .url("https://challenge-with-friends.herokuapp.com/api/groups/$groupName/")
+                .build()
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful){
+                        val json = "application/json; charset=utf-8".toMediaType()
+                        val body = "{\"name\":\"$groupName\"}".toRequestBody(json)
+                        val request = Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/groups/")
+                            .post(body)
+                            .build()
+                        withContext(Dispatchers.IO) {
+                            client.newCall(request).execute().use { response ->
+                                if (!response.isSuccessful){
+                                    throw IOException("Here! Unexpected code $response")
+                                }
+                                val moshi = Moshi.Builder()
+                                    .addLast(KotlinJsonAdapterFactory())
+                                    .build()
+                                val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
+                                val issue = issueAdapter.fromJson(response.body?.string())
+                                groupID = issue?.data?.id
+                            }
+                        }
+                    }else{
+                        val moshi = Moshi.Builder()
+                            .addLast(KotlinJsonAdapterFactory())
+                            .build()
+                        val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
+                        val issue = issueAdapter.fromJson(response.body?.string())
+                        groupID = issue?.data?.id
+                    }
+                    if (groupID!=null && playerID!=null){
+                        val json = "application/json; charset=utf-8".toMediaType()
+                        val body = "{\"player_id\":\"$playerID\", \"group_id\":\"$groupID\"}".toRequestBody(json)
+                        val request = Request.Builder()
+                            .url("https://challenge-with-friends.herokuapp.com/api/groups/assign_player_group/")
+                            .post(body)
+                            .build()
+                        withContext(Dispatchers.IO) {
+                            client.newCall(request).execute().use { response ->
+                                if (!response.isSuccessful) {
+                                    throw IOException("Here2! Unexpected code $response")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

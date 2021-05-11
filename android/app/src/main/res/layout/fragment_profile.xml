@@ -8,6 +8,7 @@
     android:background="@color/blue_3">
 
     <ImageView
+        android:id="@+id/profile_pic_profile"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -25,4 +25,8 @@
     <string name="add_group">Add Group</string>
     <string name="select">Select</string>
     <string name="new_player">Create Your Account</string>
+    <string name="player">Player</string>
+    <string name="points">Points</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

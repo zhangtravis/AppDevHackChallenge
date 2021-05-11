@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         fragmentContainer=findViewById(R.id.fragment_container)
         fragmentManager.beginTransaction()
-            .add(R.id.fragment_container, /*if (playerID==0) MakeAccountFragment() else*/ HomeFragment())
+            .add(R.id.fragment_container, /*if (playerID==0)*/ MakeAccountFragment()) /*else HomeFragment())*/
             .commit()
         setBottomNav()
     }

@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
     private fun getcurrentChallengeList(){
         val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         val playerID = sharedPref?.getInt("playerID",0)
-//        Log.d("tag1", ""+playerID)
+        Log.d("tag1", ""+playerID)
         if (playerID==0) return
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()

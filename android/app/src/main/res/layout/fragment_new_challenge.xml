@@ -74,13 +74,15 @@
         android:textColor="@color/black"
         android:textSize="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="50dp"
+        android:visibility="gone"/>
     <TextView
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/new_challenge_group_text"
         app:layout_constraintLeft_toLeftOf="@id/new_challenge_group_text"
-        android:text="@string/group_sub"/>
+        android:text="@string/group_sub"
+        android:visibility="gone"/>
     <Spinner
         android:id="@+id/new_challenge_group"
         android:layout_width="200dp"
@@ -89,7 +91,8 @@
         app:layout_constraintBottom_toBottomOf="@id/new_challenge_group_text"
         app:layout_constraintLeft_toRightOf="@id/new_challenge_title_text"
         android:layout_marginLeft="35dp"
-        android:background="@drawable/rounded_corner_white"/>
+        android:background="@drawable/rounded_corner_white"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/submit_add"
