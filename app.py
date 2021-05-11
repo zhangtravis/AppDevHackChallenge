@@ -212,6 +212,11 @@ def create_group():
     if name is None :
         return failure_response("Group Name not provided")
 
+    optional_group = Group.query.filter(Group.name == name).first()
+
+    if optional_group is not None:
+        return failure_response("Error: Group already exists")
+
     new_group = Group(name=name)
     db.session.add(new_group)
     db.session.commit()
