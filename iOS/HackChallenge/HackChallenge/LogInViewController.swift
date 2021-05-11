@@ -17,6 +17,8 @@ class LogInViewController: UIViewController {
     private var titleView = UIView()
     private var titleLabel = UILabel()
     
+    private var retryLabel = UILabel()
+    
     private var profileBackgroundCircle = UIView()
     private var profileView = UIImageView()
     private var profileButton = UIButton()
@@ -83,7 +85,15 @@ class LogInViewController: UIViewController {
         
         setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: "")
         setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: "")
-
+        
+        retryLabel.text = ""
+        retryLabel.textColor = .black
+        retryLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        retryLabel.translatesAutoresizingMaskIntoConstraints = false
+        retryLabel.numberOfLines = 0
+        retryLabel.textAlignment = .center
+        retryLabel.lineBreakMode = .byWordWrapping
+        view.addSubview(retryLabel)
    
         logInButton.setTitle("LOG IN", for: .normal)
         logInButton.setTitleColor(.white, for: .normal)
@@ -196,6 +206,12 @@ class LogInViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            retryLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20),
+            retryLabel.widthAnchor.constraint(equalToConstant: 300),
+            retryLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             logInButton.widthAnchor.constraint(equalToConstant: 150),
             logInButton.heightAnchor.constraint(equalToConstant: 35),
             logInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
@@ -217,9 +233,21 @@ class LogInViewController: UIViewController {
         
     }
     @objc func signUp() {
-        
+        if passwordTextField.text != "" || usernameTextField.text != "" {
+            if let pass = passwordTextField.text as? String {
+                player.password = pass
+            }
+            else {
+                player.password = String(passwordTextField.text!)
+            }
+            if let user = usernameTextField.text as? String {
+                player.username = user
+            }
+            else {
+                player.username = String(usernameTextField.text!)
+            }
         player.username = usernameTextField.text ?? ""
-        player.password = usernameTextField.text ?? ""
+        player.password = passwordTextField.text ?? ""
         print("SIGN UP")
         NetworkManager.createPlayer(username: player.username, password: player.password, image_data: profileImage) { (playerInfo) in
             self.player.id = playerInfo.id
@@ -232,24 +260,52 @@ class LogInViewController: UIViewController {
         self.player.login = true
         self.delegate?.logInPlayer(player: player)
         self.dismiss(animated: true, completion: nil)
+        }
+        else {
+            retryLabel.text = "Please fill in a username and a password"
+        }
 
 //        print("updated player info")
     }
     @objc func logIn() {
 
-        player.username = usernameTextField.text ?? ""
-        player.password = usernameTextField.text ?? ""
-        NetworkManager.logInPlayer(username: player.username, password: player.password) { (loggedPlayer) in
-            self.player.id = loggedPlayer.id
-            let url = URL(string: loggedPlayer.image.url)
-            let data = try? Data(contentsOf: url!)
-            self.player.image =  UIImage(data: data!)
-            self.player.groups = loggedPlayer.groups
-            print("LOG IN player id : \(self.player.id)")
+        if passwordTextField.text != "" || usernameTextField.text != "" {
+            if let pass = passwordTextField.text as? String {
+                player.password = pass
+            }
+            else {
+                player.password = String(passwordTextField.text!)
+            }
+            if let user = usernameTextField.text as? String {
+                player.username = user
+            }
+            else {
+                player.username = String(usernameTextField.text!)
+            }
+           NetworkManager.logInPlayer(username: player.username, password: player.password) { (loggedPlayer) in
+                    self.player.id = loggedPlayer.id
+                    let url = URL(string: loggedPlayer.image.url)
+                    let data = try? Data(contentsOf: url!)
+                    self.player.image =  UIImage(data: data!)
+                    self.player.groups = loggedPlayer.groups
+                    print("LOG IN player id : \(self.player.id)")
+   
+            }
+            if player.id != -1 {
+                self.player.login = true
+                self.delegate?.logInPlayer(player: player)
+                print("player username : \(player.username)")
+                print("player password : \(player.password)")
+                self.dismiss(animated: true, completion: nil)
+            }
+            else {
+                self.retryLabel.text = "Invalid Username or Password or Missing Profile Image"
+            }
         }
-        self.player.login = true
-        self.delegate?.logInPlayer(player: player)
-        self.dismiss(animated: true, completion: nil)
+        else {
+            retryLabel.text = "Please fill in a username and a password"
+        }
+
     }
 }
 extension LogInViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {

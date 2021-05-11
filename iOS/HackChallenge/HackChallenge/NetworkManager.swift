@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 
+
 class NetworkManager {
     static let host = "https://challenge-with-friends.herokuapp.com/api/"
     
