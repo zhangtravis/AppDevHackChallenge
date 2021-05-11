@@ -117,7 +117,9 @@ class NetworkManager {
             "username": username,
             "password": password
         ]
+        print("Logging in player")
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
+            print("Logged in player")
             switch response.result {
             case .success(let data):
                 print("success login")
@@ -191,6 +193,64 @@ class NetworkManager {
                 }
             case .failure(let error):
                 print("failure")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func createGroup(name: String, completion: @escaping (Group) -> Void) {
+        let endpoint = "\(host)groups/"
+        let parameters: [String:Any] = [
+            "name": name,
+        ]
+        print("making group")
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success group")
+                let jsonDecoder = JSONDecoder()
+                if let groupResponse = try? jsonDecoder.decode(GroupResponse.self, from: data) {
+                    completion(groupResponse.data)
+                }
+            case .failure(let error):
+                print("failure group")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func addPlayerToGroup(player_id: Int, group_id: Int, completion: @escaping (Group) -> Void) {
+        let endpoint = "\(host)groups/assign_player_group/"
+        let parameters: [String:Any] = [
+            "player_id": player_id,
+            "group_id": group_id
+        ]
+        print("adding to group")
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success groupadd")
+                let jsonDecoder = JSONDecoder()
+                if let groupResponse = try? jsonDecoder.decode(GroupResponse.self, from: data) {
+                    completion(groupResponse.data)
+                }
+            case .failure(let error):
+                print("failure groupadd")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func getGroup(name: String, completion: @escaping (Group) -> Void) {
+        let endpoint = "\(host)groups/\(name)/"
+        print("getting group")
+        AF.request(endpoint, method: .get).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success group get")
+                let jsonDecoder = JSONDecoder()
+                if let groupResponse = try? jsonDecoder.decode(GroupResponse.self, from: data) {
+                    completion(groupResponse.data)
+                }
+            case .failure(let error):
+                print("failure group get")
                 print(error.localizedDescription)
             }
         }

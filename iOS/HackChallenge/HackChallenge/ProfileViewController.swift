@@ -30,7 +30,7 @@ class ProfileViewController: UIViewController {
     private var signUpButton = UIButton()
     
     private var groupsCollectionView: UICollectionView!
-    private var groupInfo: [GroupInfo] = []
+    private var groupInfo: [Group] = []
     private var signedIn : Bool = false
 //    private var player = PlayerData()
 //
@@ -38,8 +38,10 @@ class ProfileViewController: UIViewController {
 //
 //    private var username = "Person12345"
 //    private var password = "12345"
-    
-    
+    let createGroupAlert = UIAlertController(
+           title: "Create Group", message: "Fill in the information below to create a group", preferredStyle: .alert)
+    let joinGroupAlert = UIAlertController(
+              title: "Join Group", message: "Fill in the name of the group you are joining", preferredStyle: .alert)
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     private let challengeRed = UIColor(red: 237/255, green: 72/255, blue: 72/255, alpha: 1)
@@ -114,6 +116,7 @@ class ProfileViewController: UIViewController {
         addGroupButton.backgroundColor = challengeBlue
         addGroupButton.layer.cornerRadius = 8
         addGroupButton.translatesAutoresizingMaskIntoConstraints = false
+        addGroupButton.addTarget(self, action: #selector(createGroup), for: .touchUpInside)
         view.addSubview(addGroupButton)
         
         signUpButton.setTitle("SIGN UP", for: .normal)
@@ -141,13 +144,48 @@ class ProfileViewController: UIViewController {
         groupsCollectionView.delegate = self
         view.addSubview(groupsCollectionView)
         
+        createGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        createGroupAlert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Input the group name here..."
+        })
+        createGroupAlert.addAction(UIAlertAction(title: "Create", style: .default, handler: { action in
+            if let textFields = self.createGroupAlert.textFields,
+               let input = textFields[0].text?.trimmingCharacters(in: .whitespacesAndNewlines),
+               input != "" {
+                NetworkManager.createGroup(name: input) { (newGroup) in
+                    NetworkManager.addPlayerToGroup(player_id: player.id, group_id: newGroup.id) { (group) in
+                        
+                    }
+                    self.groupInfo.append(newGroup)
+                    self.groupsCollectionView.reloadData()
+                }
+            }
+            
+        }))
+        //MARK: Make button and test
+        joinGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        joinGroupAlert.addTextField(configurationHandler: { textField in
+            textField.placeholder = "Input the group name here..."
+        })
+        joinGroupAlert.addAction(UIAlertAction(title: "Join", style: .default, handler: { action in
+            if let textFields = self.createGroupAlert.textFields,
+               let input = textFields[0].text?.trimmingCharacters(in: .whitespacesAndNewlines),
+               input != "" {
+                
+                NetworkManager.getGroup(name: input) { (selectedGroup) in
+                    NetworkManager.addPlayerToGroup(player_id: player.id, group_id: selectedGroup.id) { (addedgroup) in
+                        self.groupInfo.append(addedgroup)
+                        self.groupsCollectionView.reloadData()
+                    }
+                }
+                
+            }
+            
+        }))
         setupConstraints()
-        groupInfo = [
-            GroupInfo(title: "CORNELL123"),
-            GroupInfo(title: "123BEARS"),
-            GroupInfo(title: "CUBS123")
-        ]
+       
     }
+    
     func setupLabelView(titleLabel: UILabel, textField: UITextField,titleText: String, textFieldText: String) {
         titleLabel.text = titleText
         titleLabel.textColor = .black
@@ -276,10 +314,10 @@ class ProfileViewController: UIViewController {
         let player = (self.tabBarController as! TabBarController).player
         player.username = usernameTextField.text ?? ""
         player.password = usernameTextField.text ?? ""
-//        print("LOGIN")
+        print("SIGN UP")
         NetworkManager.createPlayer(username: player.username, password: player.password, image_data: profileImage) { (playerInfo) in
             player.id = playerInfo.id
-//            print("player id : \(player.id)")
+            print("SIGN UP player id : \(player.id)")
         }
 //        print("updated player info")
     }
@@ -294,8 +332,13 @@ class ProfileViewController: UIViewController {
 //            let data = try? Data(contentsOf: url!)
 //            self.profileView.image = UIImage(data: data!)
             player.id = loggedPlayer.id
-            print("player id : \(player.id)")
+            self.groupInfo = loggedPlayer.groups
+            self.groupsCollectionView.reloadData()
+            print("LOG IN player id : \(player.id)")
         }
+    }
+    @objc func createGroup() {
+        self.present(self.createGroupAlert, animated: true, completion: nil)
     }
 }
 
@@ -330,7 +373,7 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
     
     // Provide selection functionality.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            groupInfo[indexPath.item].selected = !groupInfo[indexPath.item].selected
+//            groupInfo[indexPath.item].selected = !groupInfo[indexPath.item].selected
             
 //            let selectedTitle = groupFilters[indexPath.item].title
 //            if groupFilters[indexPath.item].selected
@@ -344,6 +387,7 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
         picker.delegate = self
         present(picker, animated: true)
     }
+
     
 }
 extension ProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {

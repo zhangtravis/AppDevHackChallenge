@@ -65,8 +65,8 @@ class GroupsCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(for group: GroupInfo) {
-        groupLabel.text = group.title
+    func configure(for group: Group) {
+        groupLabel.text = group.name
     }
     
     required init?(coder: NSCoder) {
