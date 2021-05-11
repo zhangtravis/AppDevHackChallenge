@@ -655,7 +655,6 @@ Response:
 }
 ```
 
-
 ## Delete player from group by ids
 
 **DELETE** `/api/groups/group_id/player_id/`
@@ -698,6 +697,42 @@ Response:
 {
     "success": true,
     "data": [ [<USERNAME>, <POINTS>], ... ]
+    }
+}
+```
+
+## Update profile picture
+
+**POST** `/api/players/update_profile_pic/`
+
+Request:
+
+```
+{
+    "player_id": <USER INPUT>,
+    "image_data": <USER INPUT (HAS TO BE BASE64 ENCODED)>
+}
+```
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "username": "test username",
+        "points": 0,
+        "current challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "completed challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "groups": [ <SERIALIZED GROUP>, ... ],
+        "authored_challenges": [ <SERIALIZED CHALLENGE>, ... ],
+        "image": {
+            "url": <URL HERE>,
+            "created_at": <DATETIME STRING HERE>,
+            "challenge_id": null,
+            "player_id": 1
+        }
     }
 }
 ```

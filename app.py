@@ -318,6 +318,31 @@ def mark_completed():
     db.session.commit()
     return success_response(challenge.serialize(), 201)
 
+@app.route("/api/players/update_profile_pic/", methods=["POST"])
+def update_profile_pic():
+    body = json.loads(request.data)
+    player_id = body.get('player_id')
+    image_data = body.get('image_data')
+
+    if image_data is None:
+        return failure_response('No Image!')
+
+    player = Player.query.filter_by(id=player_id).first()
+
+    if player is None:
+        return failure_response("Error: Player does not exist")
+
+    if player.asset is not None:
+        db.session.delete(player.asset)
+        db.session.commit()
+
+    asset = Asset(image_data=image_data, player_id=player.id)
+    player.asset = asset
+
+    db.session.add(asset)
+    db.session.commit()
+    return success_response(player.serialize(), 201)
+
 
 if __name__ == "__main__":
     port = os.environ.get('PORT', 5000)
