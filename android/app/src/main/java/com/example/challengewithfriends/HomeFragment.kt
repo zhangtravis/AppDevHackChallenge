@@ -1,5 +1,6 @@
 package com.example.challengewithfriends
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,7 +46,7 @@ class HomeFragment : Fragment() {
         currentChallengeRecyclerView  = root.findViewById(R.id.curr_challenges)
         currentChallengeLayoutManager= LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
         currentChallengeRecyclerView.layoutManager=currentChallengeLayoutManager
-//        getChallengeList()
+        getcurrentChallengeList()
         currentChallengeAdapter = ChallengeAdapter(currChallengeDataSet,false, true,fragmentManager)
         currentChallengeRecyclerView.adapter=currentChallengeAdapter
 
@@ -58,10 +59,13 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    private fun getChallengeList(){
+    private fun getcurrentChallengeList(){
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        val playerID = sharedPref?.getInt("playerID",0)
+        if (playerID==0) return
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
-                    .url("https://challenge-with-friends.herokuapp.com/api/challenges/")
+                    .url("https://challenge-with-friends.herokuapp.com/api/players/$playerID/challenges/")
                     .build()
 
             withContext(Dispatchers.IO) {
@@ -74,16 +78,13 @@ class HomeFragment : Fragment() {
                     val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
-                        if(it.claimed && !it.completed) {
-                            currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
-                        }else if (it.claimed && it.completed){
-                            pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
-                        }
+                        currChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id))//,it.player))
+//                            pastChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username,it.author_id,it.group_id))//,it.player))
                     }
                 }
             }
             currentChallengeAdapter.notifyDataSetChanged()
-            pastChallengeAdapter.notifyDataSetChanged()
+//            pastChallengeAdapter.notifyDataSetChanged()
         }
     }
 

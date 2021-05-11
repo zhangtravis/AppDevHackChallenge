@@ -114,7 +114,7 @@ class ProfileFragment : Fragment() {
                         playerID =  issue?.data?.id
                     }else{
                         val json = "application/json; charset=utf-8".toMediaType()
-                        val body = "{\"username\":\"$usernameString\",\"password\":\"$passwordString\"}".toRequestBody(json)
+                        val body = "{\"username\":\"$usernameString\",\"password\":\"$passwordString\",\"image_data\":\"null\"}".toRequestBody(json)
                         val request = Request.Builder()
                                 .url("https://challenge-with-friends.herokuapp.com/api/players/")
                                 .post(body)

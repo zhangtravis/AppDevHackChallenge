@@ -154,7 +154,7 @@ class GroupFragment : Fragment() {
                     val issueAdapter = moshi.adapter(AllChallengeResponse::class.java)
                     val issue = issueAdapter.fromJson(response.body?.string())
                     issue?.data?.forEach {
-                        allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_id,it.group_id,it.player))
+                        allChallengeDataSet.add(Challenge(it.id, it.title, it.description, it.claimed, it.completed,it.author_username, it.author_id,it.group_id))//,it.player))
                     }
                 }
             }
@@ -170,6 +170,7 @@ class GroupFragment : Fragment() {
             listToRestore.add(s)
         }
     }
+
 
     companion object {
         @JvmStatic

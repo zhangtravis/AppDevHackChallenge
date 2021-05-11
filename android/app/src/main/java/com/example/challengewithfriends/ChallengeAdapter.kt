@@ -1,12 +1,14 @@
 package com.example.challengewithfriends
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,7 +43,7 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text=myDataset[position].title
         holder.description.text=myDataset[position].description
-        holder.author.text=myDataset[position].author_id
+        holder.author.text=myDataset[position].author_username
         if (isCompleted){
 //            Glide.with(holder.itemView.context).load(myDataset[position].url).into(holder.imageView)
         }
@@ -50,7 +52,7 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
                 // launch fragment, mark as completed, upload picture
                 if (fragmentManager != null) {
                     fragmentManager.beginTransaction()
-                        .add(R.id.upload_container,UploadFragment())
+                        .add(R.id.upload_container,UploadFragment.newInstance(myDataset[position].id))
                         .commit()
                 }
 
@@ -62,7 +64,7 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
                     val json = "application/json; charset=utf-8".toMediaType()
                     val body = "{\"player_id\":\"$playerID\",\"challenge_id\":\"${myDataset[position].id}\"}".toRequestBody(json)
                     val request = Request.Builder()
-                            .url("https://challenge-with-friends.herokuapp.com/api/challenges/assign_challenge_player")
+                            .url("https://challenge-with-friends.herokuapp.com/api/challenges/assign_challenge_player/")
                             .post(body)
                             .build()
 
@@ -70,8 +72,10 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
                         client.newCall(request).execute().use { response ->
                             if (!response.isSuccessful) throw IOException("Unexpected code $response")
                         }
+
                     }
                 }
+                Toast.makeText(holder.itemView.context, "Challenge Claimed! Please refresh this page.", Toast.LENGTH_LONG).show()
             }
         }
     }
