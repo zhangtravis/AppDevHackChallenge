@@ -70,12 +70,14 @@ class ProfileFragment : Fragment() {
             password.setText(passwordString)
         }
         submit.setOnClickListener(){
-//            getPlayerByUsername()
             login()
         }
         logout.setOnClickListener(){
             playerID=null
             setSharedPref()
+//            fragmentManager?.beginTransaction()
+//                ?.replace(R.id.fragment_container,MakeAccountFragment())
+//                ?.commit()
         }
         setGroupStuff(root)
         return root
@@ -89,6 +91,8 @@ class ProfileFragment : Fragment() {
             }else{
                 username.setText("")
                 password.setText("")
+//                playerID=0
+//                putInt("playerID", playerID!!)
             }
             putString("username",username.text.toString())
             putString("password",password.text.toString())

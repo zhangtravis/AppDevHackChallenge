@@ -2,6 +2,7 @@ package com.example.challengewithfriends
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -65,6 +66,7 @@ class HomeFragment : Fragment() {
     private fun getcurrentChallengeList(){
         val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         val playerID = sharedPref?.getInt("playerID",0)
+//        Log.d("tag1", ""+playerID)
         if (playerID==0) return
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
@@ -92,7 +94,6 @@ class HomeFragment : Fragment() {
     private fun getPastChallenges(){
         val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
         val playerID = sharedPref?.getInt("playerID",0)
-        if (playerID==0) return
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
                     .url("https://challenge-with-friends.herokuapp.com/api/challenges/completed/")

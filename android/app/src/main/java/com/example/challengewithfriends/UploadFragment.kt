@@ -88,7 +88,7 @@ class UploadFragment : Fragment() {
     private fun postPic(encodedImage:String, challengeID:Int){
         CoroutineScope(Dispatchers.Main).launch {
             val json = "application/json; charset=utf-8".toMediaType()
-            Log.d("tag1","{\"challenge_id\":\"$challengeID\",\"image_data\":\"${encodedImage.subSequence(0,50)}\"}")
+//            Log.d("tag1","{\"challenge_id\":\"$challengeID\",\"image_data\":\"${encodedImage.subSequence(0,50)}\"}")
             val body = "{\"challenge_id\":\"$challengeID\",\"image_data\":\"$encodedImage\"}".toRequestBody(json)
             val request = Request.Builder()
                     .url("https://challenge-with-friends.herokuapp.com/api/challenges/mark_completed/")
