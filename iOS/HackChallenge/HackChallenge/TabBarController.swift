@@ -14,6 +14,7 @@ class PlayerData {
     var password = ""
     var login = false
     var image = UIImage(named: "player.png")
+    var groups : [Group] = []
 }
 
 class TabBarController: UITabBarController {

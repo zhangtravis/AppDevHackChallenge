@@ -26,6 +26,7 @@ class LogInViewController: UIViewController {
     private var usernameTextField = UITextField()
     private var passwordLabel = UILabel()
     private var passwordTextField = UITextField()
+  
     
     private var logInButton = UIButton()
     private var signUpButton = UIButton()
@@ -53,11 +54,12 @@ class LogInViewController: UIViewController {
         titleView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleView)
         
-        titleLabel.text = "Profile"
+        titleLabel.text = "Challenge with Friends"
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
+        
         
         //profileBackgroundCircle
         profileBackgroundCircle.backgroundColor = challengeBlue
@@ -194,17 +196,17 @@ class LogInViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            logInButton.widthAnchor.constraint(equalToConstant: 94),
+            logInButton.widthAnchor.constraint(equalToConstant: 150),
             logInButton.heightAnchor.constraint(equalToConstant: 35),
             logInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
+            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
         ])
 
         NSLayoutConstraint.activate([
-            signUpButton.widthAnchor.constraint(equalToConstant: 101),
+            signUpButton.widthAnchor.constraint(equalToConstant: 150),
             signUpButton.heightAnchor.constraint(equalToConstant: 35),
             signUpButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            signUpButton.leadingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: 10)
+            signUpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     @objc func changeProfilePressed() {
@@ -224,8 +226,10 @@ class LogInViewController: UIViewController {
             let url = URL(string: playerInfo.image.url)
             let data = try? Data(contentsOf: url!)
             self.player.image =  UIImage(data: data!)
+            self.player.groups = playerInfo.groups
             print("SIGN UP player id : \(self.player.id)")
         }
+        self.player.login = true
         self.delegate?.logInPlayer(player: player)
         self.dismiss(animated: true, completion: nil)
 
@@ -240,8 +244,10 @@ class LogInViewController: UIViewController {
             let url = URL(string: loggedPlayer.image.url)
             let data = try? Data(contentsOf: url!)
             self.player.image =  UIImage(data: data!)
+            self.player.groups = loggedPlayer.groups
             print("LOG IN player id : \(self.player.id)")
         }
+        self.player.login = true
         self.delegate?.logInPlayer(player: player)
         self.dismiss(animated: true, completion: nil)
     }

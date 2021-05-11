@@ -32,6 +32,7 @@ class SubmitChallengeViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = backgroundGrey
+        
         // Do any additional setup after loading the view.
         submitButton.setTitle("SUBMIT", for: .normal)
         submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .black)

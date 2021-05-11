@@ -24,6 +24,8 @@ class ProfileViewController: UIViewController {
     private var passwordLabel = UILabel()
     private var passwordTextField = UITextField()
     private var groupLabel = UILabel()
+    private var reminderGroups = UILabel()
+    
     
     private var logInButton = UIButton()
     private var addGroupButton = UIButton()
@@ -45,13 +47,11 @@ class ProfileViewController: UIViewController {
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     private let challengeRed = UIColor(red: 237/255, green: 72/255, blue: 72/255, alpha: 1)
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let player = (self.tabBarController as! TabBarController).player
-        print("THIS SHOULD HAPPNE")
         profileView.image = player.image
-//        player = (self.tabBarController as! TabBarController).player
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -62,6 +62,7 @@ class ProfileViewController: UIViewController {
         let player = (self.tabBarController as! TabBarController).player
         // Do any additional setup after loading the view.
         view.backgroundColor = backgroundGrey
+        groupInfo = player.groups
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +77,14 @@ class ProfileViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
+        
+        reminderGroups.text = ""
+        reminderGroups.textColor = .black
+        reminderGroups.numberOfLines = 0
+        reminderGroups.lineBreakMode = .byWordWrapping
+        reminderGroups.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        reminderGroups.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(reminderGroups)
         
         //profileBackgroundCircle
         profileBackgroundCircle.backgroundColor = challengeBlue
@@ -191,7 +200,7 @@ class ProfileViewController: UIViewController {
         setupConstraints()
        
     }
-    
+
     func setupLabelView(titleLabel: UILabel, textField: UITextField,titleText: String, textFieldText: String) {
         titleLabel.text = titleText
         titleLabel.textColor = .black
@@ -287,12 +296,18 @@ class ProfileViewController: UIViewController {
             groupLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 21),
             groupLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 41)
         ])
-        
+
         NSLayoutConstraint.activate([
             groupsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),
             groupsCollectionView.widthAnchor.constraint(equalToConstant: 220),
             groupsCollectionView.heightAnchor.constraint(equalToConstant: 140),
             groupsCollectionView.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 30)
+        ])
+        
+        NSLayoutConstraint.activate([
+            reminderGroups.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),
+            reminderGroups.widthAnchor.constraint(equalToConstant: 220),
+            reminderGroups.topAnchor.constraint(equalTo: groupLabel.topAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -359,6 +374,12 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UICollectionViewDataSource {
     // Specify number of items in section (required).
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if groupInfo.count == 0 {
+            reminderGroups.text = "You are in no groups right now"
+        }
+        else {
+            reminderGroups.text = ""
+        }
         return groupInfo.count
 
         
