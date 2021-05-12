@@ -182,7 +182,10 @@ class MakeAccountFragment : Fragment() {
                         fragmentManager?.beginTransaction()
                             ?.replace(R.id.fragment_container,HomeFragment())
                             ?.commit()
-                    }
+                    }else{
+                        activity?.runOnUiThread(){
+                            login.visibility = View.VISIBLE
+                        }                    }
                 }
             }
 
