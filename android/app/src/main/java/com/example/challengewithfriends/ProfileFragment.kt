@@ -136,22 +136,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun setSharedPref(){
-        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
-        with(sharedPref!!.edit()){
-            if (playerID!=null){
-              putInt("playerID", playerID!!)
-            }else{
-                username.setText("")
-                password.setText("")
-//                playerID=0
-//                putInt("playerID", playerID!!)
-            }
-            putString("username",username.text.toString())
-            putString("password",password.text.toString())
-            apply()
-        }
-    }
 
     private fun login(){
         val usernameString=username.text.toString()

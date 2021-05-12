@@ -1,5 +1,6 @@
 package com.example.challengewithfriends
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,6 +25,8 @@ class LeaderboardFragment : Fragment() {
     private lateinit var leaderboardLayoutManager : RecyclerView.LayoutManager
     private var leaderboardDataSet= mutableListOf<Leaderboard>()
     private val client = OkHttpClient()
+    private var playerID:Int? = null
+    private var playerGroups:Array<Group>? = arrayOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,6 +39,9 @@ class LeaderboardFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val root:View =  inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        playerID=sharedPref?.getInt("playerID",0)
+        getGroups()
         leaderborardRecyclerView=root.findViewById(R.id.leaderboard_recycler)
         leaderboardLayoutManager= LinearLayoutManager(root.context)
         leaderborardRecyclerView.layoutManager=leaderboardLayoutManager
@@ -45,29 +51,35 @@ class LeaderboardFragment : Fragment() {
         return root
     }
 
-    private fun getLeaderboard(groupTitle:String){
+    private fun getGroups(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                .url("https://challenge-with-friends.herokuapp.com/api/players/$playerID/")
+                .build()
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        val moshi = Moshi.Builder()
+                            .addLast(KotlinJsonAdapterFactory())
+                            .build()
+                        val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
+                        val issue = issueAdapter.fromJson(response.body?.string())
+                        playerGroups = issue?.data?.groups
+                        for (i:Int in playerGroups!!.indices){
+                            getLeaderboard(playerGroups!![i].name, i)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getLeaderboard(groupTitle:String, number:Int=-1){
         var urlString="https://challenge-with-friends.herokuapp.com/api/leaderboard/"
         if (groupTitle=="Global") {
             urlString+= ""
         }else{
-            CoroutineScope(Dispatchers.Main).launch {
-                val request = Request.Builder()
-                    .url("https://challenge-with-friends.herokuapp.com/api/groups/$groupTitle/")
-                    .build()
-
-                withContext(Dispatchers.IO) {
-                    client.newCall(request).execute().use { response ->
-                        if (!response.isSuccessful) return@use
-
-                        val moshi = Moshi.Builder()
-                            .addLast(KotlinJsonAdapterFactory())
-                            .build()
-                        val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
-                        val issue = issueAdapter.fromJson(response.body?.string())
-                        urlString+="${issue?.data?.id}/"
-                    }
-                }
-            }
+            urlString+="${playerGroups!![number].id}/"
         }
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
