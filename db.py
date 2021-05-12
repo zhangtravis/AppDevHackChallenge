@@ -181,6 +181,14 @@ class Challenge(db.Model):
             "image": self.asset.serialize() if self.asset != None else None
         }
 
+    def serialize_group_id(self):
+        """
+        Return serialized data
+        """
+        return {
+            "group_id": self.group_id,
+        }
+
 class Group(db.Model):
     """
     Class used to represent Group Database

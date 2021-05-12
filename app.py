@@ -153,6 +153,13 @@ def get_challenge(challenge_id):
         return failure_response("Challenge not found!")
     return success_response(challenge.serialize())
 
+@app.route("/api/challenges/<int:challenge_id>/group/")
+def get_group_id_of_challenge(challenge_id):
+    challenge = Challenge.query.filter_by(id=challenge_id).first()
+    if challenge is None:
+        return failure_response("Challenge not found!")
+    return success_response(challenge.serialize_group_id())
+
 @app.route("/api/challenges/", methods=["POST"])
 def create_challenge():
     body = json.loads(request.data)

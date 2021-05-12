@@ -374,6 +374,21 @@ Response:
 }
 ```
 
+## Get group_id of a challenge by id
+
+**GET** `/api/challenges/{challenge_id}/group/`
+
+Response:
+
+```
+{
+    "success": true,
+    "data": {
+        "group_id": 1
+    }
+}
+```
+
 ## Delete challenge by id
 
 **DELETE** `/api/challenges/{challenge_id}/`
