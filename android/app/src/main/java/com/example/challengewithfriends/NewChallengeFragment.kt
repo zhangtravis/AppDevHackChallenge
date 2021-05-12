@@ -89,10 +89,6 @@ class NewChallengeFragment : Fragment() {
                 groupID=playerGroups!![i].id
             }
         }
-//        if (groupID==0){
-//            Toast.makeText(activity?.applicationContext, "Invalid Group", Toast.LENGTH_SHORT).show()
-//            return
-//        }
         CoroutineScope(Dispatchers.Main).launch {
             val json = "application/json; charset=utf-8".toMediaType()
             val body = "{\"title\":\"$title\",\"description\":\"$description\",\"username\":\"$username\",\"author_id\":\"$playerID\",\"group_id\":\"$groupID\"}".toRequestBody(json)
