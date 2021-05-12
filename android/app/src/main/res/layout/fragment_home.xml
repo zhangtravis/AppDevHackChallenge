@@ -53,5 +53,23 @@
         android:layout_height="match_parent"
         android:id="@+id/upload_container"
         android:orientation="vertical"/>
+    <TextView
+        android:id="@+id/emptyCurr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/curr_challenges"
+        android:text="@string/emptyCurr"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/emptyPast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/past_challenges"
+        android:text="@string/emptyPast"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

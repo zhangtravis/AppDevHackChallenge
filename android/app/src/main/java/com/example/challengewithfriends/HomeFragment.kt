@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.moshi.Moshi
@@ -30,6 +31,8 @@ class HomeFragment : Fragment() {
     private lateinit var pastChallengeLayoutManager : RecyclerView.LayoutManager
     private var pastChallengeDataSet = mutableListOf<Challenge>()
     private val client = OkHttpClient()
+    private lateinit var currEmpty:TextView
+    private lateinit var pastEmpty:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,7 +63,27 @@ class HomeFragment : Fragment() {
 
         currentChallengeAdapter.notifyDataSetChanged()
         pastChallengeAdapter.notifyDataSetChanged()
+
+        currEmpty=root.findViewById(R.id.emptyCurr)
+        checkCurrListEmpty()
+        pastEmpty=root.findViewById(R.id.emptyPast)
+        checkPastListEmpty()
         return root
+    }
+
+    private fun checkCurrListEmpty(){
+        if (currChallengeDataSet.size==0){
+            currEmpty.visibility=View.VISIBLE
+        }else{
+            currEmpty.visibility=View.GONE
+        }
+    }
+    private fun checkPastListEmpty(){
+        if (pastChallengeDataSet.size==0){
+            pastEmpty.visibility=View.VISIBLE
+        }else{
+            pastEmpty.visibility=View.GONE
+        }
     }
 
     private fun getcurrentChallengeList(){
@@ -88,6 +111,7 @@ class HomeFragment : Fragment() {
                 }
             }
             currentChallengeAdapter.notifyDataSetChanged()
+            checkCurrListEmpty()
         }
     }
 
@@ -114,6 +138,7 @@ class HomeFragment : Fragment() {
                 }
             }
             pastChallengeAdapter.notifyDataSetChanged()
+            checkPastListEmpty()
         }
     }
 

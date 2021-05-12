@@ -105,4 +105,14 @@
         app:layout_constraintTop_toBottomOf="@id/radio"
         android:layout_marginTop="20dp"/>
 
+    <TextView
+        android:id="@+id/emptyAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/all_challenges"
+        android:text="@string/emptyAll"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

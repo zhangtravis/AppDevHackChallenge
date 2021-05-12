@@ -8,10 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +39,7 @@ class GroupFragment : Fragment() {
     private lateinit var searchButton: Button
     private lateinit var clearRadioButton: Button
     private lateinit var clearSearchButton:Button
+    private lateinit var allEmpty:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,7 +65,17 @@ class GroupFragment : Fragment() {
 
         setFilterStuff(root)
 
+        allEmpty= root.findViewById(R.id.emptyAll)
+        checkListEmpty()
         return root
+    }
+
+    private fun checkListEmpty(){
+        if (allChallengeDataSet.size==0){
+            allEmpty.visibility=View.VISIBLE
+        }else{
+            allEmpty.visibility=View.GONE
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -161,6 +169,7 @@ class GroupFragment : Fragment() {
             allChallengeAdapter.notifyDataSetChanged()
             searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()
             immutableAllChallengeDataSet=allChallengeDataSet.toMutableList()
+            checkListEmpty()
         }
     }
 
