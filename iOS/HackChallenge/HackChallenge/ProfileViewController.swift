@@ -425,16 +425,19 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
     
     // Provide selection functionality.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("LEAVE")
         leaveGroupAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) in
             let player = (self.tabBarController as! TabBarController).player
-
+            print("in func")
             NetworkManager.deletePlayerFromGroup(group_id: self.groupInfo[indexPath.item].id, player_id: player.id) { (deletedGroup) in
+                print("deleted")
                 self.groupInfo.remove(at: indexPath.item)
                 player.groups = self.groupInfo
                 self.groupsCollectionView.reloadData()
-                self.present(self.leaveGroupAlert, animated: true, completion: nil)
+               
             }
         }))
+        self.present(self.leaveGroupAlert, animated: true, completion: nil)
         
 
     }

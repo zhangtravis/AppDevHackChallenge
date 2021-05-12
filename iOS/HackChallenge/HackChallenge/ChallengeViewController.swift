@@ -27,6 +27,7 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
     private var groupInfoTitleLabel = UILabel()
     
     private var submitButton = UIButton()
+    private var retryLabel = UILabel()
     
     
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
@@ -42,7 +43,7 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        retryLabel.text = ""
 //        player = (self.tabBarController as! TabBarController).player
     }
     
@@ -69,6 +70,15 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
         
         setupTextFieldView(textField: challengeTitleTextField,fillerText: "Enter Challenge Title ...")
         challengeTitleTextField.addTarget(self, action: #selector(changeChallengeTextField), for: .editingChanged)
+        
+        retryLabel.text = ""
+        retryLabel.textColor = .black
+        retryLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        retryLabel.translatesAutoresizingMaskIntoConstraints = false
+        retryLabel.numberOfLines = 0
+        retryLabel.textAlignment = .center
+        retryLabel.lineBreakMode = .byWordWrapping
+        view.addSubview(retryLabel)
         
         descriptionTextView.backgroundColor = .white
         descriptionTextView.layer.cornerRadius = 4
@@ -170,7 +180,11 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
             titleLabel.centerXAnchor.constraint(equalTo: titleView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: titleView.centerYAnchor)
         ])
-        
+        NSLayoutConstraint.activate([
+            retryLabel.topAnchor.constraint(equalTo: groupInfoTitleLabel.bottomAnchor, constant: 20),
+            retryLabel.widthAnchor.constraint(equalToConstant: 300),
+            retryLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
         NSLayoutConstraint.activate([
             challengeTitleTextField.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 48),
             challengeTitleTextField.heightAnchor.constraint(equalToConstant: 35),
@@ -267,7 +281,13 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
             }
         }
         else {
-            print("Invalid Group")
+            if challengeTitleTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) == "" || descriptionTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines) == "" || groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                retryLabel.text = "Missing Parameters"
+            }
+            else {
+                retryLabel.text = "Invalid Group Name. Try 'Global' or the name of one of your groups."
+            }
+
         }
 
     }
