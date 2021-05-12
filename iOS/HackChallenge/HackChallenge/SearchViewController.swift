@@ -38,7 +38,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        groupFilterCollectionView.reloadData()
         refreshData()
     }
     
@@ -149,9 +149,11 @@ class SearchViewController: UIViewController {
         }
     }
     func createDummyData() {
-        groupFilters = [
-            GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell")
-        ]
+//        groupFilters = [
+//            GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell"), GroupFilter(title: "123Cornell")
+//        ]
+
+       
         NetworkManager.getAllUnclaimedChallenges { (challengesList) in
             self.challengeData = challengesList
             self.sortChallengeData()
@@ -221,6 +223,12 @@ class SearchViewController: UIViewController {
             self.unclaimedChallengesTableView.reloadData()
             self.refreshControl.endRefreshing()
         })
+        let player = (self.tabBarController as! TabBarController).player
+        var groupFilterData :[GroupFilter] = []
+        for group in player.groups {
+            groupFilterData.append(GroupFilter(group: group))
+        }
+        groupFilters = groupFilterData
     }
     @objc func searchChallengesByTitle() {
         print("searching unclaimed challenges for " + (searchTitleTextField.text ?? "nothing"))
@@ -234,7 +242,6 @@ class SearchViewController: UIViewController {
         shownChallengeData = newData
         sortChallengeData()
         unclaimedChallengesTableView.reloadData()
-
     }
 }
 
@@ -314,10 +321,12 @@ extension SearchViewController : UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == groupFilterCollectionView {
             groupFilters[indexPath.item].selected = !groupFilters[indexPath.item].selected
+            if groupFilters[indexPath.item].selected {
+//                let challengeList = groupFilters[indexPath.item].group.challenges
+//                shownChallengeData = challengeList
+            }
             
-//            let selectedTitle = groupFilters[indexPath.item].title
-//            if groupFilters[indexPath.item].selected
-
+            
             collectionView.reloadData()
             unclaimedChallengesTableView.reloadData()
         }
