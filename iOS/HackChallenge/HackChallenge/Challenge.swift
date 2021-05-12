@@ -20,8 +20,8 @@ struct Challenge : Codable {
 //    var completed: Bool
     var author_username: String
 //    var author_id: Int
-//    var group_id: Int
-    var player: [ChallengePlayer]
+//    var group_id: String
+    var player: [ChallengePlayer]?
     var image : AppImage?
 }
 struct Group : Codable {
@@ -79,3 +79,10 @@ struct LeaderboardResponse : Codable {
     var data : [[String]]
 }
 
+struct ParameterOfGroup :Codable {
+    var group_id : Int
+}
+struct ParameterOfGroupResponse : Codable {
+    var success : Bool
+    var data : ParameterOfGroup
+}

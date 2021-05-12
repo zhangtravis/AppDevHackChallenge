@@ -33,15 +33,20 @@ class NetworkManager {
     }
     static func getAllUnclaimedChallenges(completion: @escaping ([Challenge]) -> Void) {
         let endpoint = "\(host)challenges/unclaimed/"
-
+        print("GETTING UNCLAIMED CHALLENGES")
         AF.request(endpoint, method: .get).validate().responseData { response in
             switch response.result {
             case .success(let data):
+                print("GETTING UNCLAIMED CHALLENGES SUCC")
+                print(data)
                 let jsonDecoder = JSONDecoder()
                 if let challengesResponse = try? jsonDecoder.decode(ChallengesResponse.self, from: data){
                     completion(challengesResponse.data)
+                    print("GETTING UNCLAIMED CHALLENGES IN")
                 }
+                print("GETTING UNCLAIMED CHALLENGES out")
             case .failure(let error):
+                print("GETTING UNCLAIMED CHALLENGES fail")
                 print(error.localizedDescription)
             }
         }
@@ -335,6 +340,26 @@ class NetworkManager {
                 print("out group let")
             case .failure(let error):
                 print("failure group leader get")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func getGroupIdOfChallengeId(challenge_id : Int, completion: @escaping (ParameterOfGroup) -> Void) {
+        let endpoint = "\(host)challenges/\(challenge_id)/group/"
+        print("getting group id of challenge id")
+        AF.request(endpoint, method: .get).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success gid cid")
+                print(data)
+                let jsonDecoder = JSONDecoder()
+                if let leaderboardResponse = try? jsonDecoder.decode(ParameterOfGroupResponse.self, from: data) {
+                    completion(leaderboardResponse.data)
+                    print("in gid cid")
+                }
+                print("out gidcid")
+            case .failure(let error):
+                print("failure gidcid")
                 print(error.localizedDescription)
             }
         }

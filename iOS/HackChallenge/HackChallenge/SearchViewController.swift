@@ -155,6 +155,7 @@ class SearchViewController: UIViewController {
 
        
         NetworkManager.getAllUnclaimedChallenges { (challengesList) in
+            print("THIS IS WHAT U WANT")
             self.challengeData = challengesList
             self.sortChallengeData()
             self.shownChallengeData = self.challengeData
@@ -233,15 +234,22 @@ class SearchViewController: UIViewController {
     @objc func searchChallengesByTitle() {
         print("searching unclaimed challenges for " + (searchTitleTextField.text ?? "nothing"))
         var newData : [Challenge] = []
-        for cell in challengeData {
-            if let matchedTitle = cell.title.range(of: searchTitleTextField.text ?? "", options: .caseInsensitive) {
-                newData.append(cell)
-            } else {
+        if searchTitleTextField.text != "" {
+            for cell in shownChallengeData {
+                if let matchedTitle = cell.title.range(of: searchTitleTextField.text ?? "", options: .caseInsensitive) {
+                    newData.append(cell)
+                } else {
+                }
             }
+            shownChallengeData = newData
         }
-        shownChallengeData = newData
+        else {
+            shownChallengeData = challengeData
+        }
         sortChallengeData()
         unclaimedChallengesTableView.reloadData()
+
+
     }
 }
 
@@ -321,15 +329,21 @@ extension SearchViewController : UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == groupFilterCollectionView {
             groupFilters[indexPath.item].selected = !groupFilters[indexPath.item].selected
+            collectionView.reloadData()
             if groupFilters[indexPath.item].selected {
                 print("filtering by " + groupFilters[indexPath.item].group.name)
-                print("THISIS IT")
                 shownChallengeData = []
                 for challenge in challengeData {
-//                    if challenge.group_id == groupFilters[indexPath.item].group.id{
-//                        shownChallengeData.append(challenge)
-//                        collectionView.reloadData()
-//                    }
+                    NetworkManager.getGroupIdOfChallengeId(challenge_id: challenge.id) { (parameterOfGroup) in
+                        print("CHALLENGEGROUPID: " + String(parameterOfGroup.group_id))
+                        print("FILTERGROUPID: " + String(self.groupFilters[indexPath.item].group.id))
+                        if parameterOfGroup.group_id == self.groupFilters[indexPath.item].group.id{
+                            print("EQUAL")
+                            self.shownChallengeData.append(challenge)
+                            self.unclaimedChallengesTableView.reloadData()
+                        }
+                    }
+
 
                 }
                 self.unclaimedChallengesTableView.reloadData()
