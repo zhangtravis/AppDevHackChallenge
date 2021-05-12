@@ -44,6 +44,8 @@ class ProfileViewController: UIViewController {
            title: "Create Group", message: "Fill in the information below to create a group", preferredStyle: .alert)
     let joinGroupAlert = UIAlertController(
               title: "Join Group", message: "Fill in the name of the group you are joining", preferredStyle: .alert)
+    let leaveGroupAlert = UIAlertController(
+              title: "Leave Group", message: "You have left this group", preferredStyle: .alert)
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     private let challengeRed = UIColor(red: 237/255, green: 72/255, blue: 72/255, alpha: 1)
@@ -121,7 +123,7 @@ class ProfileViewController: UIViewController {
         joinGroupButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         joinGroupButton.backgroundColor = challengeBlue
         joinGroupButton.layer.cornerRadius = 8
-        joinGroupButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
+        joinGroupButton.addTarget(self, action: #selector(joinGroup), for: .touchUpInside)
         joinGroupButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(joinGroupButton)
         
@@ -183,10 +185,9 @@ class ProfileViewController: UIViewController {
             textField.placeholder = "Input the group name here..."
         })
         joinGroupAlert.addAction(UIAlertAction(title: "Join", style: .default, handler: { action in
-            if let textFields = self.createGroupAlert.textFields,
+            if let textFields = self.joinGroupAlert.textFields,
                let input = textFields[0].text?.trimmingCharacters(in: .whitespacesAndNewlines),
                input != "" {
-                
                 NetworkManager.getGroup(name: input) { (selectedGroup) in
                     NetworkManager.addPlayerToGroup(player_id: player.id, group_id: selectedGroup.id) { (addedgroup) in
                         self.groupInfo.append(addedgroup)
@@ -367,6 +368,10 @@ class ProfileViewController: UIViewController {
     @objc func createGroup() {
         self.present(self.createGroupAlert, animated: true, completion: nil)
     }
+    @objc func joinGroup() {
+        self.present(self.joinGroupAlert, animated: true, completion: nil)
+    }
+
 }
 
 
@@ -406,13 +411,17 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
     
     // Provide selection functionality.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//            groupInfo[indexPath.item].selected = !groupInfo[indexPath.item].selected
-            
-//            let selectedTitle = groupFilters[indexPath.item].title
-//            if groupFilters[indexPath.item].selected
+        leaveGroupAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+            let player = (self.tabBarController as! TabBarController).player
 
-            collectionView.reloadData()
-        
+            NetworkManager.deletePlayerFromGroup(group_id: self.groupInfo[indexPath.item].id, player_id: player.id) { (deletedGroup) in
+                self.groupInfo.remove(at: indexPath.item)
+                player.groups = self.groupInfo
+                self.groupsCollectionView.reloadData()
+            }
+        }))
+        self.present(self.leaveGroupAlert, animated: true, completion: nil)
+
     }
 
 

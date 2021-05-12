@@ -274,5 +274,42 @@ class NetworkManager {
             }
         }
     }
+    static func deletePlayerFromGroup(group_id: Int, player_id: Int, completion: @escaping (Group) -> Void) {
+        let endpoint = "\(host)groups/\(group_id)/\(player_id)/"
+        let parameters = [
+            "group_id": group_id,
+            "player_id": player_id
+        ]
+        AF.request(endpoint, method: .delete, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                let jsonDecoder = JSONDecoder()
+                if let groupResponse = try? jsonDecoder.decode(GroupResponse.self, from: data){
+                    completion(groupResponse.data)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func getGlobalLeaderboard(completion: @escaping (Array<Array<String>>) -> Void) {
+        let endpoint = "\(host)leaderboard/"
+        print("getting global")
+        AF.request(endpoint, method: .get).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success global get")
+                let jsonDecoder = JSONDecoder()
+                if let leaderboardResponse = try? jsonDecoder.decode(LeaderboardResponse.self, from: data) {
+                    completion(leaderboardResponse.data)
+                    print("in global let")
+                }
+                print("out global let")
+            case .failure(let error):
+                print("failure global get")
+                print(error.localizedDescription)
+            }
+        }
+    }
    
 }

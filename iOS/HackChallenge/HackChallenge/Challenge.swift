@@ -65,3 +65,14 @@ struct ChallengesResponse : Codable {
     var data : [Challenge]
 }
 
+//struct PlayerRank : Codable {
+////    var user : String
+////    var points : String
+//    var rank : [String]
+//}
+
+struct LeaderboardResponse : Codable {
+    var success : Bool
+    var data : Array<Array<String>>
+}
+

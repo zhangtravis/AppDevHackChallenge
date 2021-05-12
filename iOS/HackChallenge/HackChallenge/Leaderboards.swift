@@ -9,13 +9,13 @@ import UIKit
 
 class Leaderboard {
     var groupName: String
-    var players : [String]
-    var completed : [Int]
+//    var rankings : [PlayerRank]
+    var rankings : Array<Array<String>>
 
-    init(groupName: String, players: [String], completed : [Int]) {
+//    init(groupName: String, rankings : [PlayerRank]) {
+    init(groupName: String, rankings : Array<Array<String>>) {
         self.groupName = groupName
-        self.players = players
-        self.completed = completed
+        self.rankings = rankings
     }
 }
 
