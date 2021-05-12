@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.moshi.Moshi
@@ -40,6 +38,7 @@ class GroupFragment : Fragment() {
     private lateinit var clearRadioButton: Button
     private lateinit var clearSearchButton:Button
     private lateinit var allEmpty:TextView
+    private var playerGroups:Array<Group>? = arrayOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -63,11 +62,47 @@ class GroupFragment : Fragment() {
         searchSafeAllChallengeDataSet=allChallengeDataSet.toMutableList()
         immutableAllChallengeDataSet=allChallengeDataSet.toMutableList()
 
-        setFilterStuff(root)
+        radio=root.findViewById(R.id.radio)
+        radio1=root.findViewById(R.id.radio_1)
+        radio2=root.findViewById(R.id.radio_2)
+        radio3=root.findViewById(R.id.radio_3)
+        searchbar=root.findViewById(R.id.search_bar)
+        searchButton=root.findViewById(R.id.search_button)
+        clearRadioButton=root.findViewById(R.id.clear)
+        clearSearchButton=root.findViewById(R.id.clear_search_button)
+        radio1.visibility=View.GONE
+        radio2.visibility=View.GONE
+        radio3.visibility=View.GONE
+        getPlayerGroups(root)
 
         allEmpty= root.findViewById(R.id.emptyAll)
         checkListEmpty()
         return root
+    }
+
+    private fun getPlayerGroups(root:View){
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        val playerID = sharedPref?.getInt("playerID",0)
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                    .url("https://challenge-with-friends.herokuapp.com/api/players/$playerID/")
+                    .build()
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        val moshi = Moshi.Builder()
+                                .addLast(KotlinJsonAdapterFactory())
+                                .build()
+                        val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
+                        val issue = issueAdapter.fromJson(response.body?.string())
+                        playerGroups=issue?.data?.groups
+                        activity?.runOnUiThread(){
+                            setFilterStuff()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun checkListEmpty(){
@@ -79,17 +114,8 @@ class GroupFragment : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setFilterStuff(root:View){
-        radio=root.findViewById(R.id.radio)
-        radio1=root.findViewById(R.id.radio_1)
-        radio2=root.findViewById(R.id.radio_2)
-        radio3=root.findViewById(R.id.radio_3)
-        searchbar=root.findViewById(R.id.search_bar)
-        searchButton=root.findViewById(R.id.search_button)
-        clearRadioButton=root.findViewById(R.id.clear)
-        clearSearchButton=root.findViewById(R.id.clear_search_button)
-
-        clearRadioButton.setOnClickListener(){
+    private fun setFilterStuff() {
+            clearRadioButton.setOnClickListener(){
             radio.clearCheck()
             restoreData(searchSafeAllChallengeDataSet,allChallengeDataSet)
             allChallengeAdapter.notifyDataSetChanged()
@@ -97,10 +123,21 @@ class GroupFragment : Fragment() {
             radio2.background=resources.getDrawable(R.drawable.rounded_corner)
             radio3.background=resources.getDrawable(R.drawable.rounded_corner)
         }
-        setRadioButton(radio1, "test", radio2, radio3)
-        setRadioButton(radio2, "test 2", radio1, radio3)
-        setRadioButton(radio3, "test 3", radio1, radio2)
-
+        radio1.visibility=View.GONE
+        radio2.visibility=View.GONE
+        radio3.visibility=View.GONE
+        if(playerGroups!!.isNotEmpty()){
+            clearRadioButton.visibility=View.VISIBLE
+            setRadioButton(radio1, playerGroups!![0].id, 0, radio2, radio3)
+            if(playerGroups!!.size>=2){
+                setRadioButton(radio2, playerGroups!![1].id,1, radio1, radio3)
+                if(playerGroups!!.size>=3){
+                    setRadioButton(radio3, playerGroups!![2].id,2, radio1, radio2)
+                }
+            }
+        }else{
+            clearRadioButton.visibility=View.GONE
+        }
         setUpSearch(searchbar,searchButton,clearSearchButton,clearRadioButton)
     }
 
@@ -127,17 +164,13 @@ class GroupFragment : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun setRadioButton(button:RadioButton, group:String?, other1:RadioButton, other2:RadioButton){
-        if(group==null){
-            button.visibility=View.GONE
-            return
-        }
-        button.text=group
+    private fun setRadioButton(button:RadioButton, group:Int,index:Int, other1:RadioButton, other2:RadioButton){
+        button.visibility=View.VISIBLE
+        button.text=playerGroups!![index].name.trim()
         button.setOnClickListener(){
             restoreData(searchSafeAllChallengeDataSet,allChallengeDataSet)
             allChallengeDataSet.retainAll { challenge:Challenge ->
-//                challenge.group == group
-            false
+                challenge.group_id == group
             }
             allChallengeAdapter.notifyDataSetChanged()
             button.background=resources.getDrawable(R.drawable.rounded_corner_selected)
