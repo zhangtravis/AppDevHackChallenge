@@ -11,12 +11,7 @@ struct GroupResponse : Codable {
     var success : Bool
     var data : Group
 }
-struct Group : Codable {
-    var id: Int
-    var name: String
-//    var players: [ Player ]
-//    var challenges: [Challenge]
-}
+
 struct Challenge : Codable {
     var id : Int
     var title : String
@@ -29,12 +24,20 @@ struct Challenge : Codable {
     var player: [ChallengePlayer]
     var image : AppImage?
 }
+struct Group : Codable {
+    var id: Int
+    var name: String
+//    var players: [ Player ]
+//    var challenges: [Challenge]
+}
+
 struct AppImage : Codable {
     var url : String
 //    var created_at : String
 //    var challenge_id : Int?
 //    var player_id : Int?
 }
+
 struct Player : Codable {
     var id: Int
     var username: String

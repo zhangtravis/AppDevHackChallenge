@@ -54,6 +54,10 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         let player = (self.tabBarController as! TabBarController).player
         profileView.image = player.image
+        usernameTextField.text = player.username
+        passwordTextField.text = player.password
+        groupInfo = player.groups
+        groupsCollectionView.reloadData()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -64,7 +68,6 @@ class ProfileViewController: UIViewController {
         let player = (self.tabBarController as! TabBarController).player
         // Do any additional setup after loading the view.
         view.backgroundColor = backgroundGrey
-        groupInfo = player.groups
         
         titleFiller.backgroundColor = challengeBlue
         titleFiller.translatesAutoresizingMaskIntoConstraints = false
@@ -142,7 +145,7 @@ class ProfileViewController: UIViewController {
         signOutButton.backgroundColor = challengeRed
         signOutButton.layer.cornerRadius = 8
         signOutButton.translatesAutoresizingMaskIntoConstraints = false
-        signOutButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+        signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
         view.addSubview(signOutButton)
         
         let groupLayout = UICollectionViewFlowLayout()
@@ -209,6 +212,7 @@ class ProfileViewController: UIViewController {
         titleLabel.textColor = .black
         titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .black)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(titleLabel)
 
         textField.font = UIFont.systemFont(ofSize: 12)
@@ -339,17 +343,25 @@ class ProfileViewController: UIViewController {
         picker.delegate = self
         present(picker, animated: true)
     }
-    @objc func signUp() {
+    @objc func signOut() {
         
         let player = (self.tabBarController as! TabBarController).player
-        player.username = usernameTextField.text ?? ""
-        player.password = usernameTextField.text ?? ""
-        print("SIGN UP")
-        NetworkManager.createPlayer(username: player.username, password: player.password, image_data: profileImage) { (playerInfo) in
-            player.id = playerInfo.id
-            print("SIGN UP player id : \(player.id)")
-        }
-//        print("updated player info")
+        player.id = -1
+        player.username = ""
+        usernameTextField.text = ""
+        usernameTextField.allowsEditingTextAttributes = false
+        player.password = ""
+        passwordTextField.text = ""
+        passwordTextField.allowsEditingTextAttributes = false
+        player.login = false
+        player.image = UIImage(named: "player.png")
+        player.groups = []
+//        var tabBarController: UITabBarController? { get }
+        tabBarController!.selectedIndex = 0
+//        if let tabBarController = self.window!.rootViewController as? UITabBarController {
+//            tabBarController.selectedIndex = 0
+//        }
+
     }
     @objc func logIn() {
         let player = (self.tabBarController as! TabBarController).player

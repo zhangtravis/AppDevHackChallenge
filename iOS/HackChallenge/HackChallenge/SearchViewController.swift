@@ -242,7 +242,6 @@ class SearchViewController: UIViewController {
         shownChallengeData = newData
         sortChallengeData()
         unclaimedChallengesTableView.reloadData()
-
     }
 }
 
@@ -322,10 +321,12 @@ extension SearchViewController : UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == groupFilterCollectionView {
             groupFilters[indexPath.item].selected = !groupFilters[indexPath.item].selected
+            if groupFilters[indexPath.item].selected {
+//                let challengeList = groupFilters[indexPath.item].group.challenges
+//                shownChallengeData = challengeList
+            }
             
-//            let selectedTitle = groupFilters[indexPath.item].title
-//            if groupFilters[indexPath.item].selected
-
+            
             collectionView.reloadData()
             unclaimedChallengesTableView.reloadData()
         }

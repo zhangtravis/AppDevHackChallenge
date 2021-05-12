@@ -380,14 +380,7 @@ extension ViewController : SubmitChallengeDelegate {
 }
 
 extension ViewController : LogInDelegate {
-//    func logInPlayer(username: String, password: String, player_id: Int) {
-//        let player = (self.tabBarController as! TabBarController).player
-//        player.username = username
-//        player.password = password
-//        player.id = player_id
-//        player.login = true
-//
-//    }
+
     func logInPlayer(player: PlayerData) {
         var player_actual = (self.tabBarController as! TabBarController).player
         player_actual = player
