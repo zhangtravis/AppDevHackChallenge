@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.blue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,8 +67,12 @@ class UploadFragment : Fragment() {
             val baos:ByteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG,100,baos)
             val b:ByteArray = baos.toByteArray()
-            val encodedImage:String = Base64.getEncoder().encodeToString(b)
+            var encodedImage:String = Base64.getEncoder().encodeToString(b)
+            encodedImage="data:image/png;base64,"+encodedImage
             postPic(encodedImage, challengeID)
+            fragmentManager?.beginTransaction()
+                    ?.remove(this)
+                    ?.commit()
         }
         return root
     }
@@ -83,7 +88,7 @@ class UploadFragment : Fragment() {
     private fun postPic(encodedImage:String, challengeID:Int){
         CoroutineScope(Dispatchers.Main).launch {
             val json = "application/json; charset=utf-8".toMediaType()
-//            Log.d("tag1","{\"challenge_id\":\"$challengeID\",\"image_data\":\"${encodedImage.subSequence(0,10)}\"}")
+//            Log.d("tag1","{\"challenge_id\":\"$challengeID\",\"image_data\":\"${encodedImage.subSequence(0,50)}\"}")
             val body = "{\"challenge_id\":\"$challengeID\",\"image_data\":\"$encodedImage\"}".toRequestBody(json)
             val request = Request.Builder()
                     .url("https://challenge-with-friends.herokuapp.com/api/challenges/mark_completed/")

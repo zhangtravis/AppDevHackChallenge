@@ -24,4 +24,12 @@
     <string name="description_max">140</string>
     <string name="add_group">Add Group</string>
     <string name="select">Select</string>
+    <string name="new_player">Create Your Account or Log In\n\nPick a Profile Pic to\nmake a new Account</string>
+    <string name="player">Player</string>
+    <string name="points">Points</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="emptyAll">No Challenges at this time.\nAdd one!</string>
+    <string name="emptyCurr">No Challenges at this time.\nClaim one!</string>
+    <string name="emptyPast">No Challenges at this time.\nComplete one!</string>
 </resources>

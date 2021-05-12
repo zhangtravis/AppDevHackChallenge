@@ -1,7 +1,9 @@
 package com.example.challengewithfriends
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -13,9 +15,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val sharedPref = this.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        var playerID = sharedPref.getInt("playerID",0)
+
+        
         fragmentContainer=findViewById(R.id.fragment_container)
         fragmentManager.beginTransaction()
-            .add(R.id.fragment_container, HomeFragment())
+            .add(R.id.fragment_container, /*if (playerID==0)*/ MakeAccountFragment()) /*else HomeFragment())*/
             .commit()
         setBottomNav()
     }

@@ -46,7 +46,7 @@ class NewChallengeFragment : Fragment() {
             createChallenge(newChallengeTitle.text.toString(), newChallengeDescription.text.toString())
             newChallengeTitle.setText("")
             newChallengeDescription.setText("")
-            Toast.makeText(activity?.applicationContext, "Challenge Created!", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity?.applicationContext, "Challenge Created!", Toast.LENGTH_SHORT).show()
         }
         return root
     }

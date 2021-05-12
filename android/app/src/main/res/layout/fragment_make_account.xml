@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MakeAccountFragment"
+    android:background="@color/blue_3">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_player"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/profile_pic_create"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/profile_pic_create"
+        android:layout_marginTop="80dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/username_create"
+        android:background="@drawable/profile_pic_background"
+        android:scaleType="centerInside"/>
+
+    <TextView
+        android:id="@+id/password_text_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/username_text_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        app:layout_constraintBottom_toTopOf="@id/password_text_create"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/lavigne"
+        android:textSize="20dp"/>
+
+
+    <EditText
+        android:id="@+id/username_create"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.5"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toTopOf="@id/username_text_create"
+        app:layout_constraintBottom_toBottomOf="@id/username_text_create"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="25dp"
+        android:maxLength="@string/user_pass_max"/>
+
+    <EditText
+        android:id="@+id/password_create"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.5"
+        android:background="@drawable/rounded_corner_white"
+        app:layout_constraintTop_toTopOf="@id/password_text_create"
+        app:layout_constraintBottom_toBottomOf="@id/password_text_create"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="25dp"
+        android:maxLength="@string/user_pass_max"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/log_in_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/sign_up_create"
+        android:backgroundTint="@color/blue"
+        android:text="@string/log_in"/>
+
+    <Button
+        android:id="@+id/sign_up_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintLeft_toRightOf="@id/log_in_create"
+        app:layout_constraintRight_toRightOf="parent"
+        android:backgroundTint="@color/blue"
+        android:text="@string/sign_up"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
