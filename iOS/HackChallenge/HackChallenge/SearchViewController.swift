@@ -144,8 +144,8 @@ class SearchViewController: UIViewController {
         createDummyData()
     }
     func sortChallengeData() {
-        challengeData.sort { (leftPost, rightPost) -> Bool in
-            return leftPost.id > rightPost.id
+        challengeData.sort { (leftChallenge, rightChallenge) -> Bool in
+            return leftChallenge.id > rightChallenge.id
         }
     }
     func createDummyData() {
@@ -276,7 +276,7 @@ extension SearchViewController : UITableViewDataSource {
 
 extension SearchViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! UnclaimedChallengeTableViewCell
+//        let cell = tableView.cellForRow(at: indexPath) as! UnclaimedChallengeTableViewCell
         currentIndexPathToUpdate = indexPath
         present(claimAlert, animated: true)
         print("selected")
@@ -322,13 +322,27 @@ extension SearchViewController : UICollectionViewDelegateFlowLayout, UICollectio
         if collectionView == groupFilterCollectionView {
             groupFilters[indexPath.item].selected = !groupFilters[indexPath.item].selected
             if groupFilters[indexPath.item].selected {
-//                let challengeList = groupFilters[indexPath.item].group.challenges
-//                shownChallengeData = challengeList
+                print("filtering by " + groupFilters[indexPath.item].group.name)
+                print("THISIS IT")
+                shownChallengeData = []
+                for challenge in challengeData {
+//                    if challenge.group_id == groupFilters[indexPath.item].group.id{
+//                        shownChallengeData.append(challenge)
+//                        collectionView.reloadData()
+//                    }
+
+                }
+                self.unclaimedChallengesTableView.reloadData()
+            }
+            else {
+                NetworkManager.getAllUnclaimedChallenges(completion: { (unclaimedChallengeData) in
+                    print("unselected filter")
+                    self.shownChallengeData = unclaimedChallengeData
+                    collectionView.reloadData()
+                    self.unclaimedChallengesTableView.reloadData()
+                })
             }
             
-            
-            collectionView.reloadData()
-            unclaimedChallengesTableView.reloadData()
         }
     }
     

@@ -170,13 +170,13 @@ class ViewController: UIViewController {
     }
     
     func sortPastChallengeData() {
-        pastChallenges.sort { (leftPost, rightPost) -> Bool in
-            return leftPost.id > rightPost.id
+        pastChallenges.sort { (leftPastChallenge, rightPastChallenge) -> Bool in
+            return leftPastChallenge.id > rightPastChallenge.id
         }
     }
     func sortCurrentChallengeData() {
-        currentChallenges.sort { (leftPost, rightPost) -> Bool in
-            return leftPost.id > rightPost.id
+        currentChallenges.sort { (leftCurrentChallenge, rightCurrentChallenge) -> Bool in
+            return leftCurrentChallenge.id > rightCurrentChallenge.id
         }
     }
     

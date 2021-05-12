@@ -432,9 +432,10 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
                 self.groupInfo.remove(at: indexPath.item)
                 player.groups = self.groupInfo
                 self.groupsCollectionView.reloadData()
+                self.present(self.leaveGroupAlert, animated: true, completion: nil)
             }
         }))
-        self.present(self.leaveGroupAlert, animated: true, completion: nil)
+        
 
     }
 

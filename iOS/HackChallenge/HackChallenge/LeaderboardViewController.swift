@@ -20,7 +20,30 @@ class LeaderboardViewController: UIViewController {
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        leaderboardCollectionView.reloadData()
+        leaderboardData = []
+        NetworkManager.getGlobalLeaderboard { (rankList) in
+            self.leaderboardData.append(Leaderboard(groupName: "Global", rankings: rankList))
+            let player = (self.tabBarController as! TabBarController).player
+            for group in player.groups {
+                NetworkManager.getGroupLeaderboard(group_id: group.id) { (groupRankList) in
+                    self.leaderboardData.append(Leaderboard(groupName: group.name, rankings: groupRankList))
+                    self.leaderboardCollectionView.reloadData()
+                }
+            }
+            
+            self.leaderboardCollectionView.reloadData()
+        }
+
+        
+    }
+    func sortLeaderboardData() {
+        leaderboardData.sort { (leftPost, rightPost) -> Bool in
+            return leftPost.groupName > rightPost.groupName
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -62,11 +85,9 @@ class LeaderboardViewController: UIViewController {
 //        leaderboardData = [
 //            Leaderboard(groupName: "Cornell123", players: ["P1", "P2", "P3", "P4", "P5", "P6"], completed: [10,9,8,7,6,5])
 //        ]
-        NetworkManager.getGlobalLeaderboard { (rankList) in
-            self.leaderboardData.append(Leaderboard(groupName: "Global", rankings: rankList))
-        }
-        
-        leaderboardCollectionView.reloadData()
+
+   
+       
     }
     
     func setupConstraints() {
@@ -103,9 +124,11 @@ extension LeaderboardViewController: UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: leaderboardCellReuseIdentifier, for: indexPath) as! LeaderboardCollectionViewCell
+            print("calling configure")
+            cell.player = (self.tabBarController as! TabBarController).player
             cell.configure(for: leaderboardData[indexPath.item])
             cell.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
-//            cell.layer.shadowColor = UIColor.gray.cgColor
+    //            cell.layer.shadowColor = UIColor.gray.cgColor
             cell.layer.shadowOffset = CGSize(width: 3, height: 3)
             cell.layer.shadowRadius = 5.0
             cell.layer.shadowOpacity = 1.0
