@@ -59,6 +59,14 @@ class MakeAccountFragment : Fragment() {
         login=root.findViewById(R.id.log_in_create)
         signup=root.findViewById(R.id.sign_up_create)
 
+        val sharedPref = activity?.getSharedPreferences("User Info", Context.MODE_PRIVATE)
+        val usernameString=sharedPref?.getString("username", null)
+        val passwordString=sharedPref?.getString("password", null)
+        if (usernameString!=null && passwordString!=null){
+            username.setText(usernameString)
+            password.setText(passwordString)
+        }
+
         signup.visibility=View.GONE
         profilePic.setOnClickListener(){
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -88,6 +96,7 @@ class MakeAccountFragment : Fragment() {
         }
         return root
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun encode(){

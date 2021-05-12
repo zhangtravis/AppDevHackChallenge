@@ -24,7 +24,7 @@
     <string name="description_max">140</string>
     <string name="add_group">Add Group</string>
     <string name="select">Select</string>
-    <string name="new_player">Create Your Account</string>
+    <string name="new_player">Create Your Account or Log In\n\nPick a Profile Pic to\nmake a new Account</string>
     <string name="player">Player</string>
     <string name="points">Points</string>
     <string name="log_in">Log In</string>

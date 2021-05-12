@@ -28,7 +28,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/username_create"
-        android:background="@drawable/profile_pic_background"/>
+        android:background="@drawable/profile_pic_background"
+        android:scaleType="centerInside"/>
 
     <TextView
         android:id="@+id/password_text_create"

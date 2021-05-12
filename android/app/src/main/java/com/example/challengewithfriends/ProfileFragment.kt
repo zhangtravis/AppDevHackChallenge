@@ -1,8 +1,13 @@
 package com.example.challengewithfriends
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -23,7 +29,8 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import com.bumptech.glide.Glide
-
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class ProfileFragment : Fragment() {
@@ -89,7 +96,43 @@ class ProfileFragment : Fragment() {
         }
         setGroupStuff(root)
         setPic()
+        setPicClick()
         return root
+    }
+
+    private fun setPicClick(){
+        profilePic.setOnClickListener(){
+            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery,100)
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == 100){
+            val imageURI=data?.data
+            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver,imageURI)
+            val baos: ByteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,baos)
+            val b:ByteArray = baos.toByteArray()
+            var encodedImage:String = Base64.getEncoder().encodeToString(b)
+            encodedImage="data:image/png;base64,"+encodedImage
+            CoroutineScope(Dispatchers.Main).launch {
+                val json = "application/json; charset=utf-8".toMediaType()
+                val body = "{\"player_id\":\"$playerID\",\"image_data\":\"$encodedImage\"}".toRequestBody(json)
+                val request = Request.Builder()
+                    .url("https://challenge-with-friends.herokuapp.com/api/players/update_profile_pic/")
+                    .post(body)
+                    .build()
+
+                withContext(Dispatchers.IO) {
+                    client.newCall(request).execute().use { response ->
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    }
+                    setPic()
+                }
+            }
+        }
     }
 
     private fun setSharedPref(){
