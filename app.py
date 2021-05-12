@@ -48,6 +48,19 @@ def get_player_by_username(username):
         return failure_response("Player not found!")
     return success_response(player.serialize())
 
+@app.route("/api/players/<string:username>/", methods=["POST"])
+def change_player_points(username):
+    body = json.loads(request.data)
+    points = body.get('points')
+
+    player = Player.query.filter_by(username=username).first()
+    if player is None:
+        return failure_response("Player not found!")
+
+    player.points = points
+    db.session.commit()
+    return success_response(player.serialize())
+
 @app.route("/api/players/", methods=["POST"])
 def create_player():
     body = json.loads(request.data)
