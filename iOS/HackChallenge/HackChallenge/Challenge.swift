@@ -28,7 +28,7 @@ struct Group : Codable {
     var id: Int
     var name: String
 //    var players: [ Player ]
-//    var challenges: [Challenge]
+    var challenges: [Challenge]?
 }
 
 struct AppImage : Codable {
@@ -76,6 +76,6 @@ struct ChallengesResponse : Codable {
 
 struct LeaderboardResponse : Codable {
     var success : Bool
-    var data : Array<Array<String>>
+    var data : [[String]]
 }
 

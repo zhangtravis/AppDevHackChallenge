@@ -234,20 +234,42 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
     }
     @objc func createChallenge() {
         let player = (self.tabBarController as! TabBarController).player
-        NetworkManager.createChallenge(title: challengeTitleTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines), description: descriptionTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines), author_id: player.id, username: player.username, group_id: groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)) { (newChallenge) in
-            //MARK: QUESTION: Make groupText get group id for group name and read author_id from somewhere?? (note doesn't use newchallenge)
-            
-            self.present(self.confrmationAlert, animated: true, completion: nil)
-            //reset view
-            self.challengeTitleTextField.text = nil
-            self.challengeTitleTextField.textColor = self.placeholderColor
-            self.groupTextField.text = nil
-            self.groupTextField.textColor = self.placeholderColor
-            self.descriptionTextView.text = nil
-            self.textViewDidEndEditing(self.descriptionTextView)
-            
-            print("created challenge")
+        var validGroup = false
+        var selectedGroupId : String = ""
+        if groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) == "Global" || groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) == "global"{
+            validGroup = true
+             selectedGroupId = String(0)
         }
+        else {
+            for group in player.groups {
+                if let _ = group.name.range(of: groupTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)) {
+                   validGroup = true
+                    selectedGroupId = String(group.id)
+                }
+            }
+        }
+
+        if validGroup {
+            print("valid")
+            NetworkManager.createChallenge(title: challengeTitleTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines), description: descriptionTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines), author_id: player.id, username: player.username, group_id: selectedGroupId) { (newChallenge) in
+                //MARK: QUESTION: Make groupText get group id for group name and read author_id from somewhere?? (note doesn't use newchallenge)
+                
+                self.present(self.confrmationAlert, animated: true, completion: nil)
+                //reset view
+                self.challengeTitleTextField.text = nil
+                self.challengeTitleTextField.textColor = self.placeholderColor
+                self.groupTextField.text = nil
+                self.groupTextField.textColor = self.placeholderColor
+                self.descriptionTextView.text = nil
+                self.textViewDidEndEditing(self.descriptionTextView)
+                
+                print("created challenge")
+            }
+        }
+        else {
+            print("Invalid Group")
+        }
+
     }
 
 }

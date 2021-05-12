@@ -68,6 +68,7 @@ class NetworkManager {
     
     static func createChallenge(title: String, description: String, author_id: Int, username : String, group_id : String, completion: @escaping (Challenge) -> Void) {
         let endpoint = "\(host)challenges/"
+        print("CREATING CHALLENGE")
         let parameters: [String:Any] = [
             "title": title,
             "description": description,
@@ -78,11 +79,15 @@ class NetworkManager {
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
             switch response.result {
             case .success(let data):
+                print("CREATING SUCCESS")
                 let jsonDecoder = JSONDecoder()
                 if let challengeResponse = try? jsonDecoder.decode(ChallengeResponse.self, from: data) {
                     completion(challengeResponse.data)
+                    print("IN LET")
                 }
+                print("OUT LET")
             case .failure(let error):
+                print("FAIL")
                 print(error.localizedDescription)
             }
         }
@@ -201,7 +206,7 @@ class NetworkManager {
     static func createGroup(name: String, completion: @escaping (Group) -> Void) {
         let endpoint = "\(host)groups/"
         let parameters: [String:Any] = [
-            "name": name,
+            "name": name
         ]
         print("making group")
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
@@ -249,7 +254,9 @@ class NetworkManager {
                 let jsonDecoder = JSONDecoder()
                 if let groupResponse = try? jsonDecoder.decode(GroupResponse.self, from: data) {
                     completion(groupResponse.data)
+                    print("in let group")
                 }
+                print("out let group")
             case .failure(let error):
                 print("failure group get")
                 print(error.localizedDescription)
@@ -292,13 +299,14 @@ class NetworkManager {
             }
         }
     }
-    static func getGlobalLeaderboard(completion: @escaping (Array<Array<String>>) -> Void) {
+    static func getGlobalLeaderboard(completion: @escaping ([[String]]) -> Void) {
         let endpoint = "\(host)leaderboard/"
         print("getting global")
         AF.request(endpoint, method: .get).validate().responseData { response in
             switch response.result {
             case .success(let data):
                 print("success global get")
+                print(data)
                 let jsonDecoder = JSONDecoder()
                 if let leaderboardResponse = try? jsonDecoder.decode(LeaderboardResponse.self, from: data) {
                     completion(leaderboardResponse.data)
@@ -307,6 +315,26 @@ class NetworkManager {
                 print("out global let")
             case .failure(let error):
                 print("failure global get")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    static func getGroupLeaderboard(group_id : Int, completion: @escaping ([[String]]) -> Void) {
+        let endpoint = "\(host)leaderboard/\(group_id)/"
+        print("getting group leader")
+        AF.request(endpoint, method: .get).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                print("success group leader")
+                print(data)
+                let jsonDecoder = JSONDecoder()
+                if let leaderboardResponse = try? jsonDecoder.decode(LeaderboardResponse.self, from: data) {
+                    completion(leaderboardResponse.data)
+                    print("in group let")
+                }
+                print("out group let")
+            case .failure(let error):
+                print("failure group leader get")
                 print(error.localizedDescription)
             }
         }
