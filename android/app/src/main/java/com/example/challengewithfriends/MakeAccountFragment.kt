@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -146,6 +147,12 @@ class MakeAccountFragment : Fragment() {
                             ?.replace(R.id.fragment_container,HomeFragment())
                             ?.commit()
 
+                    }else{
+                        activity?.runOnUiThread(){
+                            login.visibility = View.VISIBLE
+                            signup.visibility=View.VISIBLE
+                            Toast.makeText(activity?.applicationContext, "Username Taken", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -182,7 +189,12 @@ class MakeAccountFragment : Fragment() {
                         fragmentManager?.beginTransaction()
                             ?.replace(R.id.fragment_container,HomeFragment())
                             ?.commit()
-                    }
+                    }else{
+                        activity?.runOnUiThread(){
+                            login.visibility = View.VISIBLE
+                            Toast.makeText(activity?.applicationContext, "Incorrect Username or Password, or no existing player", Toast.LENGTH_SHORT).show()
+
+                        }                    }
                 }
             }
 
