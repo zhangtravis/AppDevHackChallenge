@@ -50,6 +50,7 @@ class ProfileFragment : Fragment() {
     private lateinit var add2:Button
     private lateinit var add3:Button
     private lateinit var profilePic:ImageView
+    private var playerGroups:Array<Group>? = arrayOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -230,22 +231,64 @@ class ProfileFragment : Fragment() {
             add3.visibility=View.GONE
         }
         leave1.setOnClickListener(){
-            //leave group
+            leaveGroup(group1.text.toString())
+            group1.setText("")
             leave1.visibility=View.GONE
             add1.visibility=View.VISIBLE
         }
         leave2.setOnClickListener(){
-            //leave group
+            leaveGroup(group2.text.toString())
+            group2.setText("")
             leave2.visibility=View.GONE
             add2.visibility=View.VISIBLE
         }
         leave3.setOnClickListener(){
-            //leave group
+            leaveGroup(group2.text.toString())
+            group3.setText("")
             leave3.visibility=View.GONE
             add3.visibility=View.VISIBLE
         }
+        getPlayerGroups()
     }
 
+    private fun getPlayerGroups(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val request = Request.Builder()
+                .url("https://challenge-with-friends.herokuapp.com/api/players/$playerID/")
+                .build()
+            withContext(Dispatchers.IO) {
+                client.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        val moshi = Moshi.Builder()
+                            .addLast(KotlinJsonAdapterFactory())
+                            .build()
+                        val issueAdapter = moshi.adapter(PostNewPlayerResponse::class.java)
+                        val issue = issueAdapter.fromJson(response.body?.string())
+                        playerGroups=issue?.data?.groups
+                        activity?.runOnUiThread(){
+                            for (i:Int in playerGroups!!.indices){
+                                if (i==0){
+                                    group1.setText(playerGroups!![i].name)
+                                    leave1.visibility=View.VISIBLE
+                                    add1.visibility=View.GONE
+                                }
+                                if (i==1){
+                                    group2.setText(playerGroups!![i].name)
+                                    leave2.visibility=View.VISIBLE
+                                    add2.visibility=View.GONE
+                                }
+                                if (i==2){
+                                    group3.setText(playerGroups!![i].name)
+                                    leave3.visibility=View.VISIBLE
+                                    add3.visibility=View.GONE
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun addGroup(groupName: String){
         var groupID:Int?= null
@@ -303,59 +346,25 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun addToGroup(groupName:String){
-        var groupID:Int?
+
+    private fun leaveGroup(groupName:String){
+        var groupId:Int = -1
+        for (i:Int in playerGroups!!.indices){
+            if (groupName==playerGroups!![i].name) groupId=playerGroups!![i].id
+        }
+        if (groupId==-1) return
         CoroutineScope(Dispatchers.Main).launch {
             val request = Request.Builder()
-                .url("https://challenge-with-friends.herokuapp.com/api/groups/$groupName")
+                .delete()
+                .url("https://challenge-with-friends.herokuapp.com/api/groups/$groupId/$playerID/")
                 .build()
 
             withContext(Dispatchers.IO) {
                 client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) {
-                        val json = "application/json; charset=utf-8".toMediaType()
-                        val body = "{\"name\":\"$groupName\"}".toRequestBody(json)
-                        val request =Request.Builder()
-                            .url("https://challenge-with-friends.herokuapp.com/api/groups/")
-                            .post(body)
-                            .build()
-                        client.newCall(request).execute().use { response ->
-                            if (!response.isSuccessful) throw IOException("Here3 Unexpected code $response")
-                        }
-                        val moshi = Moshi.Builder()
-                                .addLast(KotlinJsonAdapterFactory())
-                                .build()
-                        val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
-                        val issue = issueAdapter.fromJson(response.body?.string())
-                        groupID = issue?.data?.id
-                    }else{
-                        val moshi = Moshi.Builder()
-                                .addLast(KotlinJsonAdapterFactory())
-                                .build()
-                        val issueAdapter = moshi.adapter(PostNewGroupResponse::class.java)
-                        val issue = issueAdapter.fromJson(response.body?.string())
-                        groupID = issue?.data?.id
-                    }
-
-                    if (playerID!=null && groupID!=null){
-                        val json= "application/json; charset=utf-8".toMediaType()
-                        val body = "{\"player_id\":\"$playerID\",\"group_id\":\"$groupID\"}".toRequestBody(json)
-                        val request=Request.Builder()
-                            .url("https://challenge-with-friends.herokuapp.com/api/groups/assign_player_group")
-                            .post(body)
-                            .build()
-                        client.newCall(request).execute().use { response ->
-                            if (!response.isSuccessful) throw IOException("Here4 Unexpected code $response")
-                        }
-                    }
-
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
                 }
             }
         }
-    }
-
-    private fun leaveGroup(groupName:String){
-
     }
 
     companion object {
