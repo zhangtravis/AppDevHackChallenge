@@ -49,7 +49,7 @@ def get_player_by_username(username):
     return success_response(player.serialize())
 
 @app.route("/api/players/<string:username>/", methods=["POST"])
-def change_player_points(username):
+def change_player_points(username): # this is only used for video demo purposes
     body = json.loads(request.data)
     points = body.get('points')
 
