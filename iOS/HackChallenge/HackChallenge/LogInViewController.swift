@@ -257,7 +257,7 @@ class LogInViewController: UIViewController {
             self.player.groups = playerInfo.groups
             print("SIGN UP player id : \(self.player.id)")
         }
-            let seconds = 5.0
+            let seconds = 3.0
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 print(self.player.id)
                 if self.player.id != -1 {
@@ -304,7 +304,7 @@ class LogInViewController: UIViewController {
                     print("LOG IN player id : \(self.player.id)")
    
             }
-            let seconds = 5.0
+            let seconds = 3.0
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 print(self.player.id)
                 if self.player.id != -1 {

@@ -256,4 +256,23 @@ class NetworkManager {
             }
         }
     }
+    static func updateProfilePicture(player_id: Int, image_data: String, completion: @escaping (Player) -> Void) {
+        let endpoint = "\(host)players/update_profile_pic/"
+        let parameters: [String:Any] = [
+            "player_id": player_id,
+            "image_data": image_data
+        ]
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                let jsonDecoder = JSONDecoder()
+                if let playerResponse = try? jsonDecoder.decode(PlayerResponse.self, from: data) {
+                    completion(playerResponse.data)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+   
 }

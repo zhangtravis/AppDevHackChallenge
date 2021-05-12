@@ -311,22 +311,22 @@ class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            addGroupButton.widthAnchor.constraint(equalToConstant: 110),
+            addGroupButton.widthAnchor.constraint(equalToConstant: 120),
             addGroupButton.heightAnchor.constraint(equalToConstant: 35),
             addGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            addGroupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
+            addGroupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8)
         ])
         NSLayoutConstraint.activate([
             joinGroupButton.widthAnchor.constraint(equalToConstant: 127),
             joinGroupButton.heightAnchor.constraint(equalToConstant: 35),
             joinGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            joinGroupButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+            joinGroupButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 5)
         ])
         NSLayoutConstraint.activate([
             signOutButton.widthAnchor.constraint(equalToConstant: 101),
             signOutButton.heightAnchor.constraint(equalToConstant: 35),
             signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            signOutButton.leadingAnchor.constraint(equalTo: joinGroupButton.trailingAnchor, constant: 10)
+            signOutButton.leadingAnchor.constraint(equalTo: joinGroupButton.trailingAnchor, constant: 5)
         ])
 
     }
@@ -421,6 +421,7 @@ extension ProfileViewController : UICollectionViewDelegateFlowLayout, UICollecti
 extension ProfileViewController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let player = (self.tabBarController as! TabBarController).player
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             let resizedPickedImage = pickedImage.resize(toSize: CGSize(width: 100, height: 100))
             profileView.contentMode = .scaleAspectFit
@@ -428,9 +429,17 @@ extension ProfileViewController : UIImagePickerControllerDelegate & UINavigation
             if let profileImageBase64 = profileView.image?.pngData()?.base64EncodedString() {
 //                print("data:image/png;base64," + profileImageBase64)
                 profileImage = "data:image/png;base64," + profileImageBase64
+                print("update profile pic")
+                NetworkManager.updateProfilePicture(player_id: player.id, image_data: profileImage) { (updatedPlayer) in
+                    print("updating")
+                    player.image = resizedPickedImage
+                }
+                print("done")
             }
         }
-
+        
+       
         dismiss(animated: true, completion: nil)
+        
     }
 }
