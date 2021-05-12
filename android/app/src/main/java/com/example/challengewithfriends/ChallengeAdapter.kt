@@ -25,13 +25,15 @@ import java.io.IOException
 
 class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isCompleted:Boolean, var isCurrent:Boolean, fragmentManager: FragmentManager?):RecyclerView.Adapter<ChallengeAdapter.ViewHolder>() {
     val fragmentManager=fragmentManager
+    private val client = OkHttpClient()
     class ViewHolder internal constructor(itemView: View): RecyclerView.ViewHolder(itemView){
         val title:TextView = itemView.findViewById(R.id.title)
         val description:TextView = itemView.findViewById(R.id.description)
         val author:TextView = itemView.findViewById(R.id.author)
         val imageView:ImageView? = itemView.findViewById(R.id.challenge_image)
+        val pastEmpty:TextView?=itemView.findViewById(R.id.emptyPast)
+
     }
-    private val client = OkHttpClient()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             if(isCompleted) R.layout.challenge_with_image else R.layout.challenge_item,
@@ -50,6 +52,9 @@ class ChallengeAdapter(private var myDataset: MutableList<Challenge>, var isComp
         holder.itemView.setOnClickListener(){
             if (isCurrent){
                 // launch fragment, mark as completed, upload picture
+                if (holder.pastEmpty!=null){
+                    holder.pastEmpty.visibility=View.GONE
+                }
                 fragmentManager?.beginTransaction()
                         ?.add(R.id.upload_container,UploadFragment.newInstance(myDataset[position].id))
                         ?.commit()
