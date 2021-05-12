@@ -273,7 +273,12 @@ def get_group_leaderboard(group_id):
     for player in group_players:
         player_points_dict[player.username] = player.points
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
-    return success_response(player_points_lst)
+
+    alist = []
+    for row in range(len(player_points_lst)):
+        alist.append([player_points_lst[row][0], str(player_points_lst[row][1])])
+
+    return success_response(alist)
 
 @app.route("/api/leaderboard/")
 def get_leaderboard():
@@ -283,7 +288,12 @@ def get_leaderboard():
     for player in players:
         player_points_dict[player.username] = player.points
     player_points_lst = sorted(player_points_dict.items(), key=lambda x: x[1], reverse=True)
-    return success_response(player_points_lst)
+
+    alist = []
+    for row in range(len(player_points_lst)):
+        alist.append([player_points_lst[row][0], str(player_points_lst[row][1])])
+
+    return success_response(alist)
 
 @app.route('/api/challenges/mark_completed/', methods=['POST'])
 def mark_completed():
