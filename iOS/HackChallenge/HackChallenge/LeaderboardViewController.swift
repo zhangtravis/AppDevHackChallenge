@@ -20,6 +20,7 @@ class LeaderboardViewController: UIViewController {
     private let challengeBlue = UIColor(red: 46/255, green: 116/255, blue: 181/255, alpha: 1)
     private let backgroundGrey = UIColor(red: 212/255, green: 221/255, blue: 234/255, alpha: 1)
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -58,9 +59,14 @@ class LeaderboardViewController: UIViewController {
         createDummyData()
     }
     func createDummyData() {
-        leaderboardData = [
-            Leaderboard(groupName: "Cornell123", players: ["P1", "P2", "P3", "P4", "P5", "P6"], completed: [10,9,8,7,6,5])
-        ]
+//        leaderboardData = [
+//            Leaderboard(groupName: "Cornell123", players: ["P1", "P2", "P3", "P4", "P5", "P6"], completed: [10,9,8,7,6,5])
+//        ]
+        NetworkManager.getGlobalLeaderboard { (rankList) in
+            self.leaderboardData.append(Leaderboard(groupName: "Global", rankings: rankList))
+        }
+        
+        leaderboardCollectionView.reloadData()
     }
     
     func setupConstraints() {
@@ -111,12 +117,11 @@ extension LeaderboardViewController: UICollectionViewDataSource {
     
 }
 extension LeaderboardViewController : UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
-    // TODO 5a: override default flow (optional, has default flow).
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 346, height: 232)
 
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    }
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//    }
     
 }

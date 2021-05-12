@@ -108,22 +108,16 @@ class LeaderboardCollectionViewCell: UICollectionViewCell {
         //MARK: Make 5 different labels for each challenger and # completed
         var players = ""
         var complete = ""
-        for name in board.players {
-            if players.count != 0 {
-                players = players + "\n" + name
-            }
-            else {
-                players = name
-            }
-        }
-        for num in board.completed {
-            if complete.count != 0 {
-                complete = complete + "\n" + String(num)
-            }
-            else {
-                complete = String(num)
-            }
-        }
+//        for playerRank in board.rankings {
+//            if players.count != 0 {
+//                players = players + "\n" + playerRank.rank[0]
+//                complete = complete + "\n" + playerRank.rank[1]
+//            }
+//            else {
+//                players = playerRank.rank[0]
+//                complete = playerRank.rank[1]
+//            }
+//        }
         challengerLabel.text = players
         completedLabel.text = complete
     }

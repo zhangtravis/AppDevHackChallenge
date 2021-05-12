@@ -36,6 +36,7 @@ class GroupsCollectionViewCell: UICollectionViewCell {
         leaveButton.backgroundColor = challengeRed
         leaveButton.layer.cornerRadius = 5
         leaveButton.translatesAutoresizingMaskIntoConstraints = false
+//        leaveButton.addTarget(self, action: #selector(deleteGroup), for: .touchUpInside)
         contentView.addSubview(leaveButton)
         
         setupConstraints()
@@ -64,10 +65,12 @@ class GroupsCollectionViewCell: UICollectionViewCell {
             leaveButton.widthAnchor.constraint(equalToConstant: 108)
         ])
     }
+
     
-    func configure(for group: GroupInfo) {
-        groupLabel.text = group.title
+    func configure(for group: Group) {
+        groupLabel.text = group.name
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

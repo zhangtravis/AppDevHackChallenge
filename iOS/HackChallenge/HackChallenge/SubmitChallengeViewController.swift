@@ -16,8 +16,12 @@ class SubmitChallengeViewController: UIViewController{
     private var imageView = UIImageView()
     private var submitButton = UIButton()
     private var selectionButton = UIButton()
+    private var selectedChallenge : Challenge
+    private let index : Int
     
-    init() {
+    init(selectedChallenge: Challenge, index: Int) {
+        self.selectedChallenge = selectedChallenge
+        self.index = index
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,6 +32,7 @@ class SubmitChallengeViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = backgroundGrey
+        
         // Do any additional setup after loading the view.
         submitButton.setTitle("SUBMIT", for: .normal)
         submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .black)
@@ -74,9 +79,15 @@ class SubmitChallengeViewController: UIViewController{
     }
     
     @objc func submitButtonPressed() {
-//        delegate?.submitChallenge(image: selectedImage)
+
         if let profileImageBase64 = imageView.image?.pngData()?.base64EncodedString() {
-//            print(profileImageBase64)
+            print(profileImageBase64)
+            NetworkManager.completeChallenge(challenge_id: selectedChallenge.id, image_data: "data:image/png;base64," + profileImageBase64) { (completedChallenge) in
+                print("PROBLEM?")
+                self.delegate?.submitChallenge(challenge: completedChallenge, index: self.index)
+                
+            }
+            
         }
         self.dismiss(animated: true, completion: nil)
     }

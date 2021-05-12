@@ -8,7 +8,11 @@
 import UIKit
 
 protocol SubmitChallengeDelegate: class {
-    func submitChallenge(image: UIImage)
+    func submitChallenge(challenge: Challenge, index: Int)
+}
+protocol LogInDelegate: class {
+//    func logInPlayer(username: String, password: String, player_id: Int)
+    func logInPlayer(player: PlayerData)
 }
 
 class ViewController: UIViewController {
@@ -21,7 +25,8 @@ class ViewController: UIViewController {
     private var titleLabel = UILabel()
     private var currentTitleLabel = UILabel()
     private var pastTitleLabel = UILabel()
-
+    private var reminderCurrent = UILabel()
+    private var reminderPast = UILabel()
     
     // Data
     private var currentChallenges: [Challenge] = []
@@ -41,12 +46,22 @@ class ViewController: UIViewController {
     
     private let refreshControl = UIRefreshControl()
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshData()
 //        player = (self.tabBarController as! TabBarController).player
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let player = (self.tabBarController as! TabBarController).player
+        if (player.login == false ) {
+            let logInViewController = LogInViewController(player: (self.tabBarController as! TabBarController).player)
+            logInViewController.isModalInPresentation = true
+            self.present(logInViewController, animated: true, completion: nil)
+            logInViewController.delegate = self
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = backgroundGrey
@@ -66,6 +81,24 @@ class ViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
+        
+        reminderCurrent.text = ""
+        reminderCurrent.textColor = .black
+        reminderCurrent.numberOfLines = 0
+        reminderCurrent.lineBreakMode = .byWordWrapping
+//        reminderCurrent.backgroundColor = .yellow
+        reminderCurrent.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        reminderCurrent.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(reminderCurrent)
+        
+        reminderPast.text = ""
+        reminderPast.textColor = .black
+//        reminderPast.backgroundColor = .red
+        reminderPast.numberOfLines = 0
+        reminderPast.lineBreakMode = .byWordWrapping
+        reminderPast.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        reminderPast.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(reminderPast)
         
         currentTitleLabel.text = "CURRENT CHALLENGES"
         currentTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .black)
@@ -149,14 +182,14 @@ class ViewController: UIViewController {
     
     func createDummyData() {
         let player = (self.tabBarController as! TabBarController).player
-        print("trying to get current")
-        NetworkManager.getAllCurrentChallenges(playerid: player.id) { (currentChallengeList) in
-//            print("getting all current challengers from player with id \(player.id)")
-            self.currentChallenges = currentChallengeList
-            self.shownCurrentChallenges = self.currentChallenges
-            self.currentCollectionView.reloadData()
+        if player.id != -1 {
+            NetworkManager.getAllCurrentChallenges(playerid: player.id) { (currentChallengeList) in
+                self.currentChallenges = currentChallengeList
+                self.shownCurrentChallenges = self.currentChallenges
+                self.currentCollectionView.reloadData()
+            }
         }
-        print("trying to get past")
+
         NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
             
                 self.pastChallenges = pastChallengeList
@@ -187,6 +220,12 @@ class ViewController: UIViewController {
             currentTitleLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 20),
             currentTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
         ])
+        NSLayoutConstraint.activate([
+            reminderCurrent.topAnchor.constraint(equalTo: currentTitleLabel.bottomAnchor, constant: 30),
+            reminderCurrent.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            reminderCurrent.centerYAnchor.constraint(equalTo: currentCollectionView.centerYAnchor),
+            reminderCurrent.widthAnchor.constraint(equalToConstant: 300)
+        ])
 
         let collectionViewPadding: CGFloat = 16
         NSLayoutConstraint.activate([
@@ -205,6 +244,12 @@ class ViewController: UIViewController {
             pastCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -collectionViewPadding),
             pastCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -collectionViewPadding)
         ])
+        NSLayoutConstraint.activate([
+            reminderPast.topAnchor.constraint(equalTo: pastTitleLabel.bottomAnchor, constant: 40),
+            reminderPast.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            reminderPast.widthAnchor.constraint(equalToConstant: 300)
+//            reminderPast.centerYAnchor.constraint(equalTo: pastCollectionView.centerYAnchor)
+        ])
 
     }
     @objc func refreshData() {
@@ -218,13 +263,16 @@ class ViewController: UIViewController {
          DO NOT USE `DispatchQueue.main.asyncAfter` as currently is - just use `getAllPosts`
          */
         let player = (self.tabBarController as! TabBarController).player
-        NetworkManager.getAllCurrentChallenges(playerid: player.id, completion: { (currentChallengeList) in
-            self.currentChallenges = currentChallengeList
-            //
-            self.shownCurrentChallenges = self.currentChallenges
-            self.currentCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        })
+        if player.id != -1 {
+            NetworkManager.getAllCurrentChallenges(playerid: player.id, completion: { (currentChallengeList) in
+                self.currentChallenges = currentChallengeList
+                //
+                self.shownCurrentChallenges = self.currentChallenges
+                self.currentCollectionView.reloadData()
+                self.refreshControl.endRefreshing()
+            })
+        }
+
 
         NetworkManager.getAllPastChallenges(completion: { (pastChallengeList) in
             self.pastChallenges = pastChallengeList
@@ -241,9 +289,21 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == currentCollectionView {
+            if currentChallenges.count == 0 {
+                reminderCurrent.text = "You have no current challenge right now. Claim challenges on the Search tab."
+            }
+            else {
+                reminderCurrent.text = ""
+            }
             return currentChallenges.count
         }
         else {
+            if pastChallenges.count == 0 {
+                reminderPast.text = "There are no completetd challenges right now. Go complete a challenge!"
+            }
+            else {
+                reminderPast.text = ""
+            }
             return pastChallenges.count
         }
     }
@@ -292,7 +352,7 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
 //            collectionView.reloadData()
             
             print("selected a current challenge")
-            let submitChallengeController = SubmitChallengeViewController()
+            let submitChallengeController = SubmitChallengeViewController(selectedChallenge: currentChallenges[indexPath.item], index : indexPath.row)
             self.present(submitChallengeController, animated: true, completion: nil)
             submitChallengeController.delegate = self
             
@@ -305,7 +365,31 @@ extension ViewController : UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
 }
 extension ViewController : SubmitChallengeDelegate {
-    func submitChallenge(image: UIImage) {
-        print("TEST")
+    func submitChallenge(challenge: Challenge, index: Int) {
+        self.currentChallenges.remove(at: index)
+        self.sortCurrentChallengeData()
+        self.shownCurrentChallenges = self.currentChallenges
+        self.currentCollectionView.reloadData()
+        
+        self.pastChallenges.append(challenge)
+        self.sortPastChallengeData()
+        self.shownPastChallenges = self.pastChallenges
+        self.pastCollectionView.reloadData()
+
+    }
+}
+
+extension ViewController : LogInDelegate {
+//    func logInPlayer(username: String, password: String, player_id: Int) {
+//        let player = (self.tabBarController as! TabBarController).player
+//        player.username = username
+//        player.password = password
+//        player.id = player_id
+//        player.login = true
+//
+//    }
+    func logInPlayer(player: PlayerData) {
+        var player_actual = (self.tabBarController as! TabBarController).player
+        player_actual = player
     }
 }

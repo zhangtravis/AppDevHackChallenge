@@ -97,8 +97,13 @@ class PastChallengesCollectionViewCell: UICollectionViewCell {
         descriptionLabel.text = challenge.description
 //        proofImage.image = challenge.image.getImage()
 
-        senderLabel.text = "Challenged by: "
-//            + challenge.player.name
+        var sender_name = ""
+        sender_name = challenge.author_username
+        print("sender name is " + sender_name)
+        senderLabel.text = "Challenged by: " + sender_name
+        let url = URL(string: challenge.image!.url)
+        let data = try? Data(contentsOf: url!)
+        self.proofImage.image = UIImage(data: data!)
 
     }
     

@@ -7,64 +7,52 @@
 
 import UIKit
 
-//struct Image: Codable {
-//    let imageData: Data?
-//    
-//    init(withImage image: UIImage) {
-//        self.imageData = image.pngData()
-//    }
-//
-//    func getImage() -> UIImage? {
-//        guard let imageData = self.imageData else {
-//            return nil
-//        }
-//        let image = UIImage(data: imageData)
-//        
-//        return image
-//    }
-//}
-//
-//struct PastChallenge : Codable {
-//    var title: String
-//    var image: Image
-//    var description: String
-//    var sender: String
-//    var upvotes: Int
-//    var downvotes: Int
-//}
-
-struct Player : Codable {
-    var id: Int
-    var username: String
-//    var password: String
-//    var points: Int
-//    var challenges: [Challenge]
-//    var groups: [Group]
-//    var authored_challenges: [Challenge]
+struct GroupResponse : Codable {
+    var success : Bool
+    var data : Group
 }
-//{"id": 6, "username": "hi", "points": 0, "current_challenges": [], "completed_challenges":
-//[], "groups": [], "authored_challenges": []}]}
-
 struct Group : Codable {
     var id: Int
     var name: String
-    var players: [ Player ]
-    var challenges: [Challenge]
+//    var players: [ Player ]
+//    var challenges: [Challenge]
 }
-
 struct Challenge : Codable {
     var id : Int
     var title : String
     var description: String
-    var claimed: Bool
-    var completed: Bool
-    var author_id: Int
-    var group_id: Int
-    var player: [Player]
+//    var claimed: Bool
+//    var completed: Bool
+    var author_username: String
+//    var author_id: Int
+//    var group_id: Int
+    var player: [ChallengePlayer]
+    var image : AppImage?
 }
+struct AppImage : Codable {
+    var url : String
+//    var created_at : String
+//    var challenge_id : Int?
+//    var player_id : Int?
+}
+struct Player : Codable {
+    var id: Int
+    var username: String
+//    var points: Int
+//    var challenges: [Challenge]
+    var groups: [Group]
+//    var authored_challenges: [Challenge]
+    var image : AppImage
+}
+
 struct PlayerResponse : Codable {
     var success : Bool
     var data : Player
+}
+struct ChallengePlayer : Codable {
+    var id: Int
+    var username: String
+    var points : Int
 }
 
 struct ChallengeResponse : Codable {
@@ -77,7 +65,14 @@ struct ChallengesResponse : Codable {
     var data : [Challenge]
 }
 
-//struct PastChallenges : Codable {
-//    var success : Bool
-//    var data : [Challenge]
+//struct PlayerRank : Codable {
+////    var user : String
+////    var points : String
+//    var rank : [String]
 //}
+
+struct LeaderboardResponse : Codable {
+    var success : Bool
+    var data : Array<Array<String>>
+}
+

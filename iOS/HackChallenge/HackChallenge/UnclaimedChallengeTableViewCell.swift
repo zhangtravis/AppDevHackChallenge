@@ -81,13 +81,20 @@ class UnclaimedChallengeTableViewCell: UITableViewCell {
         descriptionLabel.text = challenge.description
 
         var sender_name = ""
-        NetworkManager.getPlayerById(id: challenge.author_id, completion: { (sender) in
-            print("GET ID of " + sender.username + " is \(challenge.author_id)")
-            
-            sender_name = sender.username
-            self.senderLabel.text = "Challenged by: " + sender_name
-            
-        })
+        sender_name = challenge.author_username
+        print("sender name is " + sender_name)
+        senderLabel.text = "Challenged by: " + sender_name
+//        NetworkManager.getPlayerById(id: challenge.author_id, completion: { (sender) in
+//            print("GET ID of " + sender.username + " is \(challenge.author_id)")
+//
+//            sender_name = sender.username
+//            self.senderLabel.text = "Challenged by: " + sender_name
+//
+//        })
+        
+        
+        
+        
 //        print("test")
 //        print(sender_name)
 //        senderLabel.text = "Challenged by: " + sender_name

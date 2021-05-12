@@ -61,7 +61,7 @@ class ChallengeViewController: UIViewController, UITextViewDelegate {
         titleView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleView)
         
-        titleLabel.text = "Upload Challenges"
+        titleLabel.text = "Upload"
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

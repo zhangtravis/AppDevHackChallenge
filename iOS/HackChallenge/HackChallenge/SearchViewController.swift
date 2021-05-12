@@ -13,7 +13,7 @@ class SearchViewController: UIViewController {
     private var titleView = UIView()
     private var titleLabel = UILabel()
     private var findChallengesLabel = UILabel()
-    private var searchTextField = UITextField()
+    private var searchTitleTextField = UITextField()
     
     private let unclaimedChallengesTableView = UITableView()
     private var groupFilterCollectionView: UICollectionView!
@@ -23,8 +23,8 @@ class SearchViewController: UIViewController {
     private let groupFilterCellPadding: CGFloat = 10
     
     private var challengeData: [Challenge] = []
-    private var shownchallengeData: [Challenge] = []
-    private var selectedchallengeIndex : Int?
+    private var shownChallengeData: [Challenge] = []
+//    private var selectedchallengeIndex : Int?
     private var selectedCell : UnclaimedChallengeTableViewCell?
     private var currentIndexPathToUpdate: IndexPath?
     
@@ -62,7 +62,7 @@ class SearchViewController: UIViewController {
         titleView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleView)
         
-        titleLabel.text = "Find Challenges"
+        titleLabel.text = "Search"
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -75,20 +75,21 @@ class SearchViewController: UIViewController {
         view.addSubview(findChallengesLabel)
         
         
-        searchTextField.font = UIFont.systemFont(ofSize: 12)
-        searchTextField.backgroundColor = .white
-        searchTextField.text = "Search by ..."
-        searchTextField.textColor = UIColor(red: 157/255, green: 157/255, blue: 157/255, alpha: 1)
-        searchTextField.layer.cornerRadius = 5
-        searchTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 23, height: searchTextField.frame.height))
-        searchTextField.leftViewMode = .always
-        searchTextField.layer.shadowOpacity = 1
-        searchTextField.layer.shadowRadius = 3.0
-        searchTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
-        searchTextField.layer.shadowColor = CGColor.init(red: 229/255, green: 229/255, blue: 229/255, alpha: 1)
-        searchTextField.textAlignment = .left
-        searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(searchTextField)
+        searchTitleTextField.font = UIFont.systemFont(ofSize: 12)
+        searchTitleTextField.backgroundColor = .white
+        searchTitleTextField.placeholder = "Search by title..."
+        searchTitleTextField.textColor = UIColor(red: 157/255, green: 157/255, blue: 157/255, alpha: 1)
+        searchTitleTextField.layer.cornerRadius = 5
+        searchTitleTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 23, height: searchTitleTextField.frame.height))
+        searchTitleTextField.leftViewMode = .always
+        searchTitleTextField.layer.shadowOpacity = 1
+        searchTitleTextField.layer.shadowRadius = 3.0
+        searchTitleTextField.layer.shadowOffset = CGSize(width: 2, height: 2)
+        searchTitleTextField.layer.shadowColor = CGColor.init(red: 229/255, green: 229/255, blue: 229/255, alpha: 1)
+        searchTitleTextField.textAlignment = .left
+        searchTitleTextField.addTarget(self, action: #selector(searchChallengesByTitle), for: UIControl.Event.primaryActionTriggered)
+        searchTitleTextField.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchTitleTextField)
         
         
         unclaimedChallengesTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -120,15 +121,22 @@ class SearchViewController: UIViewController {
         claimAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { action in
             let player = (self.tabBarController as! TabBarController).player
 //            MARK: Claim post NetworkManager
-            if let indexPath = self.currentIndexPathToUpdate {
-                NetworkManager.claimChallenge(player_id: player.id, challenge_id: self.challengeData[indexPath.row].id) { (claimedChallenge) in
-                    print("claiming challenge")
+            print("claiming challenge")
+            print("\(player.id)")
+
+            if player.id != -1 {
+                if let indexPath = self.currentIndexPathToUpdate {
+                    NetworkManager.claimChallenge(player_id: player.id, challenge_id: self.challengeData[indexPath.row].id) { (claimedChallenge) in
+                        print("using claim info")
+                        
+                    }
                     self.challengeData.remove(at: indexPath.row)
                     self.sortChallengeData()
-                    self.shownchallengeData = self.challengeData
+                    self.shownChallengeData = self.challengeData
                     self.unclaimedChallengesTableView.reloadData()
                 }
             }
+
             
         }))
         
@@ -147,7 +155,7 @@ class SearchViewController: UIViewController {
         NetworkManager.getAllUnclaimedChallenges { (challengesList) in
             self.challengeData = challengesList
             self.sortChallengeData()
-            self.shownchallengeData = self.challengeData
+            self.shownChallengeData = self.challengeData
             self.unclaimedChallengesTableView.reloadData()
         }
     }
@@ -176,13 +184,14 @@ class SearchViewController: UIViewController {
 
 
         NSLayoutConstraint.activate([
-            searchTextField.topAnchor.constraint(equalTo: findChallengesLabel.bottomAnchor, constant: 15),
-            searchTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            searchTextField.widthAnchor.constraint(equalToConstant: 356),
-            searchTextField.heightAnchor.constraint(equalToConstant: 32)
+            searchTitleTextField.topAnchor.constraint(equalTo: findChallengesLabel.bottomAnchor, constant: 15),
+            searchTitleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchTitleTextField.widthAnchor.constraint(equalToConstant: 356),
+            searchTitleTextField.heightAnchor.constraint(equalToConstant: 32)
         ])
+        
         NSLayoutConstraint.activate([
-            groupFilterCollectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 15),
+            groupFilterCollectionView.topAnchor.constraint(equalTo: searchTitleTextField.bottomAnchor, constant: 15),
             groupFilterCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             groupFilterCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             groupFilterCollectionView.heightAnchor.constraint(equalToConstant: 21)
@@ -208,24 +217,37 @@ class SearchViewController: UIViewController {
         NetworkManager.getAllUnclaimedChallenges(completion: { (challengeList) in
             self.challengeData = challengeList
             self.sortChallengeData()
-            self.shownchallengeData = self.challengeData
+            self.shownChallengeData = self.challengeData
             self.unclaimedChallengesTableView.reloadData()
             self.refreshControl.endRefreshing()
         })
+    }
+    @objc func searchChallengesByTitle() {
+        print("searching unclaimed challenges for " + (searchTitleTextField.text ?? "nothing"))
+        var newData : [Challenge] = []
+        for cell in challengeData {
+            if let matchedTitle = cell.title.range(of: searchTitleTextField.text ?? "", options: .caseInsensitive) {
+                newData.append(cell)
+            } else {
+            }
+        }
+        shownChallengeData = newData
+        sortChallengeData()
+        unclaimedChallengesTableView.reloadData()
 
     }
 }
 
 extension SearchViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return challengeData.count
+        return shownChallengeData.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 125
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: unclaimedChallengesReuseIdentifier, for: indexPath) as! UnclaimedChallengeTableViewCell
-        let challenge = challengeData[indexPath.row]
+        let challenge = shownChallengeData[indexPath.row]
         cell.configure(with: challenge)
         return cell
     }
