@@ -175,8 +175,10 @@ class Challenge(db.Model):
             "description": self.description,
             "claimed": self.claimed,
             "completed": self.completed,
+            "author_username": self.author_username,
             "author_id": self.author_id,
             "group_id": self.group_id,
+            "image": self.asset.serialize() if self.asset != None else None
         }
 
 class Group(db.Model):
