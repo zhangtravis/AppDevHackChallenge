@@ -257,9 +257,22 @@ class LogInViewController: UIViewController {
             self.player.groups = playerInfo.groups
             print("SIGN UP player id : \(self.player.id)")
         }
-        self.player.login = true
-        self.delegate?.logInPlayer(player: player)
-        self.dismiss(animated: true, completion: nil)
+            let seconds = 5.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                print(self.player.id)
+                if self.player.id != -1 {
+                    self.player.login = true
+                    self.delegate?.logInPlayer(player: self.player)
+                    print("player username : \(self.player.username)")
+                    print("player password : \(self.player.password)")
+                    self.dismiss(animated: true, completion: nil)
+                }
+                else {
+                    self.retryLabel.text = "Invalid Username or Password or Missing Profile Image"
+                }
+            }
+
+
         }
         else {
             retryLabel.text = "Please fill in a username and a password"
@@ -291,16 +304,21 @@ class LogInViewController: UIViewController {
                     print("LOG IN player id : \(self.player.id)")
    
             }
-            if player.id != -1 {
-                self.player.login = true
-                self.delegate?.logInPlayer(player: player)
-                print("player username : \(player.username)")
-                print("player password : \(player.password)")
-                self.dismiss(animated: true, completion: nil)
+            let seconds = 5.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                print(self.player.id)
+                if self.player.id != -1 {
+                    self.player.login = true
+                    self.delegate?.logInPlayer(player: self.player)
+                    print("player username : \(self.player.username)")
+                    print("player password : \(self.player.password)")
+                    self.dismiss(animated: true, completion: nil)
+                }
+                else {
+                    self.retryLabel.text = "Invalid Username or Password"
+                }
             }
-            else {
-                self.retryLabel.text = "Invalid Username or Password or Missing Profile Image"
-            }
+
         }
         else {
             retryLabel.text = "Please fill in a username and a password"

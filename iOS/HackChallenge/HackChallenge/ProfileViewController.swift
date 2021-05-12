@@ -27,9 +27,9 @@ class ProfileViewController: UIViewController {
     private var reminderGroups = UILabel()
     
     
-    private var logInButton = UIButton()
+    private var joinGroupButton = UIButton()
     private var addGroupButton = UIButton()
-    private var signUpButton = UIButton()
+    private var signOutButton = UIButton()
     
     private var groupsCollectionView: UICollectionView!
     private var groupInfo: [Group] = []
@@ -116,14 +116,14 @@ class ProfileViewController: UIViewController {
         groupLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(groupLabel)
         
-        logInButton.setTitle("LOG IN", for: .normal)
-        logInButton.setTitleColor(.white, for: .normal)
-        logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        logInButton.backgroundColor = challengeBlue
-        logInButton.layer.cornerRadius = 8
-        logInButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
-        logInButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logInButton)
+        joinGroupButton.setTitle("JOIN GROUP", for: .normal)
+        joinGroupButton.setTitleColor(.white, for: .normal)
+        joinGroupButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        joinGroupButton.backgroundColor = challengeBlue
+        joinGroupButton.layer.cornerRadius = 8
+        joinGroupButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
+        joinGroupButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(joinGroupButton)
         
         addGroupButton.setTitle("ADD GROUP", for: .normal)
         addGroupButton.setTitleColor(.white, for: .normal)
@@ -134,14 +134,14 @@ class ProfileViewController: UIViewController {
         addGroupButton.addTarget(self, action: #selector(createGroup), for: .touchUpInside)
         view.addSubview(addGroupButton)
         
-        signUpButton.setTitle("SIGN UP", for: .normal)
-        signUpButton.setTitleColor(.white, for: .normal)
-        signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        signUpButton.backgroundColor = challengeBlue
-        signUpButton.layer.cornerRadius = 8
-        signUpButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
-        view.addSubview(signUpButton)
+        signOutButton.setTitle("SIGN OUT", for: .normal)
+        signOutButton.setTitleColor(.white, for: .normal)
+        signOutButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        signOutButton.backgroundColor = challengeRed
+        signOutButton.layer.cornerRadius = 8
+        signOutButton.translatesAutoresizingMaskIntoConstraints = false
+        signOutButton.addTarget(self, action: #selector(signUp), for: .touchUpInside)
+        view.addSubview(signOutButton)
         
         let groupLayout = UICollectionViewFlowLayout()
         groupLayout.scrollDirection = .vertical
@@ -311,22 +311,22 @@ class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            logInButton.widthAnchor.constraint(equalToConstant: 94),
-            logInButton.heightAnchor.constraint(equalToConstant: 35),
-            logInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            logInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
-        ])
-        NSLayoutConstraint.activate([
-            addGroupButton.widthAnchor.constraint(equalToConstant: 127),
+            addGroupButton.widthAnchor.constraint(equalToConstant: 110),
             addGroupButton.heightAnchor.constraint(equalToConstant: 35),
             addGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            addGroupButton.leadingAnchor.constraint(equalTo: logInButton.trailingAnchor, constant: 10)
+            addGroupButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17)
         ])
         NSLayoutConstraint.activate([
-            signUpButton.widthAnchor.constraint(equalToConstant: 101),
-            signUpButton.heightAnchor.constraint(equalToConstant: 35),
-            signUpButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
-            signUpButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+            joinGroupButton.widthAnchor.constraint(equalToConstant: 127),
+            joinGroupButton.heightAnchor.constraint(equalToConstant: 35),
+            joinGroupButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
+            joinGroupButton.leadingAnchor.constraint(equalTo: addGroupButton.trailingAnchor, constant: 10)
+        ])
+        NSLayoutConstraint.activate([
+            signOutButton.widthAnchor.constraint(equalToConstant: 101),
+            signOutButton.heightAnchor.constraint(equalToConstant: 35),
+            signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -55),
+            signOutButton.leadingAnchor.constraint(equalTo: joinGroupButton.trailingAnchor, constant: 10)
         ])
 
     }
