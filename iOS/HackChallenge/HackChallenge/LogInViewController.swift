@@ -72,7 +72,6 @@ class LogInViewController: UIViewController {
         //profileView
         profileView.layer.borderWidth = 5
         profileView.layer.borderColor = CGColor.init(red: 1, green: 1, blue: 1, alpha: 1)
-        profileView.image = UIImage(named: "profile.png")
         profileView.layer.cornerRadius = 165.0 / 2.0
         profileView.translatesAutoresizingMaskIntoConstraints = false
         profileView.clipsToBounds = true
@@ -86,7 +85,7 @@ class LogInViewController: UIViewController {
         setupLabelView(titleLabel: usernameLabel, textField: usernameTextField, titleText: "USERNAME", textFieldText: "")
         setupLabelView(titleLabel: passwordLabel, textField: passwordTextField, titleText: "PASSWORD", textFieldText: "")
         
-        retryLabel.text = ""
+        retryLabel.text = "Signing up? Make sure to select a profile photo"
         retryLabel.textColor = .black
         retryLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         retryLabel.translatesAutoresizingMaskIntoConstraints = false
