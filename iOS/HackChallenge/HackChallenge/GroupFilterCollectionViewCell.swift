@@ -49,10 +49,10 @@ class GroupFilterCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(for filter: GroupFilter) {
-        groupFilterView.backgroundColor = filter.selected ? challengeBlue : .clear
-        groupFilterLabel.text = filter.title
-        groupFilterLabel.textColor = filter.selected ? .white : .black
+    func configure(for groupFilter: GroupFilter) {
+        groupFilterView.backgroundColor = groupFilter.selected ? challengeBlue : .clear
+        groupFilterLabel.textColor = groupFilter.selected ? .white : .black
+        groupFilterLabel.text = groupFilter.group.name
     }
     
     required init?(coder: NSCoder) {

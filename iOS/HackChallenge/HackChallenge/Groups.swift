@@ -8,21 +8,10 @@
 import UIKit
 
 class GroupFilter {
-    var title: String
+    var group : Group
     var selected : Bool
-
-    init(title: String) {
-        self.title = title
-        self.selected = false
-    }
-}
-
-class GroupInfo {
-    var title: String
-    var selected : Bool
-
-    init(title: String) {
-        self.title = title
+    init(group: Group) {
+        self.group = group
         self.selected = false
     }
 }

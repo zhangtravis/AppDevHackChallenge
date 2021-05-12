@@ -173,6 +173,7 @@ class ProfileViewController: UIViewController {
                     NetworkManager.addPlayerToGroup(player_id: player.id, group_id: newGroup.id) { (group) in
                         
                     }
+                    player.groups.append(newGroup)
                     self.groupInfo.append(newGroup)
                     self.groupsCollectionView.reloadData()
                 }
@@ -190,6 +191,7 @@ class ProfileViewController: UIViewController {
                input != "" {
                 NetworkManager.getGroup(name: input) { (selectedGroup) in
                     NetworkManager.addPlayerToGroup(player_id: player.id, group_id: selectedGroup.id) { (addedgroup) in
+                        player.groups.append(addedgroup)
                         self.groupInfo.append(addedgroup)
                         self.groupsCollectionView.reloadData()
                     }
