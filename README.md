@@ -672,7 +672,7 @@ Response:
 
 ## Delete player from group by ids
 
-**DELETE** `/api/groups/group_id/player_id/`
+**DELETE** `/api/groups/{group_id}/{player_id}/`
 
 Response:
 
