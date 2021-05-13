@@ -37,27 +37,28 @@ For iOS:
 	- ViewController.swift
 	- SubmitChallengeViewController.swift
 	- PastChallengesCollectionViewCell.swift
-		CurrentChallengeCollectionViewCell.swift
-		SearchViewController.swift
-		GroupFilterCollectionViewCell.swift
-		UnclaimedChallengeTableViewCell.swift
-		ChallengeViewController.swift
-		LeaderboardViewController.swift
-		LeaderboardCollectionViewCell.swift
-		ProfileViewController.swift
-		LogInViewController.swift
-		GroupsCollectionViewCell.swift
-	5 UICollectionView
-		currentCollectionView
-		pastCollectionView
-		groupFilterCollectionView
-		leaderboardCollectionView
-		groupsCollectionView
-	1 UITableView
-		unclaimedChallengesTableView
-		UITabBarController to navigate between screens
-For Android
-	7 unique screens, using fragment tab navigation
-	4 recycler views, 3 unique layout files used by these views, 2 unique adapters
-	Persistent data 
-	Networking
+	- CurrentChallengeCollectionViewCell.swift
+	- SearchViewController.swift
+	- GroupFilterCollectionViewCell.swift
+	- UnclaimedChallengeTableViewCell.swift
+	- ChallengeViewController.swift
+	- LeaderboardViewController.swift
+	- LeaderboardCollectionViewCell.swift
+	- ProfileViewController.swift
+	- LogInViewController.swift
+	- GroupsCollectionViewCell.swift
+- 5 UICollectionView
+	- currentCollectionView
+	- pastCollectionView
+	- groupFilterCollectionView
+	- leaderboardCollectionView
+	- groupsCollectionView
+- 1 UITableView
+	- unclaimedChallengesTableView
+	- UITabBarController to navigate between screens
+
+For Android:
+- 7 unique screens, using fragment tab navigation
+- 4 recycler views, 3 unique layout files used by these views, 2 unique adapters
+- Persistent data 
+- Networking
