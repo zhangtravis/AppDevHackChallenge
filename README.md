@@ -11,7 +11,6 @@
 **Screenshots:**
   
 ![Imgur](https://i.imgur.com/9AArBbPm.png) | ![Imgur](https://i.imgur.com/A2D6fSsm.png)
-:-----------------------------------------:|:------------------------------------------:
 
 
 ![Imgur](https://i.imgur.com/A5wZrXqm.png)
