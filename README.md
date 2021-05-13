@@ -1,14 +1,14 @@
 # AppDevHackChallenge
 
-App: Challenge with Friends
+**App:** Challenge with Friends
 
-Tagline: Do some challenges with friends!
+**Tagline:** Do some challenges with friends!
 
-Github link: https://github.com/zhangtravis/AppDevHackChallenge
+**Github link:** https://github.com/zhangtravis/AppDevHackChallenge
 
-Just Android Github link:
+**Android Github link:**
 
-Screenshots:
+**Screenshots:**
 
 
 
