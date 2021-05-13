@@ -10,23 +10,23 @@
 
 **Screenshots:**
 
-![Imgur](https://i.imgur.com/9AArBbP.png)
+![Imgur](https://i.imgur.com/9AArBbPs.png)
 
-![Imgur](https://i.imgur.com/A2D6fSs.png)
+![Imgur](https://i.imgur.com/A2D6fSss.png)
 
-![Imgur](https://i.imgur.com/A5wZrXq.png)
+![Imgur](https://i.imgur.com/A5wZrXqs.png)
 
-![Imgur](https://i.imgur.com/1eIB6C2.png)
+![Imgur](https://i.imgur.com/1eIB6C2s.png)
 
-![Imgur](https://i.imgur.com/hxgcl4y.png)
+![Imgur](https://i.imgur.com/hxgcl4ys.png)
 
-![Imgur](https://i.imgur.com/eJ4Y3nw.png)
+![Imgur](https://i.imgur.com/eJ4Y3nws.png)
 
-![Imgur](https://i.imgur.com/5gZ4nJu.png)
+![Imgur](https://i.imgur.com/5gZ4nJus.png)
 
-![Imgur](https://i.imgur.com/pT8vlnY.png)
+![Imgur](https://i.imgur.com/pT8vlnYs.png)
 
-![Imgur](https://i.imgur.com/u2dEi8L.png)
+![Imgur](https://i.imgur.com/u2dEi8Ls.png)
 
 **Short Description:**
 
