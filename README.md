@@ -10,10 +10,10 @@
 
 **Screenshots:**
   
-![Imgur](https://i.imgur.com/9AArBbPl.png) ![Imgur](https://i.imgur.com/A2D6fSsl.png)
+![Imgur](https://i.imgur.com/9AArBbPl.png)   ![Imgur](https://i.imgur.com/A2D6fSsl.png)    ![Imgur](https://i.imgur.com/A5wZrXql.png)
 
 
-![Imgur](https://i.imgur.com/A5wZrXqm.png)
+
 
 ![Imgur](https://i.imgur.com/1eIB6C2m.png)
 
