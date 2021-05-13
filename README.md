@@ -12,8 +12,12 @@ Screenshots:
 
 Short Description:
 Challenges with friends is an app where you can do challenges, with friends. 
-A player can sign up with a username and password, 
-and login every time afterward from that point. 
+A player can sign up with a username and password, and login every time afterward from that point. 
+They can then navigate between different screens based on what action they want to take next: look 
+for a challenge to claim, complete a challenge by uploading photo proof, propose a new challenge that 
+another player will claim, or look at their positional ranking on both the global leaderboard and the group 
+leaderboard for whatever groups they are a part of. There is also a profile page where a player can manage which 
+groups they are a part of.
 
 List of how app addresses each of the requirements: 
 For backend, the app addresses the 4 endpoint minimum requirements because we have 25 endpoints, specified in the API Specification ReadMe file in the backend folder. We also have relational database schema using SQLAlchemy - we have 4 tables, for Players, Challenges, Groups, and Assets. We have relationships between tables: 
