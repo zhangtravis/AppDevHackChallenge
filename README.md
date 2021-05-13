@@ -12,20 +12,9 @@
   
 ![Imgur](https://i.imgur.com/9AArBbPl.png)   ![Imgur](https://i.imgur.com/A2D6fSsl.png)    ![Imgur](https://i.imgur.com/A5wZrXql.png)
 
+![Imgur](https://i.imgur.com/1eIB6C2l.png)   ![Imgur](https://i.imgur.com/hxgcl4yl.png)    ![Imgur](https://i.imgur.com/eJ4Y3nwl.png)
 
-
-
-![Imgur](https://i.imgur.com/1eIB6C2m.png)
-
-![Imgur](https://i.imgur.com/hxgcl4ym.png)
-
-![Imgur](https://i.imgur.com/eJ4Y3nwm.png)
-
-![Imgur](https://i.imgur.com/5gZ4nJum.png)
-
-![Imgur](https://i.imgur.com/pT8vlnYm.png)
-
-![Imgur](https://i.imgur.com/u2dEi8Lm.png)
+![Imgur](https://i.imgur.com/5gZ4nJul.png)   ![Imgur](https://i.imgur.com/pT8vlnYl.png)    ![Imgur](https://i.imgur.com/u2dEi8Ll.png)
 
 **Short Description:**
 
