@@ -16,6 +16,10 @@
 
 ![Imgur](https://i.imgur.com/5gZ4nJul.png)   ![Imgur](https://i.imgur.com/pT8vlnYl.png)    ![Imgur](https://i.imgur.com/u2dEi8Ll.png)
 
+![Imgur](https://i.imgur.com/jUvqPdgl.png)   ![Imgur](https://i.imgur.com/xBxLqqvl.png)    ![Imgur](https://i.imgur.com/lkn1ggHl.png)
+
+![Imgur](https://i.imgur.com/5S5GJK8l.png)   ![Imgur](https://i.imgur.com/z2b0GRJl.png)    ![Imgur](https://i.imgur.com/SX5eTQ2l.png)
+
 **Short Description:**
 
 Challenges with friends is an app where you can do challenges, with friends. 
